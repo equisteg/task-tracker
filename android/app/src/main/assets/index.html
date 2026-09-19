@@ -85,7 +85,7 @@
         <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-400 mx-auto flex items-center justify-center text-white shadow-lg shadow-emerald-500/30">
           <i data-lucide="shield-check" class="w-8 h-8"></i>
         </div>
-        <h2 class="text-2xl font-heading font-extrabold tracking-tight text-white">AegisFlow Enterprise</h2>
+        <h2 class="text-2xl font-heading font-extrabold tracking-tight text-white">Equisteg Enterprise</h2>
         <p class="text-xs text-slate-400">Zero-Trust Identity & Access Management Gateway</p>
         <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-950/80 text-emerald-400 border border-emerald-800">
           <i data-lucide="lock" class="w-3 h-3"></i> SHA-256 HMAC SESSIONS • RATE LIMITED
@@ -167,9 +167,9 @@
       </div>
       <div>
         <div class="flex items-center gap-2">
-          <h1 id="header-company-name" class="font-heading font-bold text-lg tracking-tight text-slate-900 dark:text-white">AegisFlow Enterprise</h1>
-          <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 flex items-center gap-1">
-            <i data-lucide="lock" class="w-2.5 h-2.5"></i> ZERO-TRUST SECURED
+          <h1 id="header-company-name" class="font-heading font-bold text-lg tracking-tight text-slate-900 dark:text-white">Equisteg Enterprise</h1>
+          <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-gradient-to-r from-amber-500/20 to-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 flex items-center gap-1.5 shadow-sm">
+            <i data-lucide="zap" class="w-3 h-3 text-amber-500"></i> EQUISTEG UNLIMITED ACCESS
           </span>
         </div>
         <p class="text-xs text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1.5">
@@ -239,7 +239,16 @@
           <span id="badge-active-tasks" class="ml-auto px-2 py-0.5 text-[11px] font-bold rounded-full bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300">0</span>
         </button>
 
-        <button onclick="app.switchTab('standups-tab')" id="nav-standups-tab" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+        <button onclick="app.switchTab('calendar-tab')" id="nav-calendar-tab" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+          <i data-lucide="calendar" class="w-4 h-4 text-teal-500"></i>
+          <span>Operations Calendar</span>
+          <span id="badge-calendar-events" class="ml-auto px-1.5 py-0.5 text-[10px] font-bold rounded bg-teal-100 dark:bg-teal-950/80 text-teal-700 dark:text-teal-300">Live</span>
+        </button>
+
+              <button onclick="app.switchTab('calendar-tab')" class="p-2 text-slate-600 dark:text-slate-300 flex flex-col items-center text-[10px]">
+        <i data-lucide="calendar" class="w-5 h-5"></i> Calendar
+      </button>
+      <button onclick="app.switchTab('standups-tab')" id="nav-standups-tab" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
           <i data-lucide="calendar-check" class="w-4 h-4 text-purple-500"></i>
           <span>Daily Status & Standup</span>
           <span id="badge-standup-status" class="ml-auto px-1.5 py-0.5 text-[10px] font-bold rounded bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300">Log</span>
@@ -612,7 +621,84 @@
 
       </section>
 
-      <!-- ================= TAB 3: DAILY STANDUPS & PROGRESS ================= -->
+            <!-- ================= TAB: OPERATIONS & SLA CALENDAR ================= -->
+      <section id="calendar-tab" class="tab-panel hidden space-y-6">
+        <!-- Calendar Header Controls -->
+        <div class="glass-panel p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2 text-teal-600 dark:text-teal-400 text-xs font-bold uppercase tracking-wider mb-1">
+              <i data-lucide="calendar-days" class="w-4 h-4"></i> SLA & Operations Schedule
+            </div>
+            <h2 class="text-2xl font-heading font-extrabold text-slate-900 dark:text-white">Interactive Team Calendar</h2>
+            <p class="text-xs text-slate-500 max-w-xl mt-1">Track SLA deadlines, team milestones, and scheduled daily updates on an interactive monthly schedule.</p>
+          </div>
+
+          <!-- Calendar Controls -->
+          <div class="flex flex-wrap items-center gap-3">
+            <div class="flex items-center bg-white dark:bg-shield-900 border border-slate-200 dark:border-slate-700 rounded-xl p-1 shadow-sm">
+              <button onclick="app.calendarPrevMonth()" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Previous Month">
+                <i data-lucide="chevron-left" class="w-4 h-4"></i>
+              </button>
+              <span id="calendar-month-year-label" class="px-4 text-xs font-bold text-slate-800 dark:text-slate-100 min-w-[140px] text-center">Month Year</span>
+              <button onclick="app.calendarNextMonth()" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Next Month">
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+
+            <button onclick="app.calendarToday()" class="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition-colors">
+              Today
+            </button>
+
+            <button onclick="app.openNewTaskModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl shadow-md transition-all flex items-center gap-1.5">
+              <i data-lucide="plus" class="w-4 h-4"></i> Schedule Task
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter bar for calendar -->
+        <div class="flex flex-wrap items-center gap-3">
+          <select id="calendar-filter-team" onchange="app.renderCalendar()" class="bg-white dark:bg-shield-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-medium text-slate-700 dark:text-slate-200">
+            <option value="all">All Teams</option>
+            <!-- Populated dynamically -->
+          </select>
+
+          <select id="calendar-filter-priority" onchange="app.renderCalendar()" class="bg-white dark:bg-shield-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-medium text-slate-700 dark:text-slate-200">
+            <option value="all">All Priorities</option>
+            <option value="Critical">🚨 Critical Priority</option>
+            <option value="High">High Priority</option>
+            <option value="Medium">Medium Priority</option>
+            <option value="Low">Low Priority</option>
+          </select>
+
+          <div class="ml-auto flex items-center gap-4 text-xs text-slate-500">
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> Critical</span>
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> High</span>
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> Medium/Low</span>
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span> Standup Logged</span>
+          </div>
+        </div>
+
+        <!-- Calendar Month Grid Card -->
+        <div class="glass-panel rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+          <!-- Weekday Headers -->
+          <div class="grid grid-cols-7 border-b border-slate-200 dark:border-slate-800 bg-slate-100/80 dark:bg-shield-900 text-center text-xs font-bold text-slate-600 dark:text-slate-400 py-3">
+            <div>Sun</div>
+            <div>Mon</div>
+            <div>Tue</div>
+            <div>Wed</div>
+            <div>Thu</div>
+            <div>Fri</div>
+            <div>Sat</div>
+          </div>
+
+          <!-- Days Grid Cells -->
+          <div id="calendar-days-grid" class="grid grid-cols-7 divide-x divide-y divide-slate-200 dark:divide-slate-800 min-h-[600px] bg-slate-50/50 dark:bg-shield-950/40">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+      </section>
+
+<!-- ================= TAB 3: DAILY STANDUPS & PROGRESS ================= -->
       <section id="standups-tab" class="tab-panel hidden space-y-6">
         <!-- Standup Header & Logger Trigger -->
         <div class="glass-panel p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -737,7 +823,7 @@
                   <i data-lucide="edit-3" class="w-4 h-4"></i>
                 </button>
               </div>
-              <p id="display-company-domain" class="text-xs text-slate-500 font-medium">enterprise.aegisflow.internal</p>
+              <p id="display-company-domain" class="text-xs text-slate-500 font-medium">equisteg.com</p>
               <div class="flex items-center gap-2 mt-2">
                 <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300">
                   <i data-lucide="users" class="w-3 h-3 inline mr-1"></i> <span id="company-member-count">0 Members</span>
@@ -770,9 +856,14 @@
               <h3 class="font-heading font-bold text-lg text-slate-900 dark:text-white">Organization Teams</h3>
               <p class="text-xs text-slate-500">Departments, team emblems, assigned leads, and members.</p>
             </div>
-            <button onclick="app.openNewTeamModal()" class="px-3.5 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-xs rounded-xl hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors flex items-center gap-1.5">
-              <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add New Team
-            </button>
+            <div class="flex items-center gap-2">
+              <button onclick="app.startFreshWorkspace()" class="px-3.5 py-2 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-rose-700 dark:text-rose-300 font-bold text-xs rounded-xl hover:bg-rose-100 dark:hover:bg-rose-900/60 transition-colors flex items-center gap-1.5" title="Wipe sample tasks and start with 0 tasks for Equisteg">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Start Fresh (Clear Demo Tasks)
+              </button>
+              <button onclick="app.openNewTeamModal()" class="px-3.5 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-xs rounded-xl hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors flex items-center gap-1.5">
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add New Team
+              </button>
+            </div>
           </div>
 
           <!-- Team Cards Grid -->
@@ -1637,6 +1728,7 @@
         this.currentDraftEmblem = null;
         this.currentDraftLogo = null;
         this.selectedTaskForDetail = null;
+        this.currentCalendarDate = new Date();
         this.isAuthenticated = false;
         this.failedAttempts = 0;
         this.lockoutUntil = 0;
@@ -1869,6 +1961,242 @@
         lucide.createIcons();
       }
 
+      // ================= INTERACTIVE OPERATIONS & SLA CALENDAR =================
+      calendarPrevMonth() {
+        this.currentCalendarDate.setMonth(this.currentCalendarDate.getMonth() - 1);
+        this.renderCalendar();
+      }
+
+      calendarNextMonth() {
+        this.currentCalendarDate.setMonth(this.currentCalendarDate.getMonth() + 1);
+        this.renderCalendar();
+      }
+
+      calendarToday() {
+        this.currentCalendarDate = new Date();
+        this.renderCalendar();
+      }
+
+      renderCalendar() {
+        const grid = document.getElementById('calendar-days-grid');
+        const monthYearLabel = document.getElementById('calendar-month-year-label');
+        if (!grid || !monthYearLabel) return;
+
+        // Populate calendar team filter
+        const teamFilter = document.getElementById('calendar-filter-team');
+        if (teamFilter && teamFilter.options.length <= 1) {
+          teamFilter.innerHTML = '<option value="all">All Teams</option>' +
+            this.state.teams.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+        }
+
+        const selectedTeam = teamFilter ? teamFilter.value : 'all';
+        const priorityFilter = document.getElementById('calendar-filter-priority')?.value || 'all';
+
+        const year = this.currentCalendarDate.getFullYear();
+        const month = this.currentCalendarDate.getMonth();
+
+        const monthNames = [
+          'January', 'February', 'March', 'April', 'May', 'June',
+          'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+        monthYearLabel.textContent = `${monthNames[month]} ${year}`;
+
+        // First day of month & total days
+        const firstDayIndex = new Date(year, month, 1).getDay(); // 0 = Sun
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+        const today = new Date();
+        const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+        let html = '';
+        let monthTaskCount = 0;
+
+        // 1. Previous month trailing days
+        for (let i = firstDayIndex - 1; i >= 0; i--) {
+          const dayNum = daysInPrevMonth - i;
+          const prevDate = new Date(year, month - 1, dayNum);
+          const dateStr = `${prevDate.getFullYear()}-${String(prevDate.getMonth() + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
+          html += this.renderCalendarDayCell(dateStr, dayNum, false, false, selectedTeam, priorityFilter);
+        }
+
+        // 2. Current month days
+        for (let day = 1; day <= daysInMonth; day++) {
+          const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+          const isToday = dateStr === todayStr;
+          html += this.renderCalendarDayCell(dateStr, day, true, isToday, selectedTeam, priorityFilter);
+          
+          const matchingTasks = this.state.tasks.filter(t => t.dueDate && t.dueDate.startsWith(dateStr));
+          monthTaskCount += matchingTasks.length;
+        }
+
+        // 3. Next month leading days (to complete 35 or 42 grid cells)
+        const totalCells = firstDayIndex + daysInMonth;
+        const remainingCells = (totalCells <= 35 ? 35 : 42) - totalCells;
+        for (let day = 1; day <= remainingCells; day++) {
+          const nextDate = new Date(year, month + 1, day);
+          const dateStr = `${nextDate.getFullYear()}-${String(nextDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+          html += this.renderCalendarDayCell(dateStr, day, false, false, selectedTeam, priorityFilter);
+        }
+
+        grid.innerHTML = html;
+        const badgeCal = document.getElementById('badge-calendar-events');
+        if (badgeCal) badgeCal.textContent = `${monthTaskCount} Tasks`;
+        lucide.createIcons();
+      }
+
+      renderCalendarDayCell(dateStr, dayNum, isCurrentMonth, isToday, teamFilter, priorityFilter) {
+        // Tasks due on this day
+        let dayTasks = this.state.tasks.filter(t => t.dueDate && t.dueDate.startsWith(dateStr));
+        if (teamFilter !== 'all') dayTasks = dayTasks.filter(t => t.teamId === teamFilter);
+        if (priorityFilter !== 'all') dayTasks = dayTasks.filter(t => t.priority === priorityFilter);
+
+        // Daily standups submitted on this day
+        const dayStandups = this.state.daily_updates.filter(s => s.date === dateStr);
+
+        const bgClass = isToday ? 'bg-emerald-50/40 dark:bg-emerald-950/20' : isCurrentMonth ? 'bg-white dark:bg-shield-900/60' : 'bg-slate-100/50 dark:bg-shield-950/40 opacity-60';
+
+        return `
+          <div class="p-2.5 min-h-[110px] flex flex-col justify-between ${bgClass} transition-colors group relative border-b border-r border-slate-200 dark:border-slate-800">
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-xs font-bold ${isToday ? 'w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-md' : isCurrentMonth ? 'text-slate-800 dark:text-slate-200' : 'text-slate-400'}">
+                  ${dayNum}
+                </span>
+
+                <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button onclick="app.quickCreateTaskOnDate('${dateStr}')" class="p-1 rounded bg-slate-100 dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-emerald-950 text-slate-500 hover:text-emerald-600" title="Schedule task on ${dateStr}">
+                    <i data-lucide="plus" class="w-3 h-3"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Day Tasks List -->
+              <div class="space-y-1 overflow-hidden">
+                ${dayTasks.slice(0, 3).map(t => {
+                  const priorityBg = t.priority === 'Critical' ? 'bg-rose-500 text-white' :
+                                    t.priority === 'High' ? 'bg-amber-500 text-white' :
+                                    t.priority === 'Medium' ? 'bg-blue-500 text-white' :
+                                    'bg-slate-400 text-white';
+                  const assignee = this.state.users.find(u => u.id === t.assigneeId);
+
+                  return `
+                    <div onclick="event.stopPropagation(); app.openTaskDetail('${t.id}')" class="px-2 py-1 rounded-md text-[10px] font-bold ${priorityBg} truncate cursor-pointer hover:opacity-90 shadow-sm flex items-center justify-between gap-1" title="${this.escapeHTML(t.title)} (${t.priority})">
+                      <span class="truncate">${this.escapeHTML(t.title)}</span>
+                      ${t.escalationTier > 0 ? '<span class="text-[8px] bg-black/40 px-1 rounded">L' + t.escalationTier + '</span>' : ''}
+                    </div>
+                  `;
+                }).join('')}
+
+                ${dayTasks.length > 3 ? `
+                  <div onclick="app.openDateDayTasks('${dateStr}')" class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 cursor-pointer hover:underline text-center pt-0.5">
+                    +${dayTasks.length - 3} more
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+
+            <!-- Standup submission indicator at bottom of cell -->
+            ${dayStandups.length > 0 ? `
+              <div class="pt-1 border-t border-slate-100 dark:border-slate-800 flex items-center gap-1 text-[9px] text-purple-600 dark:text-purple-400 font-semibold">
+                <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+                <span>${dayStandups.length} Standup${dayStandups.length > 1 ? 's' : ''}</span>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }
+
+      quickCreateTaskOnDate(dateStr) {
+        this.openNewTaskModal();
+        const dueInput = document.getElementById('task-input-duedate');
+        if (dueInput) {
+          dueInput.value = `${dateStr}T17:00`;
+        }
+      }
+
+      openDateDayTasks(dateStr) {
+        const tasks = this.state.tasks.filter(t => t.dueDate && t.dueDate.startsWith(dateStr));
+        let promptText = `Tasks scheduled for ${dateStr}:\n\n` +
+          tasks.map(t => `• [${t.id}] ${t.title} (${t.priority} - ${t.status})`).join('\n');
+        alert(promptText);
+      }
+
+      // ================= DYNAMIC WORKSPACE CONTROLS =================
+      async deleteUser(userId) {
+        const user = this.state.users.find(u => u.id === userId);
+        if (!user) return;
+        if (this.state.users.length <= 1) {
+          this.showToast('Cannot delete the last remaining member.', 'error');
+          return;
+        }
+
+        if (!confirm(`Are you sure you want to delete user "${user.name}"?`)) return;
+
+        await this.dbDelete('users', userId);
+        this.state.users = this.state.users.filter(u => u.id !== userId);
+
+        // Reassign their tasks to unassigned
+        for (const t of this.state.tasks) {
+          if (t.assigneeId === userId) {
+            t.assigneeId = null;
+            t.status = 'Unassigned';
+            await this.dbPut('tasks', t);
+          }
+        }
+
+        await this.logAuditEvent('USER_DELETED', userId, { name: user.name });
+        this.showToast(`User "${user.name}" deleted`, 'info');
+        this.populatePersonaSelector();
+        this.renderAll();
+      }
+
+      async deleteTeam(teamId) {
+        const team = this.state.teams.find(t => t.id === teamId);
+        if (!team) return;
+        if (this.state.teams.length <= 1) {
+          this.showToast('Cannot delete the last remaining department.', 'error');
+          return;
+        }
+
+        if (!confirm(`Are you sure you want to delete team "${team.name}"?`)) return;
+
+        await this.dbDelete('teams', teamId);
+        this.state.teams = this.state.teams.filter(t => t.id !== teamId);
+
+        // Move members to remaining team
+        const fallbackTeam = this.state.teams[0];
+        for (const u of this.state.users) {
+          if (u.teamId === teamId) {
+            u.teamId = fallbackTeam.id;
+            await this.dbPut('users', u);
+          }
+        }
+
+        await this.logAuditEvent('TEAM_DELETED', teamId, { name: team.name });
+        this.showToast(`Team "${team.name}" deleted`, 'info');
+        this.renderAll();
+      }
+
+      async startFreshWorkspace() {
+        if (!confirm('Start Fresh for Equisteg? This will clear all sample tasks and standups, keeping your company and members ready for live operations.')) return;
+
+        // Clear tasks and standups
+        for (const t of this.state.tasks) await this.dbDelete('tasks', t.id);
+        for (const s of this.state.daily_updates) await this.dbDelete('daily_updates', s.id);
+
+        this.state.tasks = [];
+        this.state.daily_updates = [];
+
+        await this.logAuditEvent('WORKSPACE_RESET_FRESH', 'tenant_main', {
+          actor: this.getCurrentUser().name,
+          note: 'Equisteg fresh operational state initialized'
+        });
+
+        this.showToast('Workspace reset to clean slate for Equisteg!', 'success');
+        this.renderAll();
+      }
+
       // ================= DATABASE (INDEXEDDB) ENGINE =================
       async initDatabase() {
         return new Promise((resolve, reject) => {
@@ -1897,8 +2225,11 @@
       async loadAllData() {
         this.state.company = await this.dbGet('company', 'tenant_main') || {
           id: 'tenant_main',
-          name: 'AegisFlow Technologies',
-          domain: 'enterprise.aegisflow.internal',
+          name: 'Equisteg',
+          domain: 'equisteg.com',
+          plan: 'Enterprise Unlimited',
+          isUnlimited: true,
+          domain: 'equisteg.com',
           logo: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150&auto=format&fit=crop&q=80'
         };
         this.state.teams = await this.dbGetAll('teams');
@@ -2040,8 +2371,11 @@
         // Company
         const company = {
           id: 'tenant_main',
-          name: 'AegisFlow Technologies',
-          domain: 'enterprise.aegisflow.internal',
+          name: 'Equisteg',
+          domain: 'equisteg.com',
+          plan: 'Enterprise Unlimited',
+          isUnlimited: true,
+          domain: 'equisteg.com',
           logo: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150&auto=format&fit=crop&q=80'
         };
         await this.dbPut('company', company);
@@ -2289,6 +2623,7 @@
         this.renderHeaderAndUserCapsule();
         this.renderDashboard();
         this.renderTasks();
+        this.renderCalendar();
         this.renderStandupFeed();
         this.renderEscalationsQueue();
         this.renderTeamsAndUsers();
@@ -2790,9 +3125,14 @@
                     <p class="text-xs text-slate-500">${members.length} dedicated members</p>
                   </div>
                 </div>
-                <button onclick="app.openEditTeamModal('${t.id}')" class="text-slate-400 hover:text-emerald-500">
-                  <i data-lucide="edit-3" class="w-4 h-4"></i>
-                </button>
+                <div class="flex items-center gap-1.5">
+                  <button onclick="app.openEditTeamModal('${t.id}')" class="text-slate-400 hover:text-emerald-500" title="Edit Department">
+                    <i data-lucide="edit-3" class="w-4 h-4"></i>
+                  </button>
+                  <button onclick="app.deleteTeam('${t.id}')" class="text-slate-400 hover:text-rose-500" title="Delete Department">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                  </button>
+                </div>
               </div>
 
               <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">${t.desc || 'No description provided.'}</p>
@@ -2846,9 +3186,12 @@
                   ${(u.skills || []).map(s => `<span class="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[10px] text-slate-600 dark:text-slate-400">${s}</span>`).join('')}
                 </div>
               </td>
-              <td class="p-3.5 text-right">
+              <td class="p-3.5 text-right space-x-1">
                 <button onclick="app.openUserProfileModal('${u.id}')" class="px-2.5 py-1 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300">
-                  Edit Profile
+                  Edit
+                </button>
+                <button onclick="app.deleteUser('${u.id}')" class="px-2 py-1 text-xs font-semibold rounded-lg border border-rose-200 dark:border-rose-900 hover:bg-rose-50 dark:hover:bg-rose-950 text-rose-600 dark:text-rose-400" title="Delete member">
+                  Delete
                 </button>
               </td>
             </tr>
