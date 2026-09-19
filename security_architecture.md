@@ -139,11 +139,18 @@ AegisFlow enforces a tiered multi-tenant licensing and access control policy:
 - **Cryptographic Verification Gate**: Access to the Equisteg unlimited workspace is strictly gated behind verified Google Identity Services (OAuth 2.0 / TOTP security challenge) authenticating the master identity: `equisteg@gmail.com`.
 - **Anti-Impersonation Protection**: Any attempt to authenticate as Equisteg via standard corporate password portals is automatically intercepted and routed to the Google Identity Verification Gateway.
 
-### 6.2 Commercial Organizations (Access After Payment)
-- **Commercial Paywall**: Any organization other than Equisteg (or any unverified instance) operates on a commercial subscription model.
-- **Subscription Tiers**:
-  - **Starter Tier ($19/mo)**: Small teams up to 5 members, task boards, and daily standups.
-  - **Professional Tier ($49/mo)**: Mid-size teams up to 25 members, automated task allocation engine, interactive SLA calendar, and SHA-256 audit ledger.
-  - **Enterprise Tier ($99/mo)**: Unlimited members, dedicated SLA radar, cross-team floating support specialists, and custom branding.
-- **License Key Activation**: Commercial enterprises may alternatively activate perpetual access using signed license keys (`EQUISTEG-PAID-XXXX`).
+### 6.2 Commercial Organizations (Access After Payment: $1/user/month or $10/user/year)
+- **Per-User Access Model**: Any organization other than Equisteg (or any unverified instance) operates on a transparent per-user subscription model:
+  - **Monthly Billing**: **$1.00 / user / month**
+  - **Annual Billing**: **$10.00 / user / year** (Save ~17% compared to monthly)
+  - **Dynamic Seat Quota**: Workspaces dynamically provision seats (e.g. 5 seats = $5/mo or $50/yr; 25 seats = $25/mo or $250/yr).
+- **14-Day Free Evaluation**: Commercial tenants receive a 14-day evaluation trial upon registration, after which subscription payment or license key activation is mandatory for ongoing write operations.
+- **Enterprise License Key Activation**: Commercial enterprises may alternatively activate perpetual or prepaid access using cryptographically signed license keys (e.g., `EQUISTEG-PAID-XXXX`).
 - **Automated Feature Gating**: Unpaid or trial-expired commercial organizations are prompted with the paywall gateway when accessing premium features (automated allocation, cross-team reallocations, and cryptographic data exports).
+
+### 6.3 Multi-Tenant Registration & Progressive Email Verification Workflow
+- **Progressive 3-Step Registration**:
+  1. **Organization & Admin Setup**: Collects Company Name, auto-generated Domain, Admin Username, Admin Company Email, and Master Passphrase.
+  2. **Cryptographic Email Verification Challenge**: Sends a 6-digit verification code (OTP) to the specified Admin Company Email. Live inspection checks whether the email is `equisteg@gmail.com` (unlocking Lifetime Free status) or a commercial entity (activating the $1/user/mo or $10/user/yr schedule).
+  3. **Access & Subscription Provisioning**: Equisteg administrators bypass payment directly into the unlimited workspace. Commercial administrators configure user seat quotas, select monthly/annual cycles, and choose between a 14-day trial, simulated instant card/Stripe payment, or license key activation.
+- **Ledger Non-Repudiation**: Successful registration cryptographically chains `TENANT_REGISTERED` and `EMAIL_VERIFIED` events to the SHA-256 audit ledger.
