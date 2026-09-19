@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Platform Prototype — Teams, Boards & Chat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F1F3EE; --bg-raised: #E8EBE3; --bg-card: #FFFFFF;
+    --ink: #1B2430; --ink-soft: #4A5147; --rule: #C9CDC2;
+    --ochre: #B9812E; --ochre-soft: #EFE1C6;
+    --teal: #1F5C52; --teal-soft: #DCE9E4;
+    --red-soft: #E7DAD3; --red: #9B5A3C;
+    --violet: #6B5C9E; --violet-soft: #E4DFF0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14181A; --bg-raised: #1B211F; --bg-card: #1E2523;
+      --ink: #E7EAE3; --ink-soft: #AEB6A9; --rule: #333B34;
+      --ochre: #D9A24F; --ochre-soft: #2E2415;
+      --teal: #6FBFA9; --teal-soft: #16241F;
+      --red-soft: #2A1E17; --red: #C98A68;
+      --violet: #B3A6DE; --violet-soft: #24203A;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14181A; --bg-raised: #1B211F; --bg-card: #1E2523;
+    --ink: #E7EAE3; --ink-soft: #AEB6A9; --rule: #333B34;
+    --ochre: #D9A24F; --ochre-soft: #2E2415;
+    --teal: #6FBFA9; --teal-soft: #16241F;
+    --red-soft: #2A1E17; --red: #C98A68;
+    --violet: #B3A6DE; --violet-soft: #24203A;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { font-family: 'Fraunces', 'Iowan Old Style', serif; font-weight: 500; margin: 0; }
+  button, input, select, textarea { font-family: inherit; font-size: inherit; color: inherit; }
+  button { cursor: pointer; }
+  ::placeholder { color: var(--ink-soft); opacity: 0.7; }
+
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 32px 24px 100px; }
+
+  /* Top bar */
+  .topbar {
+    display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: flex-end;
+    justify-content: space-between; padding-bottom: 20px; border-bottom: 1px solid var(--rule);
+  }
+  .brand h1 { font-size: 22px; }
+  .brand-sub { color: var(--ink-soft); font-size: 13px; margin-top: 4px; }
+  .controls { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-end; }
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field label { font-size: 11.5px; color: var(--ink-soft); }
+  select, .text-input {
+    background: var(--bg-card); border: 1px solid var(--rule); border-radius: 6px;
+    padding: 8px 10px; min-width: 170px;
+  }
+  .plan-badge {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600;
+    padding: 6px 10px; border-radius: 6px;
+  }
+  .plan-badge.unlimited { background: var(--teal-soft); color: var(--teal); }
+  .plan-badge.limited { background: var(--ochre-soft); color: var(--ochre); }
+  .plan-note { font-size: 12px; color: var(--ink-soft); margin-top: 10px; max-width: 60ch; }
+
+  /* Identity bar */
+  .identity-bar {
+    display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: flex-end;
+    margin-top: 18px; padding: 14px 16px; background: var(--bg-raised); border-radius: 8px;
+  }
+  .identity-user { display: flex; align-items: center; gap: 10px; }
+  .avatar {
+    width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; font-size: 13px; font-weight: 600; color: #fff; flex-shrink: 0;
+  }
+  .role-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; margin-top: 2px;
+  }
+  .role-badge.admin { background: var(--violet-soft); color: var(--violet); }
+  .role-badge.lead { background: var(--ochre-soft); color: var(--ochre); }
+  .role-badge.member { background: var(--rule); color: var(--ink-soft); }
+  .team-cap-note { font-size: 12px; color: var(--ink-soft); }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 4px; margin-top: 28px; border-bottom: 1px solid var(--rule); flex-wrap: wrap; }
+  .tab {
+    background: none; border: none; padding: 10px 4px; margin-right: 20px;
+    font-size: 15px; color: var(--ink-soft); border-bottom: 2px solid transparent; position: relative; top: 1px;
+  }
+  .tab.active { color: var(--ink); border-bottom-color: var(--teal); font-weight: 600; }
+  .tab:disabled { color: var(--rule); cursor: not-allowed; }
+  .panel { display: none; margin-top: 26px; }
+  .panel.active { display: block; }
+  .gate-notice {
+    background: var(--ochre-soft); color: var(--ochre); border-radius: 8px;
+    padding: 16px 18px; font-size: 14px; max-width: 50ch;
+  }
+
+  /* Board */
+  .board-toolbar { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; align-items: center; }
+  .board-toolbar input[type="text"] { flex: 1 1 200px; }
+  select.assignee-select { min-width: 130px; }
+  .btn { background: var(--teal); color: #F1F3EE; border: none; border-radius: 6px; padding: 9px 16px; font-weight: 600; font-size: 14px; }
+  .btn:hover { opacity: 0.92; }
+  .btn:disabled { background: var(--rule); color: var(--ink-soft); cursor: not-allowed; opacity: 1; }
+  .btn-outline { background: none; border: 1px solid var(--rule); border-radius: 6px; padding: 8px 14px; font-size: 13px; color: var(--ink-soft); }
+  .btn-outline:hover { border-color: var(--teal); color: var(--teal); }
+
+  .columns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .column { background: var(--bg-raised); border-radius: 8px; padding: 14px; min-height: 140px; }
+  .column h3 { font-size: 14px; font-weight: 600; color: var(--ink-soft); margin-bottom: 12px; font-family: 'Inter', sans-serif; }
+  .card { background: var(--bg-card); border: 1px solid var(--rule); border-radius: 6px; padding: 10px 12px; margin-bottom: 10px; font-size: 14px; }
+  .card-title { font-weight: 500; }
+  .card-meta { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-soft); margin-top: 6px; }
+  .card-actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+  .card-actions button, .card-actions select { border: 1px solid var(--rule); border-radius: 5px; padding: 3px 8px; font-size: 11.5px; color: var(--ink-soft); background: var(--bg-card); }
+  .card-actions button:hover { border-color: var(--teal); color: var(--teal); }
+  .empty-hint { font-size: 12.5px; color: var(--ink-soft); font-style: italic; }
+
+  /* Time tracking */
+  .log-form { display: grid; grid-template-columns: 1.4fr 0.7fr 1.6fr auto; gap: 10px; background: var(--bg-raised); padding: 14px; border-radius: 8px; margin-bottom: 24px; }
+  .log-form select, .log-form input { background: var(--bg-card); border: 1px solid var(--rule); border-radius: 6px; padding: 9px 10px; }
+  table.entries { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table.entries th, table.entries td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--rule); vertical-align: middle; }
+  table.entries th { font-size: 12px; color: var(--ink-soft); font-weight: 600; }
+  .status-pill { display: inline-block; padding: 3px 9px; border-radius: 20px; font-size: 11.5px; font-weight: 600; }
+  .status-pill.draft { background: var(--rule); color: var(--ink-soft); }
+  .status-pill.submitted { background: var(--ochre-soft); color: var(--ochre); }
+  .status-pill.approved { background: var(--teal-soft); color: var(--teal); }
+  .status-pill.rejected { background: var(--red-soft); color: var(--red); }
+  .row-actions button { background: none; border: 1px solid var(--rule); border-radius: 5px; padding: 4px 9px; font-size: 12px; margin-right: 6px; color: var(--ink-soft); }
+  .row-actions button.approve:hover { border-color: var(--teal); color: var(--teal); }
+  .row-actions button.reject:hover { border-color: var(--red); color: var(--red); }
+  .row-actions button.submit:hover { border-color: var(--teal); color: var(--teal); }
+
+  /* Chat */
+  .chat-box { background: var(--bg-raised); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; height: 420px; }
+  .chat-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-right: 4px; }
+  .msg { display: flex; gap: 10px; }
+  .msg-body { background: var(--bg-card); border: 1px solid var(--rule); border-radius: 8px; padding: 8px 12px; max-width: 70%; }
+  .msg-author { font-size: 12px; font-weight: 600; margin-bottom: 2px; }
+  .msg-time { font-size: 10.5px; color: var(--ink-soft); margin-left: 6px; font-weight: 400; }
+  .msg-text { font-size: 13.5px; }
+  .chat-input-row { display: flex; gap: 8px; margin-top: 12px; }
+  .chat-input-row input { flex: 1; background: var(--bg-card); border: 1px solid var(--rule); border-radius: 6px; padding: 10px 12px; }
+
+  /* Manage */
+  .manage-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .manage-section { background: var(--bg-raised); border-radius: 8px; padding: 18px; }
+  .manage-section h3 { font-size: 15px; margin-bottom: 12px; }
+  .manage-form { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .manage-form input, .manage-form select { background: var(--bg-card); border: 1px solid var(--rule); border-radius: 6px; padding: 8px 10px; }
+  .manage-list { list-style: none; padding: 0; margin: 0; }
+  .manage-list li { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--rule); font-size: 13.5px; flex-wrap: wrap; }
+  .manage-list li:last-child { border-bottom: none; }
+  .manage-list select { background: var(--bg-card); border: 1px solid var(--rule); border-radius: 5px; padding: 4px 7px; font-size: 12.5px; }
+  .cap-line { font-size: 12px; color: var(--ink-soft); margin-bottom: 10px; }
+
+  @media (max-width: 780px) {
+    .manage-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 720px) {
+    .columns { grid-template-columns: 1fr; }
+    .log-form { grid-template-columns: 1fr; }
+    table.entries { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="brand">
+      <h1>Platform Prototype</h1>
+      <div class="brand-sub">Working demo — teams, boards, time tracking and chat, gated by workspace plan</div>
+    </div>
+    <div class="controls">
+      <div class="field">
+        <label for="workspace">Workspace</label>
+        <select id="workspace">
+          <option value="equisteg">Equisteg (internal)</option>
+          <option value="free">Demo Team — Free</option>
+          <option value="team">Demo Team — Team plan</option>
+        </select>
+      </div>
+      <span id="planBadge" class="plan-badge"></span>
+    </div>
+  </div>
+  <div id="planNote" class="plan-note"></div>
+
+  <div class="identity-bar">
+    <div class="identity-user">
+      <div class="avatar" id="currentAvatar"></div>
+      <div>
+        <div class="field">
+          <label for="userSelect">Signed in as</label>
+          <select id="userSelect"></select>
+        </div>
+        <span class="role-badge" id="roleBadge"></span>
+      </div>
+    </div>
+    <div class="field" id="teamViewField">
+      <label for="teamSelect">Viewing team</label>
+      <select id="teamSelect"></select>
+    </div>
+    <div class="team-cap-note" id="teamCapNote"></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-panel="board">Board</button>
+    <button class="tab" data-panel="time">Time tracking</button>
+    <button class="tab" id="reviewTab" data-panel="review">Review queue</button>
+    <button class="tab" id="chatTab" data-panel="chat">Team chat</button>
+    <button class="tab" id="manageTab" data-panel="manage">Manage</button>
+  </div>
+
+  <div class="panel active" id="panel-board">
+    <div class="board-toolbar">
+      <input type="text" id="newTaskInput" class="text-input" placeholder="Add a task…">
+      <select id="newTaskAssignee" class="assignee-select"></select>
+      <button class="btn" id="addTaskBtn">Add task</button>
+    </div>
+    <div class="columns">
+      <div class="column" data-status="todo"><h3>To do</h3><div class="card-list" id="col-todo"></div></div>
+      <div class="column" data-status="inprogress"><h3>In progress</h3><div class="card-list" id="col-inprogress"></div></div>
+      <div class="column" data-status="done"><h3>Done</h3><div class="card-list" id="col-done"></div></div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-time">
+    <form class="log-form" id="logForm">
+      <select id="taskSelect"></select>
+      <input type="number" id="hoursInput" placeholder="Hours" min="0.25" step="0.25" required>
+      <input type="text" id="noteInput" placeholder="What did you work on?">
+      <button type="submit" class="btn">Log time</button>
+    </form>
+    <table class="entries">
+      <thead><tr><th>Task</th><th>Hours</th><th>Note</th><th>Status</th><th></th></tr></thead>
+      <tbody id="myEntries"></tbody>
+    </table>
+  </div>
+
+  <div class="panel" id="panel-review">
+    <div id="reviewGate"></div>
+    <table class="entries" id="reviewTable">
+      <thead><tr><th>Member</th><th>Team</th><th>Task</th><th>Hours</th><th>Note</th><th>Status</th><th></th></tr></thead>
+      <tbody id="reviewEntries"></tbody>
+    </table>
+    <p class="empty-hint" id="reviewEmpty" style="display:none;">Nothing waiting on review.</p>
+  </div>
+
+  <div class="panel" id="panel-chat">
+    <div id="chatGate"></div>
+    <div class="chat-box" id="chatBox" style="display:none;">
+      <div class="chat-messages" id="chatMessages"></div>
+      <form class="chat-input-row" id="chatForm">
+        <input type="text" id="chatInput" placeholder="Message your team…">
+        <button class="btn" type="submit">Send</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-manage">
+    <div id="manageGate"></div>
+    <div class="manage-grid" id="manageContent" style="display:none;">
+      <div class="manage-section">
+        <h3>Teams</h3>
+        <div class="cap-line" id="teamCapLine"></div>
+        <form class="manage-form" id="addTeamForm">
+          <input type="text" id="newTeamName" placeholder="New team name" required>
+          <button class="btn-outline" type="submit" id="addTeamBtn">Add team</button>
+        </form>
+        <ul class="manage-list" id="teamList"></ul>
+      </div>
+      <div class="manage-section">
+        <h3>People</h3>
+        <form class="manage-form" id="addUserForm">
+          <input type="text" id="newUserName" placeholder="Name" required>
+          <select id="newUserRole">
+            <option value="member">Member</option>
+            <option value="lead">Lead</option>
+            <option value="admin">Admin</option>
+          </select>
+          <select id="newUserTeam"></select>
+          <button class="btn-outline" type="submit">Add person</button>
+        </form>
+        <ul class="manage-list" id="userList"></ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  const PLANS = {
+    equisteg: { name: 'Equisteg — internal', unlimited: true, leaderReview: true, chat: true, maxTeams: Infinity,
+      note: 'Unlimited seats, teams, chat and review — every feature unlocked, permanently.' },
+    free: { name: 'Demo Team — Free', unlimited: false, leaderReview: false, chat: false, maxTeams: 1,
+      note: 'Free tier: 1 team, self-submit time only, no team chat. Upgrade to unlock leads, review and chat.' },
+    team: { name: 'Demo Team — Team plan', unlimited: false, leaderReview: true, chat: true, maxTeams: 3,
+      note: 'Team plan: up to 3 teams, leader review and team chat unlocked.' }
+  };
+  const AVATAR_COLORS = ['#1F5C52', '#B9812E', '#6B5C9E', '#9B5A3C', '#3D6B8A'];
+
+  let state = { teams: [], users: [], tasks: [], timeEntries: [], messages: [] };
+  let currentWorkspace = 'equisteg';
+  let currentUserId = null;
+  let currentViewTeamId = null;
+
+  function today() { return new Date().toISOString().slice(0, 10); }
+  function uid(prefix) { return prefix + Math.random().toString(36).slice(2, 9); }
+  function escapeHtml(str) { const d = document.createElement('div'); d.textContent = str == null ? '' : str; return d.innerHTML; }
+  function initials(name) { return (name || '?').trim().split(/\s+/).map(p => p[0]).slice(0, 2).join('').toUpperCase(); }
+  function colorFor(id) { let h = 0; for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0; return AVATAR_COLORS[h % AVATAR_COLORS.length]; }
+
+  function defaultState(ws) {
+    if (ws === 'equisteg') {
+      return {
+        teams: [
+          { id: 'team-product', name: 'Product', leadId: 'u-priya' },
+          { id: 'team-ops', name: 'Field Ops', leadId: 'u-meera' }
+        ],
+        users: [
+          { id: 'u-you', name: 'You', role: 'admin', teamId: 'team-product' },
+          { id: 'u-priya', name: 'Priya', role: 'lead', teamId: 'team-product' },
+          { id: 'u-arjun', name: 'Arjun', role: 'member', teamId: 'team-product' },
+          { id: 'u-meera', name: 'Meera', role: 'lead', teamId: 'team-ops' },
+          { id: 'u-karthik', name: 'Karthik', role: 'member', teamId: 'team-ops' }
+        ],
+        tasks: [
+          { id: 't1', title: 'Draft onboarding flow', status: 'todo', teamId: 'team-product', assigneeId: 'u-arjun' },
+          { id: 't2', title: 'Set up free-tier database', status: 'inprogress', teamId: 'team-product', assigneeId: 'u-priya' },
+          { id: 't3', title: 'Ship task board MVP', status: 'done', teamId: 'team-product', assigneeId: 'u-you' },
+          { id: 't4', title: 'Survey rural pilot sites', status: 'todo', teamId: 'team-ops', assigneeId: 'u-karthik' }
+        ],
+        timeEntries: [
+          { id: 'e1', taskId: 't2', hours: 3, note: 'Initial setup', userId: 'u-priya', status: 'submitted', date: today() }
+        ],
+        messages: [
+          { id: 'm1', teamId: 'team-product', userId: 'u-priya', text: 'Board MVP is live — take a look.', ts: Date.now() - 3600000 }
+        ]
+      };
+    }
+    return {
+      teams: [{ id: 'team-main', name: 'Main team', leadId: null }],
+      users: [{ id: 'u-you', name: 'You', role: 'admin', teamId: 'team-main' }],
+      tasks: [
+        { id: 't1', title: 'Draft onboarding flow', status: 'todo', teamId: 'team-main', assigneeId: 'u-you' },
+        { id: 't2', title: 'Set up free-tier database', status: 'inprogress', teamId: 'team-main', assigneeId: null }
+      ],
+      timeEntries: [],
+      messages: []
+    };
+  }
+
+  function storageKey(ws) { return 'pm-demo-v2:' + ws; }
+  function userKey(ws) { return 'pm-demo-v2-user:' + ws; }
+
+  function loadState(ws) {
+    try {
+      const raw = localStorage.getItem(storageKey(ws));
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.teams && parsed.users) return parsed;
+      }
+    } catch (e) { /* fall through to defaults */ }
+    return defaultState(ws);
+  }
+  function saveState() {
+    try { localStorage.setItem(storageKey(currentWorkspace), JSON.stringify(state)); } catch (e) { /* in-memory only for this session */ }
+  }
+  function saveCurrentUser() {
+    try { localStorage.setItem(userKey(currentWorkspace), currentUserId); } catch (e) {}
+  }
+  function loadCurrentUser() {
+    try { return localStorage.getItem(userKey(currentWorkspace)); } catch (e) { return null; }
+  }
+
+  function getUser(id) { return state.users.find(u => u.id === id) || null; }
+  function getTeam(id) { return state.teams.find(t => t.id === id) || null; }
+  function teamMembers(teamId) { return state.users.filter(u => u.teamId === teamId); }
+  function teamTasks(teamId) { return state.tasks.filter(t => t.teamId === teamId); }
+
+  function plan() { return PLANS[currentWorkspace]; }
+  function currentUser() { return getUser(currentUserId); }
+  function isAdmin() { const u = currentUser(); return !!u && u.role === 'admin'; }
+  function isLead() { const u = currentUser(); return !!u && u.role === 'lead'; }
+  function viewTeamId() { return isAdmin() ? currentViewTeamId : (currentUser() ? currentUser().teamId : null); }
+
+  function init() {
+    state = loadState(currentWorkspace);
+    const saved = loadCurrentUser();
+    currentUserId = (saved && getUser(saved)) ? saved : (state.users.find(u => u.role === 'admin') || state.users[0]).id;
+    currentViewTeamId = currentUser() && currentUser().teamId ? currentUser().teamId : (state.teams[0] ? state.teams[0].id : null);
+    render();
+  }
+
+  function render() {
+    renderPlanBadge();
+    renderIdentityBar();
+    renderTabsGating();
+    renderBoard();
+    renderTimeTracking();
+    renderReview();
+    renderChat();
+    renderManage();
+  }
+
+  function renderPlanBadge() {
+    const p = plan();
+    const badge = document.getElementById('planBadge');
+    badge.textContent = p.unlimited ? p.name + ' · unlimited' : p.name;
+    badge.className = 'plan-badge ' + (p.unlimited ? 'unlimited' : 'limited');
+    document.getElementById('planNote').textContent = p.note;
+  }
+
+  function renderIdentityBar() {
+    const userSelect = document.getElementById('userSelect');
+    userSelect.innerHTML = state.users.map(u => `<option value="${u.id}" ${u.id === currentUserId ? 'selected' : ''}>${escapeHtml(u.name)}</option>`).join('');
+    const cu = currentUser();
+    const avatar = document.getElementById('currentAvatar');
+    if (cu) {
+      avatar.textContent = initials(cu.name);
+      avatar.style.background = colorFor(cu.id);
+      const roleBadge = document.getElementById('roleBadge');
+      roleBadge.textContent = cu.role.charAt(0).toUpperCase() + cu.role.slice(1);
+      roleBadge.className = 'role-badge ' + cu.role;
+    }
+    const teamViewField = document.getElementById('teamViewField');
+    const teamSelect = document.getElementById('teamSelect');
+    if (isAdmin()) {
+      teamViewField.style.display = 'flex';
+      teamSelect.innerHTML = state.teams.map(t => `<option value="${t.id}" ${t.id === currentViewTeamId ? 'selected' : ''}>${escapeHtml(t.name)}</option>`).join('');
+    } else {
+      teamViewField.style.display = 'none';
+      currentViewTeamId = cu ? cu.teamId : null;
+    }
+    const capNote = document.getElementById('teamCapNote');
+    const p = plan();
+    capNote.textContent = p.maxTeams === Infinity ? '' : `Teams: ${state.teams.length} / ${p.maxTeams}`;
+  }
+
+  function renderTabsGating() {
+    const p = plan();
+    const reviewTab = document.getElementById('reviewTab');
+    const chatTab = document.getElementById('chatTab');
+    const manageTab = document.getElementById('manageTab');
+
+    const reviewAllowed = p.leaderReview && (isAdmin() || isLead());
+    reviewTab.disabled = !reviewAllowed;
+    reviewTab.title = reviewAllowed ? '' : (p.leaderReview ? 'Only leads and admins review submissions' : 'Not available on this plan');
+
+    const chatAllowed = p.chat;
+    chatTab.disabled = !chatAllowed;
+    chatTab.title = chatAllowed ? '' : 'Team chat isn\u2019t available on this plan';
+
+    manageTab.disabled = !isAdmin();
+    manageTab.title = isAdmin() ? '' : 'Only admins manage teams and people';
+
+    const active = document.querySelector('.tab.active');
+    if (active && active.disabled) switchPanel('board');
+  }
+
+  function switchPanel(name) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.panel === name));
+    document.querySelectorAll('.panel').forEach(pnl => pnl.classList.toggle('active', pnl.id === 'panel-' + name));
+  }
+  document.querySelectorAll('.tab').forEach(tab => tab.addEventListener('click', () => { if (!tab.disabled) switchPanel(tab.dataset.panel); }));
+
+  // ---- Board ----
+  function renderBoard() {
+    const teamId = viewTeamId();
+    const members = teamId ? teamMembers(teamId) : [];
+    const assigneeSelect = document.getElementById('newTaskAssignee');
+    assigneeSelect.innerHTML = '<option value="">Unassigned</option>' + members.map(m => `<option value="${m.id}">${escapeHtml(m.name)}</option>`).join('');
+
+    ['todo', 'inprogress', 'done'].forEach(status => {
+      const col = document.getElementById('col-' + status);
+      const items = teamId ? state.tasks.filter(t => t.teamId === teamId && t.status === status) : [];
+      col.innerHTML = '';
+      if (items.length === 0) { col.innerHTML = '<div class="empty-hint">No tasks here</div>'; return; }
+      items.forEach(task => {
+        const assignee = task.assigneeId ? getUser(task.assigneeId) : null;
+        const card = document.createElement('div');
+        card.className = 'card';
+        const moves = { todo: [['inprogress', 'Start']], inprogress: [['todo', 'Back to to-do'], ['done', 'Mark done']], done: [['inprogress', 'Reopen']] };
+        let actionsHtml = moves[status].map(([target, label]) => `<button data-task="${task.id}" data-target="${target}" class="move-btn">${label}</button>`).join('');
+        card.innerHTML = `<div class="card-title">${escapeHtml(task.title)}</div>
+          <div class="card-meta">${assignee ? `<span class="avatar" style="width:18px;height:18px;font-size:9px;background:${colorFor(assignee.id)}">${initials(assignee.name)}</span> ${escapeHtml(assignee.name)}` : 'Unassigned'}</div>
+          <div class="card-actions">${actionsHtml}</div>`;
+        col.appendChild(card);
+      });
+    });
+    document.querySelectorAll('.move-btn').forEach(btn => btn.addEventListener('click', () => {
+      const task = state.tasks.find(t => t.id === btn.dataset.task);
+      if (task) { task.status = btn.dataset.target; saveState(); render(); }
+    }));
+  }
+
+  document.getElementById('addTaskBtn').addEventListener('click', addTask);
+  document.getElementById('newTaskInput').addEventListener('keydown', e => { if (e.key === 'Enter') addTask(); });
+  function addTask() {
+    const teamId = viewTeamId();
+    if (!teamId) return;
+    const input = document.getElementById('newTaskInput');
+    const title = input.value.trim();
+    if (!title) return;
+    const assigneeId = document.getElementById('newTaskAssignee').value || null;
+    state.tasks.push({ id: uid('t'), title, status: 'todo', teamId, assigneeId });
+    input.value = '';
+    saveState(); render();
+  }
+
+  // ---- Time tracking ----
+  function renderTimeTracking() {
+    const teamId = viewTeamId();
+    const taskSelect = document.getElementById('taskSelect');
+    const tasks = teamId ? teamTasks(teamId) : [];
+    taskSelect.innerHTML = tasks.map(t => `<option value="${t.id}">${escapeHtml(t.title)}</option>`).join('');
+    document.getElementById('logForm').querySelector('button').disabled = tasks.length === 0;
+
+    const tbody = document.getElementById('myEntries');
+    const mine = state.timeEntries.filter(e => e.userId === currentUserId);
+    tbody.innerHTML = '';
+    if (mine.length === 0) { tbody.innerHTML = '<tr><td colspan="5" class="empty-hint">No time logged yet</td></tr>'; return; }
+    mine.slice().reverse().forEach(entry => {
+      const task = state.tasks.find(t => t.id === entry.taskId);
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${escapeHtml(task ? task.title : 'Deleted task')}</td>
+        <td>${entry.hours}h</td>
+        <td>${escapeHtml(entry.note || '—')}</td>
+        <td><span class="status-pill ${entry.status}">${entry.status}</span></td>
+        <td class="row-actions">${entry.status === 'draft' ? `<button class="submit" data-entry="${entry.id}">Submit</button>` : ''}</td>`;
+      tbody.appendChild(tr);
+    });
+    tbody.querySelectorAll('.submit').forEach(btn => btn.addEventListener('click', () => {
+      const entry = state.timeEntries.find(e => e.id === btn.dataset.entry);
+      if (entry) { entry.status = 'submitted'; saveState(); render(); }
+    }));
+  }
+
+  document.getElementById('logForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const taskId = document.getElementById('taskSelect').value;
+    const hours = parseFloat(document.getElementById('hoursInput').value);
+    const note = document.getElementById('noteInput').value.trim();
+    if (!taskId || !hours) return;
+    state.timeEntries.push({ id: uid('e'), taskId, hours, note, userId: currentUserId, status: 'draft', date: today() });
+    document.getElementById('hoursInput').value = '';
+    document.getElementById('noteInput').value = '';
+    saveState(); render();
+  });
+
+  // ---- Review queue ----
+  function renderReview() {
+    const p = plan();
+    const gate = document.getElementById('reviewGate');
+    const table = document.getElementById('reviewTable');
+    const allowed = p.leaderReview && (isAdmin() || isLead());
+    if (!allowed) {
+      table.style.display = 'none';
+      document.getElementById('reviewEmpty').style.display = 'none';
+      gate.innerHTML = `<div class="gate-notice">${p.leaderReview ? 'Switch to a lead or admin account to review submissions.' : 'Review is a Team-plan feature. Equisteg and Team-plan workspaces have it unlocked.'}</div>`;
+      return;
+    }
+    gate.innerHTML = '';
+    table.style.display = 'table';
+    const scopeTeamIds = isAdmin() ? state.teams.map(t => t.id) : [currentUser().teamId];
+    const queue = state.timeEntries.filter(e => {
+      if (e.status !== 'submitted') return false;
+      const u = getUser(e.userId);
+      return u && scopeTeamIds.includes(u.teamId);
+    });
+    const tbody = document.getElementById('reviewEntries');
+    tbody.innerHTML = '';
+    document.getElementById('reviewEmpty').style.display = queue.length === 0 ? 'block' : 'none';
+    queue.forEach(entry => {
+      const u = getUser(entry.userId);
+      const t = getTeam(u ? u.teamId : null);
+      const task = state.tasks.find(x => x.id === entry.taskId);
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${escapeHtml(u ? u.name : 'Unknown')}</td>
+        <td>${escapeHtml(t ? t.name : '—')}</td>
+        <td>${escapeHtml(task ? task.title : 'Deleted task')}</td>
+        <td>${entry.hours}h</td>
+        <td>${escapeHtml(entry.note || '—')}</td>
+        <td><span class="status-pill ${entry.status}">${entry.status}</span></td>
+        <td class="row-actions">
+          <button class="approve" data-entry="${entry.id}" data-action="approved">Approve</button>
+          <button class="reject" data-entry="${entry.id}" data-action="rejected">Reject</button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+    tbody.querySelectorAll('button[data-action]').forEach(btn => btn.addEventListener('click', () => {
+      const entry = state.timeEntries.find(e => e.id === btn.dataset.entry);
+      if (entry) { entry.status = btn.dataset.action; saveState(); render(); }
+    }));
+  }
+
+  // ---- Chat ----
+  function renderChat() {
+    const p = plan();
+    const gate = document.getElementById('chatGate');
+    const box = document.getElementById('chatBox');
+    if (!p.chat) {
+      box.style.display = 'none';
+      gate.innerHTML = '<div class="gate-notice">Team chat is a Team-plan feature. Upgrade from Free to unlock it.</div>';
+      return;
+    }
+    gate.innerHTML = '';
+    box.style.display = 'flex';
+    const teamId = viewTeamId();
+    const msgs = state.messages.filter(m => m.teamId === teamId).sort((a, b) => a.ts - b.ts);
+    const container = document.getElementById('chatMessages');
+    container.innerHTML = '';
+    if (msgs.length === 0) {
+      container.innerHTML = '<div class="empty-hint">No messages yet — say hello.</div>';
+    } else {
+      msgs.forEach(m => {
+        const u = getUser(m.userId);
+        const div = document.createElement('div');
+        div.className = 'msg';
+        div.innerHTML = `<span class="avatar" style="width:26px;height:26px;font-size:10.5px;background:${colorFor(m.userId)}">${initials(u ? u.name : '?')}</span>
+          <div class="msg-body">
+            <div class="msg-author">${escapeHtml(u ? u.name : 'Unknown')}<span class="msg-time">${new Date(m.ts).toLocaleString()}</span></div>
+            <div class="msg-text">${escapeHtml(m.text)}</div>
+          </div>`;
+        container.appendChild(div);
+      });
+    }
+    container.scrollTop = container.scrollHeight;
+  }
+
+  document.getElementById('chatForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    const teamId = viewTeamId();
+    if (!text || !teamId) return;
+    state.messages.push({ id: uid('m'), teamId, userId: currentUserId, text, ts: Date.now() });
+    input.value = '';
+    saveState(); renderChat();
+  });
+
+  // ---- Manage ----
+  function renderManage() {
+    const gate = document.getElementById('manageGate');
+    const content = document.getElementById('manageContent');
+    if (!isAdmin()) {
+      content.style.display = 'none';
+      gate.innerHTML = '<div class="gate-notice">Only admins manage teams and people.</div>';
+      return;
+    }
+    gate.innerHTML = '';
+    content.style.display = 'grid';
+    const p = plan();
+
+    document.getElementById('teamCapLine').textContent = p.maxTeams === Infinity ? 'Unlimited teams on this plan.' : `${state.teams.length} of ${p.maxTeams} teams used.`;
+    document.getElementById('addTeamBtn').disabled = state.teams.length >= p.maxTeams;
+
+    const teamList = document.getElementById('teamList');
+    teamList.innerHTML = state.teams.map(t => {
+      const lead = t.leadId ? getUser(t.leadId) : null;
+      return `<li><strong>${escapeHtml(t.name)}</strong> — lead: ${lead ? escapeHtml(lead.name) : 'none'} · ${teamMembers(t.id).length} people</li>`;
+    }).join('');
+
+    const newUserTeam = document.getElementById('newUserTeam');
+    newUserTeam.innerHTML = state.teams.map(t => `<option value="${t.id}">${escapeHtml(t.name)}</option>`).join('');
+
+    const userList = document.getElementById('userList');
+    userList.innerHTML = '';
+    state.users.forEach(u => {
+      const li = document.createElement('li');
+      const roleOptions = ['member', 'lead', 'admin'].map(r => `<option value="${r}" ${u.role === r ? 'selected' : ''}>${r.charAt(0).toUpperCase() + r.slice(1)}</option>`).join('');
+      const teamOptions = state.teams.map(t => `<option value="${t.id}" ${u.teamId === t.id ? 'selected' : ''}>${escapeHtml(t.name)}</option>`).join('');
+      li.innerHTML = `<span class="avatar" style="width:24px;height:24px;font-size:10px;background:${colorFor(u.id)}">${initials(u.name)}</span>
+        <span style="min-width:100px;">${escapeHtml(u.name)}</span>
+        <select class="role-select" data-user="${u.id}">${roleOptions}</select>
+        <select class="team-select" data-user="${u.id}">${teamOptions}</select>`;
+      userList.appendChild(li);
+    });
+    userList.querySelectorAll('.role-select').forEach(sel => sel.addEventListener('change', () => {
+      const u = getUser(sel.dataset.user);
+      if (u) { u.role = sel.value; saveState(); render(); }
+    }));
+    userList.querySelectorAll('.team-select').forEach(sel => sel.addEventListener('change', () => {
+      const u = getUser(sel.dataset.user);
+      if (u) { u.teamId = sel.value; saveState(); render(); }
+    }));
+  }
+
+  document.getElementById('addTeamForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const p = plan();
+    if (state.teams.length >= p.maxTeams) return;
+    const name = document.getElementById('newTeamName').value.trim();
+    if (!name) return;
+    state.teams.push({ id: uid('team'), name, leadId: null });
+    document.getElementById('newTeamName').value = '';
+    saveState(); render();
+  });
+
+  document.getElementById('addUserForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const name = document.getElementById('newUserName').value.trim();
+    if (!name) return;
+    const role = document.getElementById('newUserRole').value;
+    const teamId = document.getElementById('newUserTeam').value;
+    const newUser = { id: uid('u'), name, role, teamId };
+    state.users.push(newUser);
+    if (role === 'lead') {
+      const t = getTeam(teamId);
+      if (t && !t.leadId) t.leadId = newUser.id;
+    }
+    document.getElementById('newUserName').value = '';
+    saveState(); render();
+  });
+
+  // ---- Top-level listeners ----
+  document.getElementById('workspace').addEventListener('change', e => {
+    currentWorkspace = e.target.value;
+    init();
+  });
+  document.getElementById('userSelect').addEventListener('change', e => {
+    currentUserId = e.target.value;
+    if (isAdmin()) {
+      if (!currentViewTeamId || !getTeam(currentViewTeamId)) currentViewTeamId = state.teams[0] ? state.teams[0].id : null;
+    } else {
+      currentViewTeamId = currentUser() ? currentUser().teamId : null;
+    }
+    saveCurrentUser();
+    render();
+  });
+  document.getElementById('teamSelect').addEventListener('change', e => {
+    currentViewTeamId = e.target.value;
+    render();
+  });
+
+  init();
+})();
+</script>
+</body>
+</html>

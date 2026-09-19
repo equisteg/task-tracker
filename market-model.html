@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Market Model — Platform, Pricing & Positioning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F1F3EE;
+    --bg-raised: #E8EBE3;
+    --ink: #1B2430;
+    --ink-soft: #4A5147;
+    --rule: #C9CDC2;
+    --ochre: #B9812E;
+    --ochre-soft: #EFE1C6;
+    --teal: #1F5C52;
+    --teal-soft: #DCE9E4;
+    --red-soft: #E7DAD3;
+    --red: #9B5A3C;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14181A;
+      --bg-raised: #1B211F;
+      --ink: #E7EAE3;
+      --ink-soft: #AEB6A9;
+      --rule: #333B34;
+      --ochre: #D9A24F;
+      --ochre-soft: #2E2415;
+      --teal: #6FBFA9;
+      --teal-soft: #16241F;
+      --red-soft: #2A1E17;
+      --red: #C98A68;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14181A;
+    --bg-raised: #1B211F;
+    --ink: #E7EAE3;
+    --ink-soft: #AEB6A9;
+    --rule: #333B34;
+    --ochre: #D9A24F;
+    --ochre-soft: #2E2415;
+    --teal: #6FBFA9;
+    --teal-soft: #16241F;
+    --red-soft: #2A1E17;
+    --red: #C98A68;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 72px 24px 120px;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Fraunces', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-weight: 500;
+    line-height: 1.15;
+    margin: 0;
+  }
+
+  /* Hero */
+  .hero-label {
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin: 0 0 18px;
+  }
+  h1 {
+    font-size: clamp(32px, 5.5vw, 50px);
+    max-width: 14ch;
+    letter-spacing: -0.01em;
+  }
+  .hero-sub {
+    margin: 20px 0 0;
+    max-width: 52ch;
+    font-size: 18px;
+    color: var(--ink-soft);
+  }
+  .stat-row {
+    display: flex;
+    gap: 48px;
+    flex-wrap: wrap;
+    margin-top: 48px;
+    padding-top: 28px;
+    border-top: 1px solid var(--rule);
+  }
+  .stat-num {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 500;
+  }
+  .stat-label {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-top: 4px;
+    max-width: 18ch;
+  }
+
+  section { margin-top: 88px; }
+  h2 {
+    font-size: 26px;
+    margin-bottom: 8px;
+  }
+  .section-dek {
+    color: var(--ink-soft);
+    max-width: 58ch;
+    margin: 0 0 32px;
+    font-size: 15.5px;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+  }
+  th, td {
+    text-align: left;
+    padding: 13px 10px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  th {
+    font-weight: 600;
+    color: var(--ink-soft);
+    font-size: 13px;
+  }
+  td.feature, th.feature { padding-left: 0; }
+  .mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .mark.yes { background: var(--teal-soft); color: var(--teal); }
+  .mark.partial { background: var(--ochre-soft); color: var(--ochre); }
+  .mark.no { background: var(--red-soft); color: var(--red); opacity: 0.7; }
+  .row-note {
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin-top: 2px;
+  }
+  .table-scroll {
+    overflow-x: auto;
+    margin: 0 -4px;
+    padding: 0 4px;
+  }
+
+  /* Pricing */
+  .tier-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0;
+    border-top: 1px solid var(--rule);
+    margin-top: 8px;
+  }
+  .tier {
+    padding: 24px 16px 24px 0;
+    border-right: 1px solid var(--rule);
+  }
+  .tier:last-child { border-right: none; }
+  .tier-name {
+    font-family: 'Fraunces', serif;
+    font-size: 19px;
+    font-weight: 500;
+  }
+  .tier-price {
+    margin-top: 6px;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .tier-price strong {
+    color: var(--ink);
+    font-size: 15px;
+  }
+  .tier-list {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0 0;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+  }
+  .tier-list li { margin-bottom: 8px; }
+  .tier.equisteg {
+    background: var(--teal-soft);
+    margin-right: -16px;
+    padding-left: 16px;
+    padding-right: 32px;
+    border-radius: 2px;
+  }
+  .tier.equisteg .tier-name { color: var(--teal); }
+
+  /* Flow */
+  .flow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    margin-top: 8px;
+  }
+  .flow-step {
+    flex: 1 1 150px;
+    padding: 18px 20px 18px 0;
+    border-top: 2px solid var(--rule);
+    position: relative;
+  }
+  .flow-step.active { border-top-color: var(--teal); }
+  .flow-step-name {
+    font-weight: 600;
+    font-size: 15px;
+  }
+  .flow-step-desc {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-top: 4px;
+  }
+  .flow-actor {
+    font-size: 11.5px;
+    color: var(--teal);
+    text-transform: none;
+    margin-top: 8px;
+    font-weight: 600;
+  }
+
+  /* Stack list */
+  .stack-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 32px;
+    margin-top: 8px;
+  }
+  .stack-item {
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 14px;
+  }
+  .stack-role {
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+  .stack-choice {
+    font-weight: 600;
+    margin-top: 2px;
+  }
+  .stack-cost {
+    font-size: 12.5px;
+    color: var(--teal);
+    margin-top: 3px;
+  }
+
+  .positioning-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .positioning-item {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 20px;
+  }
+  .positioning-item:first-child { padding-top: 0; }
+  .positioning-audience {
+    font-weight: 600;
+    font-size: 15px;
+  }
+  .positioning-line {
+    color: var(--ink-soft);
+    font-size: 14.5px;
+  }
+
+  footer {
+    margin-top: 100px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 560px) {
+    .wrap { padding: 48px 18px 90px; }
+    .stat-row { gap: 28px; }
+    .tier-grid { grid-template-columns: 1fr 1fr; }
+    .stack-list { grid-template-columns: 1fr; }
+    .positioning-item { grid-template-columns: 1fr; gap: 6px; }
+    table { font-size: 13px; }
+    th, td { padding: 10px 6px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="hero-label">Equisteg — internal working model</p>
+  <h1>Win on one workflow done properly, not every feature the incumbents have.</h1>
+  <p class="hero-sub">A lean project &amp; team workspace: task tracking, collaboration, and time tracking with leader review — built to run at near-zero cost and free for Equisteg from day one.</p>
+
+  <div class="stat-row">
+    <div>
+      <div class="stat-num">$0</div>
+      <div class="stat-label">infra spend to launch, on free-tier hosting and database</div>
+    </div>
+    <div>
+      <div class="stat-num">1</div>
+      <div class="stat-label">codebase serving every workspace, free and paid alike</div>
+    </div>
+    <div>
+      <div class="stat-num">∞</div>
+      <div class="stat-label">Equisteg's own workspace, entitled unlimited by default</div>
+    </div>
+  </div>
+
+  <section>
+    <h2>Where this sits against the incumbents</h2>
+    <p class="section-dek">Not a feature-for-feature match to Notion, Trello, Jira or ServiceNow — those took years and large teams to build. The comparison below is about where a lean build can genuinely compete now, and where it deliberately doesn't try to yet.</p>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th class="feature">Capability</th>
+          <th>This platform</th>
+          <th>Notion</th>
+          <th>Trello</th>
+          <th>Jira</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="feature">Task tracking &amp; boards</td>
+          <td><span class="mark yes">✓</span></td>
+          <td><span class="mark yes">✓</span></td>
+          <td><span class="mark yes">✓</span></td>
+          <td><span class="mark yes">✓</span></td>
+        </tr>
+        <tr>
+          <td class="feature">Time tracking with leader review &amp; submit</td>
+          <td><span class="mark yes">✓</span><div class="row-note">core differentiator</div></td>
+          <td><span class="mark no">–</span></td>
+          <td><span class="mark partial">±</span><div class="row-note">via add-ons only</div></td>
+          <td><span class="mark partial">±</span><div class="row-note">plugin-dependent</div></td>
+        </tr>
+        <tr>
+          <td class="feature">Internal team gets full access free</td>
+          <td><span class="mark yes">✓</span><div class="row-note">built into the access model</div></td>
+          <td><span class="mark no">–</span></td>
+          <td><span class="mark no">–</span></td>
+          <td><span class="mark no">–</span></td>
+        </tr>
+        <tr>
+          <td class="feature">Real-time collaboration &amp; chat</td>
+          <td><span class="mark partial">±</span><div class="row-note">v2, after core loop is proven</div></td>
+          <td><span class="mark yes">✓</span></td>
+          <td><span class="mark partial">±</span></td>
+          <td><span class="mark partial">±</span></td>
+        </tr>
+        <tr>
+          <td class="feature">Sprint dashboards &amp; reporting</td>
+          <td><span class="mark partial">±</span><div class="row-note">basic at launch, deeper later</div></td>
+          <td><span class="mark partial">±</span></td>
+          <td><span class="mark partial">±</span></td>
+          <td><span class="mark yes">✓</span></td>
+        </tr>
+        <tr>
+          <td class="feature">Native iOS / Android apps</td>
+          <td><span class="mark no">–</span><div class="row-note">responsive web / PWA instead</div></td>
+          <td><span class="mark yes">✓</span></td>
+          <td><span class="mark yes">✓</span></td>
+          <td><span class="mark yes">✓</span></td>
+        </tr>
+        <tr>
+          <td class="feature">Enterprise SSO, audit logging</td>
+          <td><span class="mark no">–</span><div class="row-note">v2+, once paid tiers fund it</div></td>
+          <td><span class="mark yes">✓</span></td>
+          <td><span class="mark partial">±</span></td>
+          <td><span class="mark yes">✓</span></td>
+        </tr>
+        <tr>
+          <td class="feature">Runs at near-zero cost to operate</td>
+          <td><span class="mark yes">✓</span></td>
+          <td><span class="mark no">–</span></td>
+          <td><span class="mark no">–</span></td>
+          <td><span class="mark no">–</span></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Pricing tiers</h2>
+    <p class="section-dek">Equisteg's own workspace sits outside this ladder entirely — it's entitled, not billed. Everyone else climbs the same ladder every SaaS in this space uses.</p>
+    <div class="tier-grid">
+      <div class="tier equisteg">
+        <div class="tier-name">Equisteg</div>
+        <div class="tier-price"><strong>Free, always</strong><br>internal workspace</div>
+        <ul class="tier-list">
+          <li>Every feature, unlimited</li>
+          <li>No seat cap</li>
+          <li>Flagged by workspace ID, not a separate build</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <div class="tier-name">Free</div>
+        <div class="tier-price"><strong>₹0</strong> / seat</div>
+        <ul class="tier-list">
+          <li>Task boards, up to 10 members</li>
+          <li>Time tracking, self-submit only</li>
+          <li>7-day history</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <div class="tier-name">Team</div>
+        <div class="tier-price"><strong>Paid</strong> / seat / mo</div>
+        <ul class="tier-list">
+          <li>Unlimited members</li>
+          <li>Leader review &amp; approval queue</li>
+          <li>Basic reporting dashboard</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <div class="tier-name">Business</div>
+        <div class="tier-price"><strong>Paid</strong> / seat / mo</div>
+        <ul class="tier-list">
+          <li>Sprint &amp; time-tracking analytics</li>
+          <li>Role-based access control</li>
+          <li>Priority support</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Time tracking: submit and review</h2>
+    <p class="section-dek">One workflow, two roles. Entries move forward through status, never sideways.</p>
+    <div class="flow">
+      <div class="flow-step active">
+        <div class="flow-step-name">Log</div>
+        <div class="flow-step-desc">Hours logged against a task, saved as draft</div>
+        <div class="flow-actor">Team member</div>
+      </div>
+      <div class="flow-step active">
+        <div class="flow-step-name">Submit</div>
+        <div class="flow-step-desc">Period locked, sent for review</div>
+        <div class="flow-actor">Team member</div>
+      </div>
+      <div class="flow-step active">
+        <div class="flow-step-name">Review</div>
+        <div class="flow-step-desc">Approve, reject, or comment</div>
+        <div class="flow-actor">Leader</div>
+      </div>
+      <div class="flow-step active">
+        <div class="flow-step-name">Roll up</div>
+        <div class="flow-step-desc">Approved hours feed the reporting dashboard</div>
+        <div class="flow-actor">Automatic</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What actually runs it</h2>
+    <p class="section-dek">"Zero operational cost" means free-tier infrastructure with a usage ceiling, not nothing. This is the honest version of that constraint.</p>
+    <div class="stack-list">
+      <div class="stack-item">
+        <div class="stack-role">Hosting</div>
+        <div class="stack-choice">Vercel or Cloudflare Pages</div>
+        <div class="stack-cost">free up to generous traffic limits</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-role">Auth &amp; database</div>
+        <div class="stack-choice">Supabase or Firebase</div>
+        <div class="stack-cost">free tier covers MVP-scale usage</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-role">Mobile access</div>
+        <div class="stack-choice">Responsive PWA, no native apps yet</div>
+        <div class="stack-cost">avoids app-store fees and two extra codebases</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-role">File storage</div>
+        <div class="stack-choice">Bundled with the database provider</div>
+        <div class="stack-cost">free tier, upgrade only past real usage</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Who this is for, and what it says to them</h2>
+    <ul class="positioning-list">
+      <li class="positioning-item">
+        <div class="positioning-audience">Equisteg's own team</div>
+        <div class="positioning-line">One place to track work and hours, already paid for — nothing to buy, nothing to renew.</div>
+      </li>
+      <li class="positioning-item">
+        <div class="positioning-audience">Small teams outgrowing spreadsheets</div>
+        <div class="positioning-line">Task tracking and time tracking in one tool, free to start, without the enterprise weight of Jira.</div>
+      </li>
+      <li class="positioning-item">
+        <div class="positioning-audience">Growing teams with leads who approve hours</div>
+        <div class="positioning-line">A submit-and-review workflow built in, not bolted on through a plugin.</div>
+      </li>
+    </ul>
+  </section>
+
+  <footer>
+    Working model — feature scope and pricing are directional, meant to sharpen as the wedge narrows.
+  </footer>
+
+</div>
+</body>
+</html>

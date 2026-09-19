@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Android Studio & Gradle
+.gradle/
+build/
+android/.gradle/
+android/build/
+android/app/build/
+android/.idea/
+android/*.iml
+android/app/*.iml
+local.properties
+.cxx/
+
+# Node / Scratch
+node_modules/
+*.log
