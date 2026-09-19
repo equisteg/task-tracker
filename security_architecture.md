@@ -127,3 +127,23 @@ AegisFlow eliminates recurring infrastructure costs by implementing a **Multi-St
    - Complete JSON Export with cryptographic SHA-256 payload integrity signature.
    - CSV Task and Standup Log exports for compatibility with Excel, BI, and reporting tools.
    - Safe JSON Import with schema validation, format verification, and preview before committing.
+
+---
+
+## 6. Multi-Tenant Identity Verification & Paywall Architecture
+
+AegisFlow enforces a tiered multi-tenant licensing and access control policy:
+
+### 6.1 Equisteg Master Identity Verification (`equisteg@gmail.com`)
+- **Lifetime Free Unlimited License ($0.00 / Forever)**: The **Equisteg** organization is granted an exclusive, unconditional lifetime complimentary license across all enterprise features, unlimited user seats, unrestricted automated allocations, and immutable ledger logging.
+- **Cryptographic Verification Gate**: Access to the Equisteg unlimited workspace is strictly gated behind verified Google Identity Services (OAuth 2.0 / TOTP security challenge) authenticating the master identity: `equisteg@gmail.com`.
+- **Anti-Impersonation Protection**: Any attempt to authenticate as Equisteg via standard corporate password portals is automatically intercepted and routed to the Google Identity Verification Gateway.
+
+### 6.2 Commercial Organizations (Access After Payment)
+- **Commercial Paywall**: Any organization other than Equisteg (or any unverified instance) operates on a commercial subscription model.
+- **Subscription Tiers**:
+  - **Starter Tier ($19/mo)**: Small teams up to 5 members, task boards, and daily standups.
+  - **Professional Tier ($49/mo)**: Mid-size teams up to 25 members, automated task allocation engine, interactive SLA calendar, and SHA-256 audit ledger.
+  - **Enterprise Tier ($99/mo)**: Unlimited members, dedicated SLA radar, cross-team floating support specialists, and custom branding.
+- **License Key Activation**: Commercial enterprises may alternatively activate perpetual access using signed license keys (`EQUISTEG-PAID-XXXX`).
+- **Automated Feature Gating**: Unpaid or trial-expired commercial organizations are prompted with the paywall gateway when accessing premium features (automated allocation, cross-team reallocations, and cryptographic data exports).
