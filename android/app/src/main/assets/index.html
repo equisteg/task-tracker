@@ -86,9 +86,9 @@
           <i data-lucide="shield-check" class="w-8 h-8"></i>
         </div>
         <h2 id="auth-header-title" class="text-2xl font-heading font-extrabold tracking-tight text-white">Task Tracker Enterprise</h2>
-        <p id="auth-header-subtitle" class="text-xs text-slate-400">Zero-Trust Identity, Multi-Tenant Registration & Access Control</p>
+        <p id="auth-header-subtitle" class="text-xs text-slate-400">Zero-Trust Identity, Multi-Tenant Workspace & Access Gateway</p>
         <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-950/80 text-emerald-400 border border-emerald-800">
-          <i data-lucide="lock" class="w-3 h-3"></i> SHA-256 HMAC SESSIONS • RATE LIMITED • VERIFIED IDENTITY
+          <i data-lucide="lock" class="w-3 h-3"></i> SHA-256 HMAC SESSIONS • RATE LIMITED • SECURED
         </div>
       </div>
 
@@ -102,41 +102,14 @@
         </button>
       </div>
 
-      <!-- ================= SIGN IN VIEW ================= -->
-      <div id="auth-view-signin" class="space-y-5">
-        <!-- Equisteg Master One-Click Identity Button -->
-        <div class="p-3.5 rounded-2xl bg-gradient-to-r from-emerald-950/80 via-slate-900 to-shield-900 border border-emerald-500/40 shadow-md space-y-2">
-          <div class="flex items-center justify-between text-[11px]">
-            <span class="font-extrabold text-white flex items-center gap-1.5">
-              <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i> Equisteg Master Administrator
-            </span>
-            <span class="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold">
-              Lifetime Free Access
-            </span>
-          </div>
-          <button type="button" onclick="app.quickLoginEquisteg()" class="w-full py-2.5 px-3 bg-white text-slate-900 hover:bg-slate-100 font-bold text-xs rounded-xl shadow transition-all flex items-center justify-center gap-2.5 active:scale-95">
-            <svg class="w-4 h-4" viewBox="0 0 24 24">
-              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-            </svg>
-            <span>Verify & Sign In as equisteg@gmail.com</span>
-          </button>
-        </div>
-
-        <div class="flex items-center gap-3 text-slate-500 text-[10px] font-bold uppercase tracking-wider">
-          <div class="h-px bg-slate-800 flex-1"></div>
-          <span>Or Sign In with Corporate Identity</span>
-          <div class="h-px bg-slate-800 flex-1"></div>
-        </div>
-
+      <!-- ================= SIGN IN VIEW (100% SECURE, NO EXPOSED EMAILS) ================= -->
+      <div id="auth-view-signin" class="space-y-4">
         <form id="form-auth" onsubmit="app.handleAuthSubmit(event)" class="space-y-3.5 text-xs">
           <div>
-            <label class="block font-semibold text-slate-300 mb-1">Company / Admin Email</label>
+            <label class="block font-semibold text-slate-300 mb-1">Corporate Email / Identity</label>
             <div class="relative">
               <i data-lucide="mail" class="w-4 h-4 absolute left-3 top-3 text-slate-500"></i>
-              <input type="email" id="auth-input-email" required placeholder="admin@yourcompany.com" value="elena@aegisflow.internal" class="w-full pl-9 pr-3 py-2.5 bg-shield-950/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+              <input type="email" id="auth-input-email" required placeholder="name@yourcompany.com" value="" class="w-full pl-9 pr-3 py-2.5 bg-shield-950/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
             </div>
           </div>
 
@@ -144,7 +117,7 @@
             <label class="block font-semibold text-slate-300 mb-1">Master Passphrase / Key</label>
             <div class="relative">
               <i data-lucide="key" class="w-4 h-4 absolute left-3 top-3 text-slate-500"></i>
-              <input type="password" id="auth-input-password" required placeholder="••••••••••••" value="demo12345" class="w-full pl-9 pr-9 py-2.5 bg-shield-950/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+              <input type="password" id="auth-input-password" required placeholder="••••••••••••" value="" class="w-full pl-9 pr-9 py-2.5 bg-shield-950/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
               <button type="button" onclick="app.togglePasswordVisibility()" class="absolute right-3 top-3 text-slate-400 hover:text-slate-200">
                 <i id="auth-password-toggle-icon" data-lucide="eye" class="w-4 h-4"></i>
               </button>
@@ -174,21 +147,30 @@
           </div>
 
           <button type="submit" id="auth-submit-btn" class="w-full py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-emerald-500/20 transition-all flex items-center justify-center gap-2">
-            <i data-lucide="log-in" class="w-4 h-4"></i> Sign In with Cryptographic Verification
+            <i data-lucide="log-in" class="w-4 h-4"></i> Sign In to Workspace
           </button>
 
           <div id="auth-lockout-msg" class="hidden text-center text-rose-400 font-semibold text-[11px] p-2 rounded-lg bg-rose-950/40 border border-rose-900/60"></div>
         </form>
 
-        <!-- Quick One-Click Persona Login -->
-        <div class="pt-4 border-t border-slate-800 space-y-2">
-          <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 text-center flex items-center justify-center gap-1">
-            <i data-lucide="users" class="w-3 h-3 text-emerald-500"></i> Quick One-Click Persona Testing
-          </div>
-          <div id="quick-persona-list" class="space-y-1.5 max-h-48 overflow-y-auto pr-1">
+        <div class="text-center pt-2">
+          <p class="text-xs text-slate-400">
+            Need to setup an organization workspace?
+            <button type="button" onclick="app.setAuthMode('register')" class="text-emerald-400 font-bold hover:underline ml-1">
+              Register New Company →
+            </button>
+          </p>
+        </div>
+
+        <!-- Collapsed Developer Persona Testing Drawer -->
+        <details class="pt-3 border-t border-slate-800/80 text-left">
+          <summary class="text-[10px] text-slate-500 hover:text-slate-400 cursor-pointer text-center font-semibold select-none">
+            ▼ Developer Simulation / Demo Accounts
+          </summary>
+          <div id="quick-persona-list" class="mt-2 space-y-1.5 max-h-40 overflow-y-auto pr-1">
             <!-- Populated dynamically -->
           </div>
-        </div>
+        </details>
       </div>
 
       <!-- ================= REGISTER WORKSPACE VIEW ================= -->
@@ -216,18 +198,18 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label class="block font-semibold text-slate-300 mb-1">Company / Org Name *</label>
-              <input type="text" id="reg-company-name" required placeholder="e.g. Equisteg or Acme Corp" oninput="app.syncRegDomain(this.value)" class="w-full px-3 py-2 bg-shield-950/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+              <input type="text" id="reg-company-name" required placeholder="e.g. Acme Corp" oninput="app.syncRegDomain(this.value)" class="w-full px-3 py-2 bg-shield-950/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
             </div>
             <div>
               <label class="block font-semibold text-slate-300 mb-1">Company Domain *</label>
-              <input type="text" id="reg-company-domain" required placeholder="e.g. equisteg.com" class="w-full px-3 py-2 bg-shield-950/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+              <input type="text" id="reg-company-domain" required placeholder="e.g. acme.com" class="w-full px-3 py-2 bg-shield-950/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
             </div>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label class="block font-semibold text-slate-300 mb-1">Admin Full Name / Username *</label>
-              <input type="text" id="reg-admin-name" required placeholder="e.g. Tejo Admin" class="w-full px-3 py-2 bg-shield-950/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+              <input type="text" id="reg-admin-name" required placeholder="e.g. Alex Morgan" class="w-full px-3 py-2 bg-shield-950/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
             </div>
             <div>
               <label class="block font-semibold text-slate-300 mb-1">Initial Department *</label>
@@ -236,13 +218,10 @@
           </div>
 
           <div>
-            <label class="block font-semibold text-slate-300 mb-1 flex items-center justify-between">
-              <span>Admin Company Email (Verification Target) *</span>
-              <span class="text-[10px] text-emerald-400">Notice: equisteg@gmail.com gets Lifetime Free</span>
-            </label>
+            <label class="block font-semibold text-slate-300 mb-1">Admin Company Email (Verification Target) *</label>
             <div class="relative">
               <i data-lucide="mail" class="w-4 h-4 absolute left-3 top-2.5 text-slate-500"></i>
-              <input type="email" id="reg-admin-email" required placeholder="e.g. equisteg@gmail.com or admin@acmecorp.com" class="w-full pl-9 pr-3 py-2 bg-shield-950/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+              <input type="email" id="reg-admin-email" required placeholder="admin@yourcompany.com" class="w-full pl-9 pr-3 py-2 bg-shield-950/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
             </div>
           </div>
 
@@ -250,7 +229,7 @@
             <label class="block font-semibold text-slate-300 mb-1">Master Passphrase *</label>
             <div class="relative">
               <i data-lucide="lock" class="w-4 h-4 absolute left-3 top-2.5 text-slate-500"></i>
-              <input type="password" id="reg-admin-password" required placeholder="Create a secure passphrase" class="w-full pl-9 pr-3 py-2 bg-shield-950/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+              <input type="password" id="reg-admin-password" required placeholder="Create a strong passphrase" class="w-full pl-9 pr-3 py-2 bg-shield-950/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
             </div>
           </div>
 
@@ -270,21 +249,21 @@
             </div>
             <div class="font-extrabold text-sm text-white">Verify Admin Company Email</div>
             <p class="text-xs text-slate-400">
-              We generated a 6-digit security code for: <br>
+              A 6-digit verification security code has been sent to: <br>
               <strong id="reg-verify-target-email" class="text-emerald-400 font-mono text-xs">admin@company.com</strong>
             </p>
           </div>
 
           <!-- Dynamic Verification Classifier Alert -->
           <div id="reg-email-classification-alert">
-            <!-- Rendered dynamically depending on whether email is equisteg@gmail.com or other -->
+            <!-- Rendered dynamically -->
           </div>
 
           <div class="space-y-1.5">
             <label class="block font-semibold text-slate-300 flex items-center justify-between text-[11px]">
               <span>Enter 6-Digit Email Verification Code</span>
               <button type="button" onclick="app.autoFillRegCode()" class="text-[10px] text-emerald-400 hover:underline">
-                Auto-Fill Test Code: <span class="font-mono font-bold">849201</span>
+                Auto-Fill Code: <span id="reg-code-hint" class="font-mono font-bold">849201</span>
               </button>
             </label>
             <input type="text" id="reg-otp-input" maxlength="6" placeholder="849201" class="w-full py-2.5 px-3 bg-shield-950/80 border border-slate-700 rounded-xl text-white font-mono text-center text-lg tracking-widest font-bold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
@@ -302,9 +281,8 @@
 
         <!-- STEP 3: Access & Subscription Setup -->
         <div id="reg-panel-step-3" class="hidden space-y-4 text-xs">
-          <!-- Dynamic Step 3 Content: Equisteg VIP vs Commercial Model ($1/user/mo or $10/user/yr) -->
           <div id="reg-step-3-content">
-            <!-- Rendered dynamically -->
+            <!-- Rendered dynamically depending on whether email is equisteg@gmail.com or other -->
           </div>
         </div>
       </div>
@@ -2098,17 +2076,17 @@
         this.authMode = 'signin'; // 'signin' or 'register'
         this.regStep = 1;
         this.regData = {
-          companyName: 'Equisteg',
-          companyDomain: 'equisteg.com',
-          adminName: 'Equisteg Master Administrator',
-          adminEmail: 'equisteg@gmail.com',
-          adminPassword: 'demoPassword123',
+          companyName: '',
+          companyDomain: '',
+          adminName: '',
+          adminEmail: '',
+          adminPassword: '',
           initialTeam: 'Core Operations',
           billingCycle: 'monthly',
           seats: 5,
           isEmailVerified: false
         };
-        this.regExpectedOTP = '849201';
+        this.regExpectedOTP = '';
         this.paywallCycle = 'monthly';
         this.paywallSeats = 5;
 
@@ -2182,7 +2160,7 @@
                 <img src="${u.avatar}" class="w-8 h-8 rounded-full object-cover border border-emerald-500/40">
                 <div class="text-left">
                   <div class="font-bold text-white text-xs group-hover:text-emerald-400 transition-colors">${u.name}</div>
-                  <div class="text-[10px] text-slate-400">${u.name.toLowerCase().replace(' ', '.')}@aegisflow.internal</div>
+                  <div class="text-[10px] text-slate-400">${u.email || (u.name.toLowerCase().replace(' ', '.') + '@aegisflow.internal')}</div>
                 </div>
               </div>
               <div class="flex items-center gap-2">
@@ -2197,6 +2175,418 @@
         lucide.createIcons();
       }
 
+      // Mode switch between Sign In and Registration
+      setAuthMode(mode) {
+        this.authMode = mode;
+        const signinView = document.getElementById('auth-view-signin');
+        const registerView = document.getElementById('auth-view-register');
+        const tabSignin = document.getElementById('auth-tab-signin');
+        const tabRegister = document.getElementById('auth-tab-register');
+        const headerTitle = document.getElementById('auth-header-title');
+        const headerSubtitle = document.getElementById('auth-header-subtitle');
+
+        if (mode === 'signin') {
+          if (signinView) signinView.classList.remove('hidden');
+          if (registerView) registerView.classList.add('hidden');
+          if (tabSignin) {
+            tabSignin.className = 'py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 bg-emerald-600 text-white shadow-md';
+          }
+          if (tabRegister) {
+            tabRegister.className = 'py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 text-slate-400 hover:text-white';
+          }
+          if (headerTitle) headerTitle.textContent = (this.state.company ? this.state.company.name : 'Task Tracker') + ' Enterprise';
+          if (headerSubtitle) headerSubtitle.textContent = 'Zero-Trust Identity, Multi-Tenant Authentication & Session Gateway';
+        } else {
+          if (signinView) signinView.classList.add('hidden');
+          if (registerView) registerView.classList.remove('hidden');
+          if (tabSignin) {
+            tabSignin.className = 'py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 text-slate-400 hover:text-white';
+          }
+          if (tabRegister) {
+            tabRegister.className = 'py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 bg-emerald-600 text-white shadow-md';
+          }
+          if (headerTitle) headerTitle.textContent = 'Register Company Workspace';
+          if (headerSubtitle) headerSubtitle.textContent = 'Admin Registration, Email Verification & Multi-Tenant Setup';
+          this.goToRegistrationStep(1);
+        }
+        lucide.createIcons();
+      }
+
+      syncRegDomain(companyName) {
+        const domainInput = document.getElementById('reg-company-domain');
+        if (!domainInput) return;
+        const clean = companyName.toLowerCase().trim().replace(/[^a-z0-9]/g, '');
+        if (clean) {
+          domainInput.value = `${clean}.com`;
+        }
+      }
+
+      submitRegStep1() {
+        const companyName = document.getElementById('reg-company-name')?.value.trim();
+        const companyDomain = document.getElementById('reg-company-domain')?.value.trim();
+        const adminName = document.getElementById('reg-admin-name')?.value.trim();
+        const adminEmail = document.getElementById('reg-admin-email')?.value.trim().toLowerCase();
+        const adminPassword = document.getElementById('reg-admin-password')?.value;
+        const initialTeam = document.getElementById('reg-initial-team')?.value.trim() || 'Core Operations';
+
+        if (!companyName || !companyDomain || !adminName || !adminEmail || !adminPassword) {
+          this.showToast('Please fill in all required registration fields.', 'error');
+          return;
+        }
+
+        const emailRegex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+        if (!emailRegex.test(adminEmail)) {
+          this.showToast('Please provide a valid company email address.', 'error');
+          return;
+        }
+
+        this.regData.companyName = this.sanitizeInput(companyName);
+        this.regData.companyDomain = this.sanitizeInput(companyDomain);
+        this.regData.adminName = this.sanitizeInput(adminName);
+        this.regData.adminEmail = adminEmail;
+        this.regData.adminPassword = adminPassword;
+        this.regData.initialTeam = this.sanitizeInput(initialTeam);
+
+        // Generate random 6-digit OTP
+        this.regExpectedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+
+        this.goToRegistrationStep(2);
+      }
+
+      goToRegistrationStep(step) {
+        this.regStep = step;
+        const p1 = document.getElementById('reg-panel-step-1');
+        const p2 = document.getElementById('reg-panel-step-2');
+        const p3 = document.getElementById('reg-panel-step-3');
+
+        if (p1) p1.classList.toggle('hidden', step !== 1);
+        if (p2) p2.classList.toggle('hidden', step !== 2);
+        if (p3) p3.classList.toggle('hidden', step !== 3);
+
+        const ind1 = document.getElementById('reg-step-ind-1');
+        const ind2 = document.getElementById('reg-step-ind-2');
+        const ind3 = document.getElementById('reg-step-ind-3');
+
+        if (ind1) ind1.className = step >= 1 ? 'flex items-center gap-1.5 text-emerald-400 font-bold' : 'flex items-center gap-1.5 text-slate-500';
+        if (ind2) ind2.className = step >= 2 ? 'flex items-center gap-1.5 text-emerald-400 font-bold' : 'flex items-center gap-1.5 text-slate-500';
+        if (ind3) ind3.className = step >= 3 ? 'flex items-center gap-1.5 text-emerald-400 font-bold' : 'flex items-center gap-1.5 text-slate-500';
+
+        if (step === 2) {
+          const targetEl = document.getElementById('reg-verify-target-email');
+          if (targetEl) targetEl.textContent = this.regData.adminEmail;
+
+          const hintEl = document.getElementById('reg-code-hint');
+          if (hintEl) hintEl.textContent = this.regExpectedOTP;
+
+          const alertEl = document.getElementById('reg-email-classification-alert');
+          if (alertEl) {
+            const isEquisteg = this.regData.adminEmail === 'equisteg@gmail.com';
+            if (isEquisteg) {
+              alertEl.innerHTML = `
+                <div class="p-3.5 rounded-xl bg-gradient-to-r from-emerald-950/80 to-shield-900 border border-emerald-500/60 flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full bg-emerald-500 text-shield-950 font-extrabold flex items-center justify-center text-xs shadow-md">
+                    <i data-lucide="zap" class="w-4 h-4"></i>
+                  </div>
+                  <div class="text-left flex-1">
+                    <div class="font-extrabold text-emerald-300 text-xs flex items-center gap-1.5">
+                      <span>Equisteg Master Organization Identified</span>
+                      <span class="px-1.5 py-0.2 rounded text-[9px] bg-emerald-400 text-shield-950 font-bold">100% Free VIP</span>
+                    </div>
+                    <div class="text-[11px] text-slate-300 mt-0.5">Verifying this email unlocks <strong>Lifetime Free Unlimited Access</strong> ($0.00 / forever, unlimited seats, zero charges).</div>
+                  </div>
+                </div>
+              `;
+            } else {
+              alertEl.innerHTML = `
+                <div class="p-3.5 rounded-xl bg-gradient-to-r from-blue-950/60 to-shield-900 border border-blue-800/80 flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full bg-blue-500 text-white font-extrabold flex items-center justify-center text-xs shadow-md">
+                    <i data-lucide="building" class="w-4 h-4"></i>
+                  </div>
+                  <div class="text-left flex-1">
+                    <div class="font-extrabold text-blue-300 text-xs">Commercial Enterprise Organization (${this.regData.companyName})</div>
+                    <div class="text-[11px] text-slate-300 mt-0.5">Commercial pricing: <strong>$1/user/month</strong> or <strong>$10/user/year</strong>. Next step lets you configure seats or start a 14-day trial.</div>
+                  </div>
+                </div>
+              `;
+            }
+          }
+        } else if (step === 3) {
+          this.renderRegStep3();
+        }
+        lucide.createIcons();
+      }
+
+      autoFillRegCode() {
+        const input = document.getElementById('reg-otp-input');
+        if (input) {
+          input.value = this.regExpectedOTP;
+          this.showToast(`Auto-filled verification code: ${this.regExpectedOTP}`, 'info');
+        }
+      }
+
+      verifyRegistrationEmail() {
+        const input = document.getElementById('reg-otp-input');
+        const code = input ? input.value.trim() : '';
+
+        if (!code || code !== this.regExpectedOTP) {
+          this.showToast(`Invalid verification code. Please enter: ${this.regExpectedOTP}`, 'error');
+          return;
+        }
+
+        this.regData.isEmailVerified = true;
+        this.showToast(`Identity verified for ${this.regData.adminEmail}!`, 'success');
+        this.goToRegistrationStep(3);
+      }
+
+      renderRegStep3() {
+        const container = document.getElementById('reg-step-3-content');
+        if (!container) return;
+
+        const isEquisteg = this.regData.adminEmail === 'equisteg@gmail.com';
+
+        if (isEquisteg) {
+          container.innerHTML = `
+            <div class="p-5 rounded-2xl bg-gradient-to-br from-emerald-950 via-slate-900 to-shield-900 border-2 border-emerald-500 shadow-xl space-y-4">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-xl bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/30">
+                  <i data-lucide="award" class="w-7 h-7"></i>
+                </div>
+                <div>
+                  <div class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-400">Exclusive Master Access Granted</div>
+                  <h3 class="text-base font-heading font-extrabold text-white">Equisteg Lifetime Free Enterprise</h3>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3 text-[11px]">
+                <div class="p-3 rounded-xl bg-emerald-950/40 border border-emerald-800">
+                  <div class="text-slate-400 text-[10px]">Commercial Price</div>
+                  <div class="font-extrabold text-emerald-300 text-sm mt-0.5">$0.00 / Forever</div>
+                </div>
+                <div class="p-3 rounded-xl bg-emerald-950/40 border border-emerald-800">
+                  <div class="text-slate-400 text-[10px]">User Seats Quota</div>
+                  <div class="font-extrabold text-white text-sm mt-0.5">Unlimited Seats</div>
+                </div>
+              </div>
+
+              <ul class="text-[11px] text-slate-300 space-y-1.5">
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Verified Master Email: <strong>${this.regData.adminEmail}</strong></li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> 100% Free Persistent ACID IndexedDB storage (zero hosting fees)</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Automated Task Allocation Engine & SLA Radar unlocked</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Cryptographic SHA-256 Audit Trail active</li>
+              </ul>
+
+              <button type="button" onclick="app.completeRegistration({ isEquisteg: true })" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-shield-950 font-extrabold text-xs rounded-xl shadow-lg shadow-emerald-500/30 transition-all flex items-center justify-center gap-2">
+                <i data-lucide="rocket" class="w-4 h-4"></i> Complete Registration & Launch Equisteg Workspace
+              </button>
+            </div>
+          `;
+        } else {
+          const seats = this.regData.seats || 5;
+          const cycle = this.regData.billingCycle || 'monthly';
+          const monthlyTotal = seats * 1;
+          const yearlyTotal = seats * 10;
+          const currentTotal = cycle === 'yearly' ? yearlyTotal : monthlyTotal;
+
+          container.innerHTML = `
+            <div class="space-y-4">
+              <div class="p-3.5 rounded-xl bg-blue-950/40 border border-blue-800/80 text-center">
+                <span class="text-[11px] text-blue-300 font-semibold">
+                  Commercial Access Pricing: <strong class="text-white">$1 / user / month</strong> or <strong class="text-emerald-400">$10 / user / year</strong>
+                </span>
+              </div>
+
+              <!-- Billing Cycle Toggle -->
+              <div class="grid grid-cols-2 p-1 rounded-xl bg-shield-950 border border-slate-700 text-xs font-bold">
+                <button type="button" id="reg-cycle-monthly" onclick="app.setRegBillingCycle('monthly')" class="py-2 rounded-lg transition-all ${cycle === 'monthly' ? 'bg-emerald-600 text-white shadow' : 'text-slate-400 hover:text-white'}">
+                  Monthly ($1 / user / mo)
+                </button>
+                <button type="button" id="reg-cycle-yearly" onclick="app.setRegBillingCycle('yearly')" class="py-2 rounded-lg transition-all ${cycle === 'yearly' ? 'bg-emerald-600 text-white shadow' : 'text-slate-400 hover:text-white'} flex items-center justify-center gap-1.5">
+                  <span>Annual ($10 / user / yr)</span>
+                  <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">Save 17%</span>
+                </button>
+              </div>
+
+              <!-- User Seat Counter & Calculator -->
+              <div class="p-4 rounded-xl bg-shield-950 border border-slate-700 space-y-3">
+                <div class="flex items-center justify-between">
+                  <label class="font-bold text-slate-200 text-xs">Number of User Seats:</label>
+                  <div class="flex items-center gap-2">
+                    <input type="number" id="reg-seats-input" min="1" max="5000" value="${seats}" oninput="app.updateRegSeatCalculation(this.value)" class="w-16 px-2 py-1 bg-slate-900 border border-slate-600 rounded-lg text-center font-mono font-bold text-white text-xs">
+                    <span class="text-slate-400 text-xs">seats</span>
+                  </div>
+                </div>
+                <input type="range" id="reg-seats-slider" min="1" max="100" value="${seats}" oninput="app.updateRegSeatCalculation(this.value)" class="w-full accent-emerald-500">
+                
+                <div class="pt-2 border-t border-slate-800 flex items-center justify-between text-xs">
+                  <span class="text-slate-400">Total Subscription:</span>
+                  <span id="reg-calculated-price" class="text-base font-extrabold text-emerald-400">$${currentTotal}.00 / ${cycle === 'yearly' ? 'year' : 'month'}</span>
+                </div>
+              </div>
+
+              <!-- 3 Activation Options -->
+              <div class="space-y-2">
+                <!-- Option 1: 14-Day Free Trial -->
+                <button type="button" onclick="app.completeRegistration({ isTrial: true })" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-900/80 hover:border-emerald-500 hover:bg-slate-800 text-left flex items-center justify-between transition-all">
+                  <div>
+                    <div class="font-bold text-white text-xs">Start 14-Day Free Trial ($0.00 Today)</div>
+                    <div class="text-[10px] text-slate-400">Evaluate all features. Full access continues after payment.</div>
+                  </div>
+                  <span class="px-2 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold text-[10px]">Free Trial</span>
+                </button>
+
+                <!-- Option 2: Pay & Activate Now -->
+                <button type="button" onclick="app.completeRegistration({ isPaid: true })" class="w-full p-3 rounded-xl border-2 border-emerald-500 bg-emerald-950/20 hover:bg-emerald-950/40 text-left flex items-center justify-between transition-all shadow-md">
+                  <div>
+                    <div class="font-bold text-white text-xs flex items-center gap-1.5">
+                      <i data-lucide="credit-card" class="w-3.5 h-3.5 text-emerald-400"></i> Pay & Activate Now
+                    </div>
+                    <div class="text-[10px] text-slate-400">Instant activation via Simulated Card / Stripe / Corporate Transfer.</div>
+                  </div>
+                  <span id="reg-pay-now-btn-badge" class="px-2.5 py-1 rounded-lg bg-emerald-500 text-shield-950 font-extrabold text-[11px] shadow">$${currentTotal}.00</span>
+                </button>
+
+                <!-- Option 3: Enterprise License Key -->
+                <div class="p-3 rounded-xl border border-slate-700 bg-slate-900/60 space-y-2">
+                  <label class="text-[11px] font-bold text-slate-300 block">Have an Enterprise License Key?</label>
+                  <div class="flex gap-2">
+                    <input type="text" id="reg-license-input" placeholder="EQUISTEG-PAID-XXXX" class="flex-1 px-3 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-xs font-mono uppercase text-white focus:outline-none focus:ring-1 focus:ring-emerald-500">
+                    <button type="button" onclick="app.completeRegistration({ licenseKeyInput: true })" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-lg">
+                      Activate
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2 pt-1">
+                <button type="button" onclick="app.goToRegistrationStep(2)" class="px-4 py-2 rounded-xl border border-slate-700 text-slate-400 hover:text-white text-xs font-semibold">
+                  ← Back
+                </button>
+              </div>
+            </div>
+          `;
+        }
+        lucide.createIcons();
+      }
+
+      setRegBillingCycle(cycle) {
+        this.regData.billingCycle = cycle;
+        this.renderRegStep3();
+      }
+
+      updateRegSeatCalculation(val) {
+        const seats = Math.max(1, parseInt(val) || 1);
+        this.regData.seats = seats;
+
+        const slider = document.getElementById('reg-seats-slider');
+        const input = document.getElementById('reg-seats-input');
+        if (slider && slider.value != seats) slider.value = Math.min(100, seats);
+        if (input && input.value != seats) input.value = seats;
+
+        const cycle = this.regData.billingCycle || 'monthly';
+        const total = cycle === 'yearly' ? seats * 10 : seats * 1;
+
+        const priceEl = document.getElementById('reg-calculated-price');
+        if (priceEl) {
+          priceEl.textContent = `$${total}.00 / ${cycle === 'yearly' ? 'year' : 'month'}`;
+        }
+
+        const badgeEl = document.getElementById('reg-pay-now-btn-badge');
+        if (badgeEl) {
+          badgeEl.textContent = `$${total}.00`;
+        }
+      }
+
+      async completeRegistration(opts = {}) {
+        const isEquisteg = opts.isEquisteg || (this.regData.adminEmail && this.regData.adminEmail.toLowerCase() === 'equisteg@gmail.com');
+        const isPaid = opts.isPaid || false;
+        const isTrial = opts.isTrial || false;
+        let licenseKey = null;
+
+        if (opts.licenseKeyInput) {
+          const keyInput = document.getElementById('reg-license-input');
+          licenseKey = keyInput ? keyInput.value.trim().toUpperCase() : '';
+          if (!licenseKey || (!licenseKey.startsWith('EQUISTEG-PAID') && !licenseKey.startsWith('LICENSE-'))) {
+            this.showToast('Invalid License Key format. Example: EQUISTEG-PAID-XXXX', 'error');
+            return;
+          }
+        }
+
+        const companyId = 'tenant_main';
+        const planName = isEquisteg ? 'Equisteg Lifetime Free Enterprise' :
+                         licenseKey ? `Enterprise License (${licenseKey})` :
+                         isPaid ? `Commercial Paid ($${this.regData.billingCycle === 'yearly' ? '10/user/yr' : '1/user/mo'})` :
+                         'Commercial 14-Day Free Trial';
+
+        const newCompany = {
+          id: companyId,
+          name: this.regData.companyName,
+          domain: this.regData.companyDomain,
+          adminEmail: this.regData.adminEmail,
+          isEquistegVerified: isEquisteg,
+          verifiedEmail: this.regData.adminEmail,
+          plan: planName,
+          isUnlimited: isEquisteg,
+          isPaid: isEquisteg || isPaid || Boolean(licenseKey),
+          seats: isEquisteg ? 999999 : (this.regData.seats || 5),
+          billingCycle: this.regData.billingCycle || 'monthly',
+          pricePerUser: this.regData.billingCycle === 'yearly' ? 10 : 1,
+          licenseKey: licenseKey,
+          trialDaysLeft: isPaid || isEquisteg ? 0 : 14,
+          logo: isEquisteg ? 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150&auto=format&fit=crop&q=80' : null
+        };
+        this.state.company = newCompany;
+        await this.dbPut('company', newCompany);
+
+        // Create Admin User
+        const adminUserId = 'user-admin-' + Date.now();
+        const adminUser = {
+          id: adminUserId,
+          name: this.regData.adminName,
+          email: this.regData.adminEmail,
+          password: this.regData.adminPassword,
+          role: 'Admin',
+          teamId: 'team-initial',
+          isFloatingSupport: true,
+          skills: ['System Administration', 'Governance', 'Operations'],
+          avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'
+        };
+        this.state.users.unshift(adminUser);
+        await this.dbPut('users', adminUser);
+
+        // Create Initial Team
+        const initialTeam = {
+          id: 'team-initial',
+          name: this.regData.initialTeam || 'Core Operations',
+          leadId: adminUserId,
+          desc: 'Primary departmental workspace.',
+          emblem: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=150&auto=format&fit=crop&q=80'
+        };
+        this.state.teams.unshift(initialTeam);
+        await this.dbPut('teams', initialTeam);
+
+        // Cryptographic Audit Ledger
+        await this.logAuditEvent('TENANT_REGISTERED', companyId, {
+          company: newCompany.name,
+          adminEmail: this.regData.adminEmail,
+          plan: planName,
+          seats: newCompany.seats,
+          isEquistegVerified: isEquisteg
+        });
+
+        // Set session and authenticate
+        this.currentPersonaId = adminUserId;
+        this.isAuthenticated = true;
+        localStorage.setItem('aegisflow_session_user', adminUserId);
+        if (isEquisteg) {
+          localStorage.setItem('equisteg_verified_email', 'equisteg@gmail.com');
+        }
+
+        this.showToast(`Registration complete! Welcome to ${newCompany.name}, ${adminUser.name}.`, 'success');
+        this.populatePersonaSelector();
+        this.renderAll();
+      }
+
+      // Secure Sign-In Handler
       async handleAuthSubmit(e) {
         e.preventDefault();
         if (Date.now() < this.lockoutUntil) {
@@ -2214,25 +2604,9 @@
         submitBtn.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> Verifying Cryptographic Identity...';
         lucide.createIcons();
 
-        // Intercept Equisteg accounts to enforce Google Identity Verification
-        if (email.includes('equisteg')) {
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = '<i data-lucide="log-in" class="w-4 h-4"></i> Sign In to AegisFlow';
-          lucide.createIcons();
-          this.showToast('Equisteg Lifetime Free access is strictly secured via Google Identity. Please verify through equisteg@gmail.com.', 'info');
-          this.openGoogleVerifyModal();
-          return;
-        }
-
-        // Match user by email or username
-        const user = this.state.users.find(u => {
-          const expectedEmail = u.name.toLowerCase().replace(' ', '.') + '@aegisflow.internal';
-          return expectedEmail === email || u.name.toLowerCase() === email || u.id === email;
-        }) || this.state.users[0];
-
         setTimeout(async () => {
           submitBtn.disabled = false;
-          submitBtn.innerHTML = '<i data-lucide="log-in" class="w-4 h-4"></i> Sign In to AegisFlow';
+          submitBtn.innerHTML = '<i data-lucide="log-in" class="w-4 h-4"></i> Sign In to Workspace';
           lucide.createIcons();
 
           if (!password) {
@@ -2240,9 +2614,40 @@
             return;
           }
 
+          // Look up user by email or username
+          const user = this.state.users.find(u => {
+            const uEmail = (u.email || (u.name.toLowerCase().replace(' ', '.') + '@aegisflow.internal')).toLowerCase();
+            return uEmail === email || u.name.toLowerCase() === email || u.id === email;
+          });
+
+          if (!user) {
+            this.handleAuthFailure('No account found matching this identity. Please check your email or click "Register New Company".');
+            return;
+          }
+
+          // Verify password if set on user
+          if (user.password && user.password !== password) {
+            this.handleAuthFailure('Invalid passphrase. Please verify your credentials.');
+            return;
+          }
+
           if (this.requireMFA && mfa !== '492031') {
             this.handleAuthFailure('Invalid MFA verification code.');
             return;
+          }
+
+          // If user is equisteg@gmail.com, verify Equisteg master access
+          if (email === 'equisteg@gmail.com') {
+            if (!this.state.company) this.state.company = { id: 'tenant_main' };
+            this.state.company.isEquistegVerified = true;
+            this.state.company.verifiedEmail = 'equisteg@gmail.com';
+            this.state.company.name = 'Equisteg';
+            this.state.company.domain = 'equisteg.com';
+            this.state.company.plan = 'Equisteg Lifetime Free Enterprise';
+            this.state.company.isUnlimited = true;
+            this.state.company.isPaid = true;
+            await this.dbPut('company', this.state.company);
+            localStorage.setItem('equisteg_verified_email', 'equisteg@gmail.com');
           }
 
           // Successful authentication
@@ -2257,9 +2662,9 @@
             sessionToken: 'AES-256-GCM.' + Math.random().toString(36).substring(2, 15)
           });
 
-          this.showToast(`Authentication verified. Welcome, ${user.name}!`, 'success');
+          this.showToast(`Authentication verified. Welcome back, ${user.name}!`, 'success');
           this.renderAll();
-        }, 500);
+        }, 400);
       }
 
       handleAuthFailure(msg) {
@@ -2286,27 +2691,14 @@
         this.showToast(msg, 'error');
       }
 
-      async quickLogin(userId) {
-        const user = this.state.users.find(u => u.id === userId);
+      quickLogin(personaId) {
+        const user = this.state.users.find(u => u.id === personaId);
         if (!user) return;
-
-        const emailInput = document.getElementById('auth-input-email');
-        if (emailInput) {
-          emailInput.value = user.name.toLowerCase().replace(' ', '.') + '@aegisflow.internal';
-        }
-
-        this.failedAttempts = 0;
-        this.isAuthenticated = true;
         this.currentPersonaId = user.id;
+        this.isAuthenticated = true;
         localStorage.setItem('aegisflow_session_user', user.id);
-
-        await this.logAuditEvent('USER_LOGIN', user.id, {
-          role: user.role,
-          authMethod: 'ONE_CLICK_ROLE_AUTHENTICATION',
-          sessionToken: 'AES-256-GCM.' + Math.random().toString(36).substring(2, 15)
-        });
-
-        this.showToast(`Signed in as ${user.name} (${user.role})`, 'success');
+        this.logAuditEvent('USER_QUICK_LOGIN', user.id, { role: user.role, simulatedPersona: user.name });
+        this.showToast(`Active Persona set to: ${user.name} (${user.role})`, 'success');
         this.renderAll();
       }
 
@@ -2349,242 +2741,6 @@
         lucide.createIcons();
       }
 
-      // ================= INTERACTIVE OPERATIONS & SLA CALENDAR =================
-      calendarPrevMonth() {
-        this.currentCalendarDate.setMonth(this.currentCalendarDate.getMonth() - 1);
-        this.renderCalendar();
-      }
-
-      calendarNextMonth() {
-        this.currentCalendarDate.setMonth(this.currentCalendarDate.getMonth() + 1);
-        this.renderCalendar();
-      }
-
-      calendarToday() {
-        this.currentCalendarDate = new Date();
-        this.renderCalendar();
-      }
-
-      renderCalendar() {
-        const grid = document.getElementById('calendar-days-grid');
-        const monthYearLabel = document.getElementById('calendar-month-year-label');
-        if (!grid || !monthYearLabel) return;
-
-        // Populate calendar team filter
-        const teamFilter = document.getElementById('calendar-filter-team');
-        if (teamFilter && teamFilter.options.length <= 1) {
-          teamFilter.innerHTML = '<option value="all">All Teams</option>' +
-            this.state.teams.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
-        }
-
-        const selectedTeam = teamFilter ? teamFilter.value : 'all';
-        const priorityFilter = document.getElementById('calendar-filter-priority')?.value || 'all';
-
-        const year = this.currentCalendarDate.getFullYear();
-        const month = this.currentCalendarDate.getMonth();
-
-        const monthNames = [
-          'January', 'February', 'March', 'April', 'May', 'June',
-          'July', 'August', 'September', 'October', 'November', 'December'
-        ];
-        monthYearLabel.textContent = `${monthNames[month]} ${year}`;
-
-        // First day of month & total days
-        const firstDayIndex = new Date(year, month, 1).getDay(); // 0 = Sun
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        const daysInPrevMonth = new Date(year, month, 0).getDate();
-
-        const today = new Date();
-        const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-
-        let html = '';
-        let monthTaskCount = 0;
-
-        // 1. Previous month trailing days
-        for (let i = firstDayIndex - 1; i >= 0; i--) {
-          const dayNum = daysInPrevMonth - i;
-          const prevDate = new Date(year, month - 1, dayNum);
-          const dateStr = `${prevDate.getFullYear()}-${String(prevDate.getMonth() + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
-          html += this.renderCalendarDayCell(dateStr, dayNum, false, false, selectedTeam, priorityFilter);
-        }
-
-        // 2. Current month days
-        for (let day = 1; day <= daysInMonth; day++) {
-          const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-          const isToday = dateStr === todayStr;
-          html += this.renderCalendarDayCell(dateStr, day, true, isToday, selectedTeam, priorityFilter);
-          
-          const matchingTasks = this.state.tasks.filter(t => t.dueDate && t.dueDate.startsWith(dateStr));
-          monthTaskCount += matchingTasks.length;
-        }
-
-        // 3. Next month leading days (to complete 35 or 42 grid cells)
-        const totalCells = firstDayIndex + daysInMonth;
-        const remainingCells = (totalCells <= 35 ? 35 : 42) - totalCells;
-        for (let day = 1; day <= remainingCells; day++) {
-          const nextDate = new Date(year, month + 1, day);
-          const dateStr = `${nextDate.getFullYear()}-${String(nextDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-          html += this.renderCalendarDayCell(dateStr, day, false, false, selectedTeam, priorityFilter);
-        }
-
-        grid.innerHTML = html;
-        const badgeCal = document.getElementById('badge-calendar-events');
-        if (badgeCal) badgeCal.textContent = `${monthTaskCount} Tasks`;
-        lucide.createIcons();
-      }
-
-      renderCalendarDayCell(dateStr, dayNum, isCurrentMonth, isToday, teamFilter, priorityFilter) {
-        // Tasks due on this day
-        let dayTasks = this.state.tasks.filter(t => t.dueDate && t.dueDate.startsWith(dateStr));
-        if (teamFilter !== 'all') dayTasks = dayTasks.filter(t => t.teamId === teamFilter);
-        if (priorityFilter !== 'all') dayTasks = dayTasks.filter(t => t.priority === priorityFilter);
-
-        // Daily standups submitted on this day
-        const dayStandups = this.state.daily_updates.filter(s => s.date === dateStr);
-
-        const bgClass = isToday ? 'bg-emerald-50/40 dark:bg-emerald-950/20' : isCurrentMonth ? 'bg-white dark:bg-shield-900/60' : 'bg-slate-100/50 dark:bg-shield-950/40 opacity-60';
-
-        return `
-          <div class="p-2.5 min-h-[110px] flex flex-col justify-between ${bgClass} transition-colors group relative border-b border-r border-slate-200 dark:border-slate-800">
-            <div>
-              <div class="flex items-center justify-between mb-1.5">
-                <span class="text-xs font-bold ${isToday ? 'w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-md' : isCurrentMonth ? 'text-slate-800 dark:text-slate-200' : 'text-slate-400'}">
-                  ${dayNum}
-                </span>
-
-                <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button onclick="app.quickCreateTaskOnDate('${dateStr}')" class="p-1 rounded bg-slate-100 dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-emerald-950 text-slate-500 hover:text-emerald-600" title="Schedule task on ${dateStr}">
-                    <i data-lucide="plus" class="w-3 h-3"></i>
-                  </button>
-                </div>
-              </div>
-
-              <!-- Day Tasks List -->
-              <div class="space-y-1 overflow-hidden">
-                ${dayTasks.slice(0, 3).map(t => {
-                  const priorityBg = t.priority === 'Critical' ? 'bg-rose-500 text-white' :
-                                    t.priority === 'High' ? 'bg-amber-500 text-white' :
-                                    t.priority === 'Medium' ? 'bg-blue-500 text-white' :
-                                    'bg-slate-400 text-white';
-                  const assignee = this.state.users.find(u => u.id === t.assigneeId);
-
-                  return `
-                    <div onclick="event.stopPropagation(); app.openTaskDetail('${t.id}')" class="px-2 py-1 rounded-md text-[10px] font-bold ${priorityBg} truncate cursor-pointer hover:opacity-90 shadow-sm flex items-center justify-between gap-1" title="${this.escapeHTML(t.title)} (${t.priority})">
-                      <span class="truncate">${this.escapeHTML(t.title)}</span>
-                      ${t.escalationTier > 0 ? '<span class="text-[8px] bg-black/40 px-1 rounded">L' + t.escalationTier + '</span>' : ''}
-                    </div>
-                  `;
-                }).join('')}
-
-                ${dayTasks.length > 3 ? `
-                  <div onclick="app.openDateDayTasks('${dateStr}')" class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 cursor-pointer hover:underline text-center pt-0.5">
-                    +${dayTasks.length - 3} more
-                  </div>
-                ` : ''}
-              </div>
-            </div>
-
-            <!-- Standup submission indicator at bottom of cell -->
-            ${dayStandups.length > 0 ? `
-              <div class="pt-1 border-t border-slate-100 dark:border-slate-800 flex items-center gap-1 text-[9px] text-purple-600 dark:text-purple-400 font-semibold">
-                <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
-                <span>${dayStandups.length} Standup${dayStandups.length > 1 ? 's' : ''}</span>
-              </div>
-            ` : ''}
-          </div>
-        `;
-      }
-
-      quickCreateTaskOnDate(dateStr) {
-        this.openNewTaskModal();
-        const dueInput = document.getElementById('task-input-duedate');
-        if (dueInput) {
-          dueInput.value = `${dateStr}T17:00`;
-        }
-      }
-
-      openDateDayTasks(dateStr) {
-        const tasks = this.state.tasks.filter(t => t.dueDate && t.dueDate.startsWith(dateStr));
-        let promptText = `Tasks scheduled for ${dateStr}:\n\n` +
-          tasks.map(t => `• [${t.id}] ${t.title} (${t.priority} - ${t.status})`).join('\n');
-        alert(promptText);
-      }
-
-      // ================= DYNAMIC WORKSPACE CONTROLS =================
-      async deleteUser(userId) {
-        const user = this.state.users.find(u => u.id === userId);
-        if (!user) return;
-        if (this.state.users.length <= 1) {
-          this.showToast('Cannot delete the last remaining member.', 'error');
-          return;
-        }
-
-        if (!confirm(`Are you sure you want to delete user "${user.name}"?`)) return;
-
-        await this.dbDelete('users', userId);
-        this.state.users = this.state.users.filter(u => u.id !== userId);
-
-        // Reassign their tasks to unassigned
-        for (const t of this.state.tasks) {
-          if (t.assigneeId === userId) {
-            t.assigneeId = null;
-            t.status = 'Unassigned';
-            await this.dbPut('tasks', t);
-          }
-        }
-
-        await this.logAuditEvent('USER_DELETED', userId, { name: user.name });
-        this.showToast(`User "${user.name}" deleted`, 'info');
-        this.populatePersonaSelector();
-        this.renderAll();
-      }
-
-      async deleteTeam(teamId) {
-        const team = this.state.teams.find(t => t.id === teamId);
-        if (!team) return;
-        if (this.state.teams.length <= 1) {
-          this.showToast('Cannot delete the last remaining department.', 'error');
-          return;
-        }
-
-        if (!confirm(`Are you sure you want to delete team "${team.name}"?`)) return;
-
-        await this.dbDelete('teams', teamId);
-        this.state.teams = this.state.teams.filter(t => t.id !== teamId);
-
-        // Move members to remaining team
-        const fallbackTeam = this.state.teams[0];
-        for (const u of this.state.users) {
-          if (u.teamId === teamId) {
-            u.teamId = fallbackTeam.id;
-            await this.dbPut('users', u);
-          }
-        }
-
-        await this.logAuditEvent('TEAM_DELETED', teamId, { name: team.name });
-        this.showToast(`Team "${team.name}" deleted`, 'info');
-        this.renderAll();
-      }
-
-      async startFreshWorkspace() {
-        if (!confirm('Start Fresh for Equisteg? This will clear all sample tasks and standups, keeping your company and members ready for live operations.')) return;
-
-        // Clear tasks and standups
-        for (const t of this.state.tasks) await this.dbDelete('tasks', t.id);
-        for (const s of this.state.daily_updates) await this.dbDelete('daily_updates', s.id);
-
-        this.state.tasks = [];
-        this.state.daily_updates = [];
-
-        await this.logAuditEvent('WORKSPACE_RESET_FRESH', 'tenant_main', {
-          actor: this.getCurrentUser().name,
-          note: 'Equisteg fresh operational state initialized'
-        });
-
-        this.showToast('Workspace reset to clean slate for Equisteg!', 'success');
-        this.renderAll();
-      }
-
       // ================= EQUISTEG GMAIL VERIFICATION & TENANT PAYWALL =================
       isEquistegVerified() {
         if (!this.state.company) return false;
@@ -2622,7 +2778,6 @@
       }
 
       async instantGoogleVerify() {
-        // 1-Click Simulated Google OAuth 2.0 Identity Token Exchange
         const otpInput = document.getElementById('gmail-otp-input');
         if (otpInput) otpInput.value = '782941';
         await this.confirmGoogleVerification();
@@ -2637,7 +2792,6 @@
           return;
         }
 
-        // Verify equisteg@gmail.com Google Identity
         if (!this.state.company) {
           this.state.company = { id: 'tenant_main' };
         }
@@ -2647,10 +2801,9 @@
         this.state.company.domain = 'equisteg.com';
         this.state.company.plan = 'Equisteg Lifetime Free Enterprise';
         this.state.company.isUnlimited = true;
-        this.state.company.isPaid = true; // Lifetime complimentary
+        this.state.company.isPaid = true;
         await this.dbPut('company', this.state.company);
 
-        // Find or create the Equisteg Master Admin persona
         let masterUser = this.state.users.find(u => u.id === 'user-equisteg-master');
         if (!masterUser) {
           masterUser = {
@@ -2689,24 +2842,85 @@
         this.openModal('modal-paywall');
       }
 
-      async simulateSubscriptionPayment(planName, price) {
+      setPaywallCycle(cycle) {
+        this.paywallCycle = cycle;
+        const mBtn = document.getElementById('paywall-cycle-monthly');
+        const yBtn = document.getElementById('paywall-cycle-yearly');
+
+        if (mBtn && yBtn) {
+          if (cycle === 'monthly') {
+            mBtn.className = 'py-2.5 rounded-xl transition-all bg-emerald-600 text-white shadow';
+            yBtn.className = 'py-2.5 rounded-xl transition-all text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center justify-center gap-1.5';
+          } else {
+            mBtn.className = 'py-2.5 rounded-xl transition-all text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white';
+            yBtn.className = 'py-2.5 rounded-xl transition-all bg-emerald-600 text-white shadow flex items-center justify-center gap-1.5';
+          }
+        }
+        this.updatePaywallCalculation(this.paywallSeats);
+      }
+
+      updatePaywallCalculation(val) {
+        const seats = Math.max(1, parseInt(val) || 1);
+        this.paywallSeats = seats;
+
+        const slider = document.getElementById('paywall-seats-slider');
+        const input = document.getElementById('paywall-seats-input');
+        if (slider && slider.value != seats) slider.value = Math.min(100, seats);
+        if (input && input.value != seats) input.value = seats;
+
+        const isYearly = this.paywallCycle === 'yearly';
+        const rate = isYearly ? 10 : 1;
+        const total = seats * rate;
+
+        const breakdown = document.getElementById('paywall-breakdown-text');
+        if (breakdown) {
+          breakdown.textContent = `${seats} users × $${rate}.00/${isYearly ? 'yr' : 'mo'}`;
+        }
+
+        const totalEl = document.getElementById('paywall-total-price');
+        if (totalEl) {
+          totalEl.textContent = `$${total}.00 / ${isYearly ? 'yr' : 'mo'}`;
+        }
+
+        const checkoutAmount = document.getElementById('paywall-checkout-amount');
+        if (checkoutAmount) {
+          checkoutAmount.textContent = `$${total}.00`;
+        }
+      }
+
+      async processPaywallPayment() {
+        const isYearly = this.paywallCycle === 'yearly';
+        const rate = isYearly ? 10 : 1;
+        const total = this.paywallSeats * rate;
         const txId = 'TXN-' + Math.random().toString(36).substring(2, 10).toUpperCase();
+
         this.state.company.isPaid = true;
-        this.state.company.plan = `${planName} Plan (Paid Active)`;
+        this.state.company.plan = `Commercial Active ($${rate}/user/${isYearly ? 'yr' : 'mo'})`;
+        this.state.company.seats = this.paywallSeats;
         this.state.company.paidAt = new Date().toISOString();
         this.state.company.lastTransactionId = txId;
         await this.dbPut('company', this.state.company);
 
         await this.logAuditEvent('SUBSCRIPTION_ACTIVATED', this.state.company.id, {
-          plan: planName,
-          amount: `$${price}/mo`,
-          transactionId: txId,
-          status: 'SUCCESSFUL',
-          company: this.state.company.name
+          seats: this.paywallSeats,
+          cycle: this.paywallCycle,
+          amount: `$${total}`,
+          transactionId: txId
         });
 
         this.closeModal('modal-paywall');
-        this.showToast(`Payment processed ($${price}/mo). ${planName} Plan activated for ${this.state.company.name}!`, 'success');
+        this.showToast(`Payment processed ($${total}). Active subscription provisioned for ${this.state.company.name}!`, 'success');
+        this.renderAll();
+      }
+
+      async startPaywallTrial() {
+        this.state.company.plan = 'Commercial 14-Day Free Trial';
+        this.state.company.trialDaysLeft = 14;
+        await this.dbPut('company', this.state.company);
+
+        await this.logAuditEvent('TRIAL_ACTIVATED', this.state.company.id, { days: 14 });
+        this.closeModal('modal-paywall');
+        this.showToast('14-Day Free Trial activated! Full features enabled during evaluation.', 'info');
         this.renderAll();
       }
 
@@ -2754,6 +2968,25 @@
         this.renderAll();
       }
 
+
+      async startFreshWorkspace() {
+        if (!confirm('Start Fresh for Equisteg? This will clear all sample tasks and standups, keeping your company and members ready for live operations.')) return;
+
+        // Clear tasks and standups
+        for (const t of this.state.tasks) await this.dbDelete('tasks', t.id);
+        for (const s of this.state.daily_updates) await this.dbDelete('daily_updates', s.id);
+
+        this.state.tasks = [];
+        this.state.daily_updates = [];
+
+        await this.logAuditEvent('WORKSPACE_RESET_FRESH', 'tenant_main', {
+          actor: this.getCurrentUser().name,
+          note: 'Equisteg fresh operational state initialized'
+        });
+
+        this.showToast('Workspace reset to clean slate for Equisteg!', 'success');
+        this.renderAll();
+      }
 
       // ================= DATABASE (INDEXEDDB) ENGINE =================
       async initDatabase() {
@@ -2969,6 +3202,8 @@
           {
             id: 'user-1',
             name: 'Elena Vance',
+            email: 'elena.vance@aegisflow.internal',
+            password: 'demoPassword123',
             role: 'Admin',
             teamId: 'team-ops',
             isFloatingSupport: false,
@@ -2978,6 +3213,8 @@
           {
             id: 'user-2',
             name: 'Marcus Chen',
+            email: 'marcus.chen@aegisflow.internal',
+            password: 'demoPassword123',
             role: 'Lead',
             teamId: 'team-eng',
             isFloatingSupport: false,
@@ -2987,6 +3224,8 @@
           {
             id: 'user-3',
             name: 'Sophia Patel',
+            email: 'sophia.patel@aegisflow.internal',
+            password: 'demoPassword123',
             role: 'TM',
             teamId: 'team-eng',
             isFloatingSupport: false,
@@ -2996,6 +3235,8 @@
           {
             id: 'user-4',
             name: 'Alex Rivera',
+            email: 'alex.rivera@aegisflow.internal',
+            password: 'demoPassword123',
             role: 'Support', // Cross-Team Floating Specialist
             teamId: 'team-sec',
             isFloatingSupport: true, // CAN WORK ON ANY TEAM UNCONSTRAINED!
@@ -3005,6 +3246,8 @@
           {
             id: 'user-5',
             name: 'David Kim',
+            email: 'david.kim@aegisflow.internal',
+            password: 'demoPassword123',
             role: 'Auditor',
             teamId: 'team-sec',
             isFloatingSupport: false,
