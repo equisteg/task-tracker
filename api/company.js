@@ -3,7 +3,7 @@
 const crypto = require('crypto');
 const { endpoint, HttpError, authenticate, issueSession, EMAIL_RE, cleanText } = require('./_lib/http');
 const { query, tx, ident, literal } = require('./_lib/db');
-const { encryptSecret } = require('./_lib/security');
+const { encryptSecret, verifyPassword } = require('./_lib/security');
 const { sendWith, companySmtpConfig, testEmail } = require('./_lib/mailer');
 const {
   quote, createRazorpayOrder, verifyRazorpaySignature, periodEnd, publicBillingInfo,
@@ -180,6 +180,41 @@ module.exports = endpoint({
         await query('UPDATE platform.companies SET db_role = NULL WHERE id = $1', [company.id]);
       }
       return { database: { schema: company.schema_name, enabled: false } };
+    },
+  },
+
+  // ---------- Delete the whole organization ----------
+  // Removes the company's schema (all workspace data), its database login and every member account.
+  'delete-organization': {
+    method: 'POST',
+    handler: async ({ req, body }) => {
+      const { account, company } = await authenticate(req, { roles: ['Admin'], requireAccess: false });
+      if (String(body.confirmName || '').trim().toLowerCase() !== String(company.name).trim().toLowerCase()) {
+        throw new HttpError(400, 'Type the company name exactly as shown to confirm.', 'CONFIRM_MISMATCH');
+      }
+      const acct = (await query('SELECT password_hash FROM platform.accounts WHERE user_id = $1', [account.userId])).rows[0];
+      if (!acct || !(await verifyPassword(String(body.password || ''), acct.password_hash))) {
+        throw new HttpError(400, 'Your password is incorrect.', 'INVALID_PASSWORD');
+      }
+
+      const schema = ident(company.schema_name);
+      await tx(async (client) => {
+        // Lock the row so two admins can't race the deletion.
+        await client.query('SELECT id FROM platform.companies WHERE id = $1 FOR UPDATE', [company.id]);
+        await client.query(`DROP SCHEMA IF EXISTS ${schema} CASCADE`);
+        await client.query('DELETE FROM platform.companies WHERE id = $1', [company.id]); // accounts cascade
+      });
+
+      // The read-only database login (if any) is removed after its schema is gone.
+      if (company.db_role) {
+        const r = ident(company.db_role);
+        await query('SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE usename = $1', [company.db_role]).catch(() => {});
+        await query(`DROP ROLE IF EXISTS ${r}`).catch(async (err) => {
+          console.error('[company] could not drop role, disabling instead', err.message);
+          await query(`ALTER ROLE ${r} WITH NOLOGIN PASSWORD NULL`).catch(() => {});
+        });
+      }
+      return { deleted: company.id };
     },
   },
 

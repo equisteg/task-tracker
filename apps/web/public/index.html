@@ -114,6 +114,9 @@
         #0f172a;
     }
 
+    /* Wide tables scroll inside their card; containment stops phones from zooming the whole page out. */
+    .overflow-x-auto { contain: content; }
+
     /* Segmented view toggle */
     .view-btn { color: #64748b; }
     .view-btn.is-active { background: #ffffff; color: #0f172a; box-shadow: 0 1px 2px rgba(16, 24, 40, 0.08); }
@@ -999,7 +1002,7 @@
               <thead class="bg-slate-50 dark:bg-slate-800/60 text-xs text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">
                 <tr>
                   <th class="px-4 py-3 font-medium">Member</th>
-                  <th class="px-4 py-3 font-medium">Role</th>
+                  <th class="px-4 py-3 font-medium hidden sm:table-cell">Role</th>
                   <th class="px-4 py-3 font-medium hidden md:table-cell">Team</th>
                   <th class="px-4 py-3 font-medium hidden lg:table-cell">Cross-team</th>
                   <th class="px-4 py-3 font-medium hidden sm:table-cell">Open tasks</th>
@@ -1011,6 +1014,15 @@
             </table>
             </div>
           </div>
+        </div>
+
+        <!-- Danger zone (admins) -->
+        <div id="org-danger-zone" class="rounded-xl border border-rose-200 dark:border-rose-900/60 bg-white dark:bg-shield-900 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h3 class="text-sm font-semibold text-rose-700 dark:text-rose-400">Delete organization</h3>
+            <p class="text-sm text-slate-500 mt-0.5 max-w-xl">Permanently deletes this company, all tasks, teams, standups and audit history, and every member's account. This can't be undone.</p>
+          </div>
+          <button onclick="app.openDeleteOrganization()" class="h-9 px-3.5 rounded-md border border-rose-300 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-sm font-medium hover:bg-rose-50 dark:hover:bg-rose-950/40 shrink-0">Delete organization</button>
         </div>
       </section>
 
@@ -2201,6 +2213,34 @@
         <button type="button" onclick="app.closeModal('modal-sentinel-ai')" class="h-9 px-3.5 rounded-md border border-slate-300 dark:border-slate-700 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800">Close</button>
         <button onclick="app.runSentinelDiagnosticsAndHeal(true)" class="h-9 px-3.5 rounded-md bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium inline-flex items-center gap-1.5"><i data-lucide="refresh-cw" class="w-4 h-4"></i> Run checks now</button>
       </div>
+    </div>
+  </div>
+
+  <!-- Delete organization -->
+  <div id="modal-delete-org" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-shield-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-md w-full overflow-hidden">
+      <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+        <h3 class="text-base font-semibold text-slate-900 dark:text-white">Delete organization</h3>
+        <button onclick="app.closeModal('modal-delete-org')" class="w-8 h-8 inline-flex items-center justify-center rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800" aria-label="Close"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+      <form onsubmit="app.confirmDeleteOrganization(event)" class="p-5 space-y-4">
+        <div class="flex gap-3 p-3 rounded-lg bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/60 text-sm text-rose-800 dark:text-rose-200">
+          <i data-lucide="alert-triangle" class="w-5 h-5 shrink-0 text-rose-600"></i>
+          <span>This permanently deletes <strong id="delete-org-name" class="font-semibold"></strong> for everyone: tasks, teams, standups, audit history and all member accounts.</span>
+        </div>
+        <div class="space-y-1.5">
+          <label for="delete-org-confirm" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Type <span id="delete-org-name-hint" class="font-semibold"></span> to confirm</label>
+          <input type="text" id="delete-org-confirm" autocomplete="off" oninput="app.updateDeleteOrganizationButton()" class="w-full h-10 px-3 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-md text-sm text-slate-900 dark:text-white">
+        </div>
+        <div id="delete-org-password-wrap" class="space-y-1.5">
+          <label for="delete-org-password" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Your password</label>
+          <input type="password" id="delete-org-password" autocomplete="current-password" class="w-full h-10 px-3 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-md text-sm text-slate-900 dark:text-white">
+        </div>
+        <div class="flex items-center justify-end gap-2 pt-1">
+          <button type="button" onclick="app.closeModal('modal-delete-org')" class="h-9 px-3.5 rounded-md border border-slate-300 dark:border-slate-700 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800">Cancel</button>
+          <button type="submit" id="delete-org-submit" disabled class="h-9 px-3.5 rounded-md bg-rose-600 hover:bg-rose-700 text-white text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed">Delete permanently</button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -4775,6 +4815,8 @@
         document.getElementById('company-member-count').textContent = `${this.state.users.length} Members`;
         const addMemberBtn = document.getElementById('add-member-btn');
         if (addMemberBtn) addMemberBtn.classList.toggle('hidden', this.cloud.enabled && !this.isCloudAdmin());
+        const dangerZone = document.getElementById('org-danger-zone');
+        if (dangerZone) dangerZone.classList.toggle('hidden', ((this.getCurrentUser() || {}).role) !== 'Admin');
         this.renderCloudSettings();
         document.getElementById('company-team-count').textContent = `${this.state.teams.length} Teams`;
 
@@ -4820,15 +4862,16 @@
           return `
             <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
               <td class="px-4 py-3">
-                <div class="flex items-center gap-3 min-w-[200px]">
+                <div class="flex items-center gap-3 sm:min-w-[200px]">
                   <img src="${u.avatar}" alt="" class="w-8 h-8 rounded-full object-cover bg-slate-200">
                   <div class="min-w-0">
                     <div class="font-medium text-slate-900 dark:text-white truncate">${u.name}${u.id === this.currentPersonaId && this.cloud.enabled ? ' <span class="text-xs text-slate-400 font-normal">(you)</span>' : ''}</div>
                     <div class="text-xs text-slate-500 truncate">${this.cloud.enabled ? this.escapeHTML(u.email || '') : (team ? team.name : '')}</div>
+                    <div class="sm:hidden text-xs text-slate-600 dark:text-slate-300">${this.roleLabel(u.role)}${pending ? ' · <span class="text-amber-700 dark:text-amber-400">Invite pending</span>' : ''}</div>
                   </div>
                 </div>
               </td>
-              <td class="px-4 py-3 whitespace-nowrap">
+              <td class="px-4 py-3 whitespace-nowrap hidden sm:table-cell">
                 <span class="text-slate-700 dark:text-slate-200">${this.roleLabel(u.role)}</span>
                 ${pending ? '<div class="text-[11px] font-medium text-amber-700 dark:text-amber-400" title="Invited — has not set a password yet">Invite pending</div>' : ''}
               </td>
@@ -4840,7 +4883,7 @@
                   ${(u.skills || []).slice(0, 4).map(sk => `<span class="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[11px] text-slate-600 dark:text-slate-400">${sk}</span>`).join('')}
                 </div>
               </td>
-              <td class="px-4 py-3 text-right whitespace-nowrap">${this.renderMemberActions(u)}</td>
+              <td class="px-2 sm:px-4 py-3 text-right whitespace-nowrap">${this.renderMemberActions(u)}</td>
             </tr>
           `;
         }).join('');
@@ -6595,16 +6638,16 @@
       }
 
       renderMemberActions(u) {
-        const btn = 'h-8 px-2.5 rounded-md text-xs font-medium inline-flex items-center transition-colors';
+        const btn = 'h-8 px-2 sm:px-2.5 rounded-md text-xs font-medium inline-flex items-center gap-1 transition-colors';
         const parts = [];
         if (this.cloud.enabled && this.isCloudAdmin() && u.inviteStatus === 'pending') {
-          parts.push(`<button onclick="app.resendInvite('${u.id}')" class="${btn} text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/40" title="Email a new sign-in link and temporary password">Resend invite</button>`);
+          parts.push(`<button onclick="app.resendInvite('${u.id}')" class="${btn} text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/40" title="Email a new sign-in link and temporary password"><i data-lucide="mail" class="w-4 h-4 sm:hidden"></i><span class="hidden sm:inline">Resend invite</span></button>`);
         }
         if (this.canEditMember(u)) {
-          parts.push(`<button onclick="app.openUserProfileModal('${u.id}')" class="${btn} text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">Edit</button>`);
+          parts.push(`<button onclick="app.openUserProfileModal('${u.id}')" class="${btn} text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800" title="Edit"><i data-lucide="pencil" class="w-4 h-4 sm:hidden"></i><span class="hidden sm:inline">Edit</span></button>`);
         }
         if (!this.cloud.enabled || (this.isCloudAdmin() && u.id !== this.currentPersonaId)) {
-          parts.push(`<button onclick="app.deleteUser('${u.id}')" class="${btn} text-slate-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40" title="Remove member">Remove</button>`);
+          parts.push(`<button onclick="app.deleteUser('${u.id}')" class="${btn} text-slate-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40" title="Remove member"><i data-lucide="trash-2" class="w-4 h-4 sm:hidden"></i><span class="hidden sm:inline">Remove</span></button>`);
         }
         return parts.join('') || '<span class="text-xs text-slate-400">—</span>';
       }
@@ -6786,6 +6829,68 @@
         const done = () => this.showToast('Copied to clipboard.', 'success');
         if (navigator.clipboard) navigator.clipboard.writeText(el.value).then(done, () => { el.select(); document.execCommand('copy'); done(); });
         else { el.select(); document.execCommand('copy'); done(); }
+      }
+
+      // ---------- Delete organization (admins) ----------
+      openDeleteOrganization() {
+        const name = (this.state.company && this.state.company.name) || '';
+        document.getElementById('delete-org-name').textContent = name;
+        document.getElementById('delete-org-name-hint').textContent = name;
+        document.getElementById('delete-org-confirm').value = '';
+        document.getElementById('delete-org-password').value = '';
+        // The offline demo has no server-side password to check.
+        document.getElementById('delete-org-password-wrap').classList.toggle('hidden', !this.cloud.enabled);
+        this.updateDeleteOrganizationButton();
+        this.openModal('modal-delete-org');
+      }
+
+      updateDeleteOrganizationButton() {
+        const name = ((this.state.company && this.state.company.name) || '').trim().toLowerCase();
+        const typed = document.getElementById('delete-org-confirm').value.trim().toLowerCase();
+        document.getElementById('delete-org-submit').disabled = !name || typed !== name;
+      }
+
+      async confirmDeleteOrganization(e) {
+        e.preventDefault();
+        const btn = document.getElementById('delete-org-submit');
+        const confirmName = document.getElementById('delete-org-confirm').value.trim();
+        const companyName = this.state.company ? this.state.company.name : '';
+        if (confirmName.toLowerCase() !== companyName.trim().toLowerCase()) return;
+        btn.disabled = true;
+        btn.textContent = 'Deleting…';
+        try {
+          if (this.cloud.enabled) {
+            const password = document.getElementById('delete-org-password').value;
+            if (!password) throw new Error('Enter your password.');
+            await this.api('company', { action: 'delete-organization', confirmName, password });
+            this.closeModal('modal-delete-org');
+            this.cloud.queue = [];
+            await this.endCloudSession();
+            this.setAuthMode('signin');
+            this.showToast(`${companyName} was deleted.`, 'success');
+          } else {
+            // Offline demo: remove this workspace's local database and directory entry.
+            const tenantId = this.activeTenantId;
+            this.sentinelAI.stop();
+            if (this.db) { this.db.close(); this.db = null; }
+            await new Promise(resolve => {
+              const req = indexedDB.deleteDatabase(this.dbName);
+              req.onsuccess = req.onerror = req.onblocked = () => resolve();
+            });
+            try {
+              const dir = JSON.parse(localStorage.getItem('aegisflow_tenants_directory') || '[]').filter(t => t.id !== tenantId);
+              localStorage.setItem('aegisflow_tenants_directory', JSON.stringify(dir));
+              localStorage.removeItem('aegisflow_active_tenant');
+              localStorage.removeItem('aegisflow_session_user');
+              localStorage.removeItem('master_verified_vip');
+            } catch (err) {}
+            location.reload();
+          }
+        } catch (err) {
+          this.showToast(err.message, 'error');
+          btn.textContent = 'Delete permanently';
+          this.updateDeleteOrganizationButton();
+        }
       }
 
       // ---------- Members & teams (both modes) ----------
