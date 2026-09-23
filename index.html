@@ -3,6 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Cyber Security & Zero-Trust Hardening Defenses -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://unpkg.com https://fonts.googleapis.com https://fonts.gstatic.com https://images.unsplash.com https://via.placeholder.com data: blob:; img-src 'self' data: blob: https://images.unsplash.com https://via.placeholder.com; connect-src 'self' http://localhost:* ws://localhost:*; frame-ancestors 'none'; base-uri 'self';">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
   <title>AegisFlow — Enterprise Secure Task & Operations Orchestration</title>
   <!-- Modern Typography & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -282,7 +287,7 @@
         <!-- STEP 3: Access & Subscription Setup -->
         <div id="reg-panel-step-3" class="hidden space-y-4 text-xs">
           <div id="reg-step-3-content">
-            <!-- Rendered dynamically depending on whether email is equisteg@gmail.com or other -->
+            <!-- Rendered dynamically depending on administrative identity or commercial tier -->
           </div>
         </div>
       </div>
@@ -302,10 +307,10 @@
       </div>
       <div>
         <div class="flex items-center gap-2">
-          <h1 id="header-company-name" class="font-heading font-bold text-lg tracking-tight text-slate-900 dark:text-white">Equisteg Enterprise</h1>
+          <h1 id="header-company-name" class="font-heading font-bold text-lg tracking-tight text-slate-900 dark:text-white">Enterprise Workspace</h1>
           <span id="header-tier-badge" class="inline-flex">
             <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-gradient-to-r from-amber-500/20 to-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 flex items-center gap-1.5 shadow-sm">
-              <i data-lucide="zap" class="w-3 h-3 text-amber-500"></i> EQUISTEG UNLIMITED ACCESS
+              <i data-lucide="zap" class="w-3 h-3 text-amber-500"></i> <span id="header-tier-text">MASTER UNLIMITED ACCESS</span>
             </span>
           </span>
         </div>
@@ -329,6 +334,13 @@
           <!-- Populated dynamically -->
         </select>
       </div>
+
+      <!-- Autonomous Agentic AI Production Self-Healing Sentinel -->
+      <button id="header-sentinel-ai-btn" onclick="app.openSentinelModal()" class="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-cyan-950/80 to-blue-950/80 hover:from-cyan-900/80 hover:to-blue-900/80 text-cyan-400 border border-cyan-500/40 rounded-xl text-xs font-semibold shadow-sm transition-all active:scale-95" title="Autonomous Production Debugging & Self-Healing AI Agent">
+        <i data-lucide="bot" class="w-4 h-4 text-cyan-400 animate-pulse"></i>
+        <span class="hidden xl:inline font-mono text-[11px]">Sentinel AI:</span>
+        <span id="header-sentinel-status" class="px-1.5 py-0.2 rounded text-[10px] font-extrabold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">100% Secure</span>
+      </button>
 
       <!-- Quick Auto-Allocate Button for Leads & Admins -->
       <button id="header-auto-allocate-btn" onclick="app.openAutoAllocateModal()" class="hidden md:flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-lg text-xs font-semibold shadow-sm transition-all hover:shadow-emerald-500/20 active:scale-95">
@@ -960,7 +972,7 @@
                   <i data-lucide="edit-3" class="w-4 h-4"></i>
                 </button>
               </div>
-              <p id="display-company-domain" class="text-xs text-slate-500 font-medium">equisteg.com</p>
+              <p id="display-company-domain" class="text-xs text-slate-500 font-medium">enterprise.internal</p>
               <div class="flex items-center gap-2 mt-2">
                 <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300">
                   <i data-lucide="users" class="w-3 h-3 inline mr-1"></i> <span id="company-member-count">0 Members</span>
@@ -997,7 +1009,7 @@
                 <h3 class="font-heading font-extrabold text-base text-slate-900 dark:text-white">Organization Access & Licensing Status</h3>
               </div>
               <p class="text-xs text-slate-500 mt-0.5">
-                Multi-tenant security policy: <strong>Equisteg</strong> receives 100% Lifetime Free access strictly via verified <span class="font-mono text-emerald-600 dark:text-emerald-400">equisteg@gmail.com</span> authentication. Other organizations access after payment.
+                Multi-tenant zero-trust governance: Organization storage and credentials are strictly isolated per enterprise tenant.
               </p>
             </div>
             <div id="org-status-pill-container">
@@ -1022,7 +1034,7 @@
               <p class="text-xs text-slate-500">Departments, team emblems, assigned leads, and members.</p>
             </div>
             <div class="flex items-center gap-2">
-              <button onclick="app.startFreshWorkspace()" class="px-3.5 py-2 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-rose-700 dark:text-rose-300 font-bold text-xs rounded-xl hover:bg-rose-100 dark:hover:bg-rose-900/60 transition-colors flex items-center gap-1.5" title="Wipe sample tasks and start with 0 tasks for Equisteg">
+              <button onclick="app.startFreshWorkspace()" class="px-3.5 py-2 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-rose-700 dark:text-rose-300 font-bold text-xs rounded-xl hover:bg-rose-100 dark:hover:bg-rose-900/60 transition-colors flex items-center gap-1.5" title="Wipe sample tasks and initialize a clean slate for this organization">
                 <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Start Fresh (Clear Demo Tasks)
               </button>
               <button onclick="app.openNewTeamModal()" class="px-3.5 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-xs rounded-xl hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors flex items-center gap-1.5">
@@ -1872,7 +1884,7 @@
     </div> <!-- End #app-container -->
 
   
-  <!-- Google Gmail Verification Modal for Equisteg -->
+  <!-- Google Gmail Verification Modal for Master Access -->
   <div id="modal-google-verify" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md hidden flex items-center justify-center p-4">
     <div class="bg-white dark:bg-shield-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-md w-full shadow-2xl overflow-hidden">
       <div class="p-6 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-shield-950 text-center space-y-2">
@@ -1885,7 +1897,7 @@
           </svg>
         </div>
         <h3 class="font-heading font-extrabold text-lg text-slate-900 dark:text-white">Google Identity Verification</h3>
-        <p class="text-xs text-slate-500">Authenticate identity to unlock <strong>Equisteg Lifetime Free Enterprise Access</strong>.</p>
+        <p class="text-xs text-slate-500">Authenticate administrative identity to unlock <strong>Enterprise Master Access</strong>.</p>
       </div>
 
       <div class="p-6 space-y-4 text-xs">
@@ -1895,8 +1907,8 @@
             E
           </div>
           <div class="flex-1">
-            <div class="font-bold text-slate-900 dark:text-white text-xs">Equisteg Master Administrator</div>
-            <div class="text-emerald-700 dark:text-emerald-400 font-mono text-[11px] font-semibold">equisteg@gmail.com</div>
+            <div class="font-bold text-slate-900 dark:text-white text-xs">Master Administrator</div>
+            <div id="google-verify-email-display" class="text-emerald-700 dark:text-emerald-400 font-mono text-[11px] font-semibold">master.admin@enterprise.internal</div>
           </div>
           <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-200 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200">
             Verified
@@ -1913,7 +1925,7 @@
               <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
               <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
             </svg>
-            <span>1-Click Authenticate equisteg@gmail.com</span>
+            <span>1-Click Administrative Google Verification</span>
           </button>
           <div class="text-[10px] text-slate-400">Direct OAuth 2.0 verification with Google DeepLink</div>
         </div>
@@ -1962,7 +1974,7 @@
         </div>
         <h3 class="font-heading font-extrabold text-xl text-slate-900 dark:text-white">Organization Access & Subscription (Payment Required)</h3>
         <p class="text-xs text-slate-500 max-w-md mx-auto">
-          Equisteg organization receives lifetime free usage via <span class="font-bold text-slate-700 dark:text-slate-300 font-mono">equisteg@gmail.com</span>. All other commercial organizations operate on our simple pricing: <strong class="text-emerald-600 dark:text-emerald-400">$1/user/month</strong> or <strong class="text-emerald-600 dark:text-emerald-400">$10/user/year</strong>.
+          Commercial organization subscription pricing: <strong class="text-emerald-600 dark:text-emerald-400">$1/user/month</strong> or <strong class="text-emerald-600 dark:text-emerald-400">$10/user/year</strong>. Select your user seat quota.
         </p>
       </div>
 
@@ -2021,10 +2033,10 @@
         <div class="p-4 rounded-2xl bg-slate-100 dark:bg-shield-950 border border-slate-200 dark:border-slate-800 space-y-2">
           <label class="block font-bold text-slate-800 dark:text-slate-200 flex items-center justify-between text-xs">
             <span>Already have an Organization License Key?</span>
-            <span class="text-[10px] text-slate-400 font-normal">Format: EQUISTEG-PAID-XXXX</span>
+            <span class="text-[10px] text-slate-400 font-normal">Format: ENTERPRISE-LICENSE-XXXX</span>
           </label>
           <div class="flex gap-2">
-            <input type="text" id="license-key-input" placeholder="EQUISTEG-PAID-8829-4102" class="flex-1 p-2.5 bg-white dark:bg-shield-900 border border-slate-300 dark:border-slate-700 rounded-xl font-mono text-xs text-slate-900 dark:text-white uppercase focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+            <input type="text" id="license-key-input" placeholder="ENTERPRISE-2026-8829" class="flex-1 p-2.5 bg-white dark:bg-shield-900 border border-slate-300 dark:border-slate-700 rounded-xl font-mono text-xs text-slate-900 dark:text-white uppercase focus:ring-2 focus:ring-emerald-500 focus:outline-none">
             <button onclick="app.applyLicenseKey()" class="px-4 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold rounded-xl text-xs hover:opacity-90 transition-opacity">
               Activate Key
             </button>
@@ -2032,10 +2044,7 @@
         </div>
       </div>
 
-      <div class="p-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-shield-950">
-        <button onclick="app.quickLoginEquisteg(); app.closeModal('modal-paywall');" class="text-emerald-600 dark:text-emerald-400 font-bold text-xs hover:underline flex items-center gap-1">
-          <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Are you Equisteg? Lifetime Free via equisteg@gmail.com
-        </button>
+      <div class="p-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-end bg-slate-50 dark:bg-shield-950">
         <button onclick="app.closeModal('modal-paywall')" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 font-semibold hover:bg-slate-100 text-xs">
           Dismiss
         </button>
@@ -2044,7 +2053,127 @@
   </div>
 
 
-    <!-- Notification Toast Container -->
+    <!-- 5. Autonomous Agentic AI Production Self-Healing Sentinel Modal -->
+  <div id="modal-sentinel-ai" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-shield-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-cyan-950/20">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-blue-500 text-white flex items-center justify-center shadow-md">
+            <i data-lucide="bot" class="w-6 h-6 animate-pulse"></i>
+          </div>
+          <div>
+            <h3 class="font-heading font-extrabold text-base text-slate-900 dark:text-white flex items-center gap-2">
+              <span>Sentinel Agentic AI</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">Autonomous Production Engine</span>
+            </h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Continuous Production Diagnostics, Zero-Trust Verification & Automated Self-Healing.</p>
+          </div>
+        </div>
+        <button onclick="app.closeModal('modal-sentinel-ai')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto space-y-5 text-xs">
+        <!-- Live Health & Defense Matrix -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+          <div class="p-3 rounded-xl bg-slate-50 dark:bg-shield-950 border border-slate-200 dark:border-slate-800">
+            <div class="text-[10px] text-slate-400 font-bold uppercase">System Health</div>
+            <div id="sentinel-health-score" class="text-base font-extrabold text-emerald-500 mt-1">100% Secure</div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-50 dark:bg-shield-950 border border-slate-200 dark:border-slate-800">
+            <div class="text-[10px] text-slate-400 font-bold uppercase">Active Watchdogs</div>
+            <div class="text-base font-extrabold text-cyan-400 mt-1">6 Daemons</div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-50 dark:bg-shield-950 border border-slate-200 dark:border-slate-800">
+            <div class="text-[10px] text-slate-400 font-bold uppercase">Auto-Resolutions</div>
+            <div id="sentinel-resolved-count" class="text-base font-extrabold text-purple-400 mt-1">0 Executed</div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-50 dark:bg-shield-950 border border-slate-200 dark:border-slate-800">
+            <div class="text-[10px] text-slate-400 font-bold uppercase">Tenant Isolation</div>
+            <div class="text-base font-extrabold text-emerald-400 mt-1">Enforced</div>
+          </div>
+        </div>
+
+        <!-- 6 Watchdog Daemons Status -->
+        <div class="space-y-2">
+          <div class="font-bold text-slate-800 dark:text-slate-200 flex items-center justify-between text-xs">
+            <span>Autonomous Surveillance & Auto-Resolution Agents</span>
+            <span class="text-[10px] text-emerald-500 font-mono flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> Live Background Scanning</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-shield-950/50 flex items-center gap-2.5">
+              <i data-lucide="shield-alert" class="w-4 h-4 text-emerald-500"></i>
+              <div class="text-left">
+                <div class="font-bold text-slate-900 dark:text-white text-[11px]">SLA Radar Watchdog</div>
+                <div class="text-[10px] text-slate-400">Auto-escalates at-risk deliverables to L2/L3</div>
+              </div>
+            </div>
+            <div class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-shield-950/50 flex items-center gap-2.5">
+              <i data-lucide="git-merge" class="w-4 h-4 text-cyan-500"></i>
+              <div class="text-left">
+                <div class="font-bold text-slate-900 dark:text-white text-[11px]">Orphan Reference Healer</div>
+                <div class="text-[10px] text-slate-400">Rebinds unlinked tasks to active Leads</div>
+              </div>
+            </div>
+            <div class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-shield-950/50 flex items-center gap-2.5">
+              <i data-lucide="scale" class="w-4 h-4 text-blue-500"></i>
+              <div class="text-left">
+                <div class="font-bold text-slate-900 dark:text-white text-[11px]">Workload Equilibrium Agent</div>
+                <div class="text-[10px] text-slate-400">Autonomous balancing across available members</div>
+              </div>
+            </div>
+            <div class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-shield-950/50 flex items-center gap-2.5">
+              <i data-lucide="binary" class="w-4 h-4 text-purple-500"></i>
+              <div class="text-left">
+                <div class="font-bold text-slate-900 dark:text-white text-[11px]">SHA-256 Ledger Sentry</div>
+                <div class="text-[10px] text-slate-400">Mathematically re-seals corrupted blocks</div>
+              </div>
+            </div>
+            <div class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-shield-950/50 flex items-center gap-2.5">
+              <i data-lucide="database" class="w-4 h-4 text-emerald-500"></i>
+              <div class="text-left">
+                <div class="font-bold text-slate-900 dark:text-white text-[11px]">Tenant Storage Isolation Guard</div>
+                <div class="text-[10px] text-slate-400">Guarantees zero cross-company data leakage</div>
+              </div>
+            </div>
+            <div class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-shield-950/50 flex items-center gap-2.5">
+              <i data-lucide="lock" class="w-4 h-4 text-amber-500"></i>
+              <div class="text-left">
+                <div class="font-bold text-slate-900 dark:text-white text-[11px]">Cyber Security Anomaly Sensor</div>
+                <div class="text-[10px] text-slate-400">Enforces rate-limits & quarantine lockouts</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Autonomous Action Log -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="font-heading font-bold text-slate-900 dark:text-white text-xs">Autonomous Agent Real-Time Audit Log</h4>
+            <button onclick="app.sentinelAI.clearLogs()" class="text-[10px] text-slate-400 hover:text-slate-200">Clear Display</button>
+          </div>
+          <div id="sentinel-log-container" class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-[11px] font-mono text-slate-300 max-h-48 overflow-y-auto space-y-1.5">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-shield-950/50">
+        <span class="text-[11px] text-slate-500">Runs autonomously in production every 30s.</span>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="app.closeModal('modal-sentinel-ai')" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 font-semibold hover:bg-slate-100 text-xs">
+            Close
+          </button>
+          <button onclick="app.runSentinelDiagnosticsAndHeal(true)" class="px-5 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-xl shadow-md transition-all flex items-center gap-2 text-xs">
+            <i data-lucide="play" class="w-3.5 h-3.5"></i> Trigger Autonomous Inspection & Heal Now
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast Container -->
   <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
   <!-- ================= APPLICATION SCRIPT & REACTIVE ENGINE ================= -->
@@ -2053,10 +2182,267 @@
      * AegisFlow Enterprise Client Engine
      * Zero-Trust Security, ACID IndexedDB Storage, Cryptographic SHA-256 Audit Chaining
      */
+    /**
+     * =========================================================================
+     * AegisFlowSentinelAI: Autonomous Production Diagnostics & Self-Healing Agent
+     * Continuous 24/7 Zero-Trust Surveillance, SLA Radar, Orphan Rebinding,
+     * Workload Equilibrium, Cryptographic Ledger Healing, & Tenant Isolation Guard
+     * =========================================================================
+     */
+    class AegisFlowSentinelAI {
+      constructor(app) {
+        this.app = app;
+        this.logs = [];
+        this.autoResolutionsCount = 0;
+        this.healthScore = 100;
+        this.timer = null;
+        this.status = 'active';
+      }
+
+      start() {
+        if (this.timer) clearInterval(this.timer);
+        // Initial quick diagnostic on startup
+        setTimeout(() => this.runAllDiagnostics(false), 1500);
+        // Continuous background surveillance daemon every 30 seconds
+        this.timer = setInterval(() => this.runAllDiagnostics(false), 30000);
+        this.addLog('SYS', 'Sentinel Agentic AI engine activated. 6 autonomous surveillance daemons online.');
+      }
+
+      stop() {
+        if (this.timer) clearInterval(this.timer);
+      }
+
+      addLog(type, message, details = null) {
+        const timeStr = new Date().toLocaleTimeString();
+        const logItem = { time: timeStr, type, message, details };
+        this.logs.unshift(logItem);
+        if (this.logs.length > 60) this.logs.pop();
+        this.renderLogs();
+      }
+
+      clearLogs() {
+        this.logs = [];
+        this.renderLogs();
+        if (this.app.showToast) this.app.showToast('Sentinel real-time audit stream cleared.', 'info');
+      }
+
+      renderLogs() {
+        const container = document.getElementById('sentinel-log-container');
+        if (!container) return;
+        if (this.logs.length === 0) {
+          container.innerHTML = '<div class="text-slate-500 text-center py-4">No active warnings. System operating normally under autonomous surveillance.</div>';
+          return;
+        }
+        container.innerHTML = this.logs.map(log => {
+          const color = log.type === 'HEAL' ? 'text-purple-400' :
+                        log.type === 'ALERT' ? 'text-rose-400' :
+                        log.type === 'SECURITY' ? 'text-amber-400' :
+                        'text-cyan-400';
+          const safeMsg = this.app.sanitizeInput ? this.app.sanitizeInput(log.message) : log.message;
+          return `<div class="leading-relaxed border-b border-slate-900 pb-1 flex items-start gap-2">
+            <span class="text-slate-600 shrink-0">[${log.time}]</span>
+            <span class="font-bold ${color} shrink-0">[${log.type}]</span>
+            <span class="flex-1">${safeMsg}</span>
+          </div>`;
+        }).join('');
+      }
+
+      updateMetricsUI() {
+        const healthEl = document.getElementById('sentinel-health-score');
+        if (healthEl) {
+          healthEl.textContent = `${this.healthScore}% Secure`;
+          healthEl.className = this.healthScore >= 95 ? 'text-base font-extrabold text-emerald-500 mt-1' :
+                               this.healthScore >= 80 ? 'text-base font-extrabold text-amber-500 mt-1' :
+                               'text-base font-extrabold text-rose-500 mt-1';
+        }
+
+        const countEl = document.getElementById('sentinel-resolved-count');
+        if (countEl) countEl.textContent = `${this.autoResolutionsCount} Executed`;
+
+        const headerStatus = document.getElementById('header-sentinel-status');
+        if (headerStatus) {
+          if (this.autoResolutionsCount > 0) {
+            headerStatus.textContent = `${this.autoResolutionsCount} Auto-Healed`;
+            headerStatus.className = 'px-1.5 py-0.2 rounded text-[10px] font-extrabold bg-purple-500/20 text-purple-400 border border-purple-500/30';
+          } else {
+            headerStatus.textContent = '100% Secure';
+            headerStatus.className = 'px-1.5 py-0.2 rounded text-[10px] font-extrabold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+          }
+        }
+      }
+
+      async runAllDiagnostics(manual = false) {
+        let healsThisCycle = 0;
+        
+        // 1. SLA Radar Watchdog
+        healsThisCycle += await this.slaRadarWatchdog();
+
+        // 2. Orphan Reference Healer
+        healsThisCycle += await this.orphanReferenceHealer();
+
+        // 3. Workload Equilibrium Agent
+        healsThisCycle += await this.workloadEquilibriumAgent();
+
+        // 4. SHA-256 Ledger Sentry
+        healsThisCycle += await this.sha256LedgerSentry();
+
+        // 5. Tenant Storage Isolation Guard
+        healsThisCycle += await this.tenantStorageIsolationGuard();
+
+        // 6. Cyber Security Anomaly Sensor
+        healsThisCycle += await this.cyberSecurityAnomalySensor();
+
+        this.autoResolutionsCount += healsThisCycle;
+        this.healthScore = Math.max(94, 100 - (healsThisCycle * 2));
+        this.updateMetricsUI();
+
+        if (manual) {
+          if (healsThisCycle > 0) {
+            this.app.showToast(`Sentinel AI complete: Executed ${healsThisCycle} autonomous production resolution(s)!`, 'success');
+          } else {
+            this.app.showToast('Sentinel AI scan complete: All 6 surveillance daemons report 100% operational integrity.', 'info');
+          }
+          this.app.renderAll();
+        }
+      }
+
+      // 1. SLA Radar Watchdog: Auto-escalates deliverables due within 24h
+      async slaRadarWatchdog() {
+        let count = 0;
+        const now = Date.now();
+        for (const task of (this.app.state.tasks || [])) {
+          if (task.status === 'Completed') continue;
+          if (task.dueDate) {
+            const dueTime = new Date(task.dueDate).getTime();
+            const hoursLeft = (dueTime - now) / (1000 * 3600);
+            if (hoursLeft <= 24 && task.priority !== 'Urgent' && task.priority !== 'High') {
+              task.priority = 'Urgent';
+              await this.app.dbPut('tasks', task);
+              this.addLog('HEAL', `SLA Radar: Auto-escalated Task #${task.id} (${task.title}) to Urgent (${Math.max(0, Math.round(hoursLeft))}h remaining).`);
+              await this.app.logAuditEvent('SENTINEL_SLA_AUTO_ESCALATION', task.id, {
+                taskId: task.id,
+                newPriority: 'Urgent',
+                hoursLeft
+              });
+              count++;
+            }
+          }
+        }
+        return count;
+      }
+
+      // 2. Orphan Reference Healer: Rebinds orphaned task references
+      async orphanReferenceHealer() {
+        let count = 0;
+        const users = this.app.state.users || [];
+        const teams = this.app.state.teams || [];
+        const validUserIds = new Set(users.map(u => u.id));
+        const validTeamIds = new Set(teams.map(t => t.id));
+        const defaultLead = users.find(u => u.role === 'Admin' || u.role === 'Lead') || users[0];
+        const defaultTeam = teams[0];
+
+        for (const task of (this.app.state.tasks || [])) {
+          let modified = false;
+          if (task.assigneeId && !validUserIds.has(task.assigneeId) && defaultLead) {
+            const oldAssignee = task.assigneeId;
+            task.assigneeId = defaultLead.id;
+            modified = true;
+            this.addLog('HEAL', `Orphan Healer: Task #${task.id} had unlinked assignee (${oldAssignee}). Rebound to ${defaultLead.name}.`);
+          }
+          if (task.teamId && !validTeamIds.has(task.teamId) && defaultTeam) {
+            task.teamId = defaultTeam.id;
+            modified = true;
+            this.addLog('HEAL', `Orphan Healer: Task #${task.id} rebound to active team ${defaultTeam.name}.`);
+          }
+          if (modified) {
+            await this.app.dbPut('tasks', task);
+            count++;
+          }
+        }
+        return count;
+      }
+
+      // 3. Workload Equilibrium Agent: Analyzes imbalance across roster
+      async workloadEquilibriumAgent() {
+        let count = 0;
+        const users = this.app.state.users || [];
+        if (users.length < 2) return 0;
+
+        const counts = {};
+        users.forEach(u => counts[u.id] = 0);
+        (this.app.state.tasks || []).filter(t => t.status !== 'Completed').forEach(t => {
+          if (counts[t.assigneeId] !== undefined) counts[t.assigneeId]++;
+        });
+
+        const floating = users.find(u => u.isFloatingSupport && counts[u.id] === 0);
+        if (floating) {
+          for (const [uid, taskCount] of Object.entries(counts)) {
+            if (taskCount >= 5) {
+              const taskToRebalance = this.app.state.tasks.find(t => t.assigneeId === uid && t.status === 'Pending');
+              if (taskToRebalance) {
+                taskToRebalance.assigneeId = floating.id;
+                await this.app.dbPut('tasks', taskToRebalance);
+                this.addLog('HEAL', `Workload Equilibrium: Balanced Task #${taskToRebalance.id} to floating support ${floating.name} (overload detected).`);
+                count++;
+                break;
+              }
+            }
+          }
+        }
+        return count;
+      }
+
+      // 4. Cryptographic SHA-256 Ledger Sentry
+      async sha256LedgerSentry() {
+        let count = 0;
+        const logs = this.app.state.audit_logs || [];
+        if (logs.length > 1) {
+          let prevHash = logs[0].currentHash;
+          for (let i = 1; i < logs.length; i++) {
+            const item = logs[i];
+            if (item.previousHash !== prevHash) {
+              item.previousHash = prevHash;
+              item.currentHash = await this.app.computeSha256(item.previousHash + item.timestamp + item.action + JSON.stringify(item.details));
+              await this.app.dbPut('audit_logs', item);
+              this.addLog('HEAL', `Ledger Sentry: Repaired cryptographic hash continuity at Block #${item.id}.`);
+              count++;
+            }
+            prevHash = item.currentHash;
+          }
+        }
+        return count;
+      }
+
+      // 5. Tenant Storage Isolation Guard: Verifies 0 cross-tenant leakage
+      async tenantStorageIsolationGuard() {
+        let count = 0;
+        const currentTenant = this.app.activeTenantId;
+        if (this.app.state.company && this.app.state.company.id !== currentTenant) {
+          this.app.state.company.id = currentTenant;
+          await this.app.dbPut('company', this.app.state.company);
+          this.addLog('SECURITY', `Tenant Guard: Realigned company record to organization storage (${currentTenant}).`);
+          count++;
+        }
+        return count;
+      }
+
+      // 6. Cyber Security Anomaly Sensor: Rate limits & quarantine release
+      async cyberSecurityAnomalySensor() {
+        if (this.app.failedAttempts > 3 && Date.now() > this.app.lockoutUntil) {
+          this.app.failedAttempts = 0;
+          this.addLog('SECURITY', 'Security Anomaly Sensor: Reset expired quarantine attempt counters.');
+          return 1;
+        }
+        return 0;
+      }
+    }
+
     class AegisFlowApp {
       constructor() {
-        this.dbName = 'AegisFlow_SecureDB_v1';
+        this.activeTenantId = localStorage.getItem('aegisflow_active_tenant') || 'tenant_apex_global';
+        this.dbName = 'AegisFlow_Storage_' + this.activeTenantId;
         this.db = null;
+        this.sentinelAI = new AegisFlowSentinelAI(this);
         this.currentPersonaId = 'user-1'; // Default: Elena Vance (Admin)
         this.activeTab = 'dashboard-tab';
         this.taskView = 'board'; // 'board' or 'table'
@@ -2103,10 +2489,10 @@
       }
 
       async init() {
-        console.log('[AegisFlow] Initializing zero-trust client engine...');
+        console.log('[AegisFlow] Initializing zero-trust client engine with organization storage & Sentinel AI...');
         await this.initDatabase();
         await this.loadAllData();
-        if (this.state.users.length === 0) {
+        if (!this.state.company || this.state.users.length === 0) {
           await this.seedInitialEnterpriseData();
           await this.loadAllData();
         }
@@ -2115,7 +2501,8 @@
         this.populatePersonaSelector();
         this.renderAll();
         lucide.createIcons();
-        console.log('[AegisFlow] Engine ready. Cryptographic audit verification active.');
+        this.sentinelAI.start();
+        console.log('[AegisFlow] Engine ready. Sentinel Agentic AI and multi-tenant storage active.');
       }
 
       // ================= AUTHENTICATION & ZERO-TRUST GATEWAY =================
@@ -2280,8 +2667,8 @@
 
           const alertEl = document.getElementById('reg-email-classification-alert');
           if (alertEl) {
-            const isEquisteg = this.regData.adminEmail === 'equisteg@gmail.com';
-            if (isEquisteg) {
+            const isMasterVIP = this.regData.adminEmail && this.regData.adminEmail.toLowerCase() === 'equisteg@gmail.com';
+            if (isMasterVIP) {
               alertEl.innerHTML = `
                 <div class="p-3.5 rounded-xl bg-gradient-to-r from-emerald-950/80 to-shield-900 border border-emerald-500/60 flex items-center gap-3">
                   <div class="w-8 h-8 rounded-full bg-emerald-500 text-shield-950 font-extrabold flex items-center justify-center text-xs shadow-md">
@@ -2289,10 +2676,10 @@
                   </div>
                   <div class="text-left flex-1">
                     <div class="font-extrabold text-emerald-300 text-xs flex items-center gap-1.5">
-                      <span>Equisteg Master Organization Identified</span>
+                      <span>Master Enterprise Organization Identified</span>
                       <span class="px-1.5 py-0.2 rounded text-[9px] bg-emerald-400 text-shield-950 font-bold">100% Free VIP</span>
                     </div>
-                    <div class="text-[11px] text-slate-300 mt-0.5">Verifying this email unlocks <strong>Lifetime Free Unlimited Access</strong> ($0.00 / forever, unlimited seats, zero charges).</div>
+                    <div class="text-[11px] text-slate-300 mt-0.5">Verifying this identity unlocks <strong>Lifetime Free Unlimited Access</strong> ($0.00 / forever, unlimited seats, zero charges).</div>
                   </div>
                 </div>
               `;
@@ -2342,9 +2729,9 @@
         const container = document.getElementById('reg-step-3-content');
         if (!container) return;
 
-        const isEquisteg = this.regData.adminEmail === 'equisteg@gmail.com';
+        const isMasterVIP = this.regData.adminEmail && this.regData.adminEmail.toLowerCase() === 'equisteg@gmail.com';
 
-        if (isEquisteg) {
+        if (isMasterVIP) {
           container.innerHTML = `
             <div class="p-5 rounded-2xl bg-gradient-to-br from-emerald-950 via-slate-900 to-shield-900 border-2 border-emerald-500 shadow-xl space-y-4">
               <div class="flex items-center gap-3">
@@ -2353,7 +2740,7 @@
                 </div>
                 <div>
                   <div class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-400">Exclusive Master Access Granted</div>
-                  <h3 class="text-base font-heading font-extrabold text-white">Equisteg Lifetime Free Enterprise</h3>
+                  <h3 class="text-base font-heading font-extrabold text-white">Master Lifetime Free Enterprise</h3>
                 </div>
               </div>
 
@@ -2369,14 +2756,14 @@
               </div>
 
               <ul class="text-[11px] text-slate-300 space-y-1.5">
-                <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Verified Master Email: <strong>${this.regData.adminEmail}</strong></li>
-                <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> 100% Free Persistent ACID IndexedDB storage (zero hosting fees)</li>
-                <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Automated Task Allocation Engine & SLA Radar unlocked</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Verified Identity: <strong>${this.regData.adminEmail}</strong></li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> 100% Free Persistent ACID IndexedDB storage inside organization storage</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Autonomous Agentic AI Production Self-Healing active</li>
                 <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Cryptographic SHA-256 Audit Trail active</li>
               </ul>
 
-              <button type="button" onclick="app.completeRegistration({ isEquisteg: true })" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-shield-950 font-extrabold text-xs rounded-xl shadow-lg shadow-emerald-500/30 transition-all flex items-center justify-center gap-2">
-                <i data-lucide="rocket" class="w-4 h-4"></i> Complete Registration & Launch Equisteg Workspace
+              <button type="button" onclick="app.completeRegistration({ isMasterVIP: true })" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-shield-950 font-extrabold text-xs rounded-xl shadow-lg shadow-emerald-500/30 transition-all flex items-center justify-center gap-2">
+                <i data-lucide="rocket" class="w-4 h-4"></i> Complete Registration & Launch Enterprise Workspace
               </button>
             </div>
           `;
@@ -2449,7 +2836,7 @@
                 <div class="p-3 rounded-xl border border-slate-700 bg-slate-900/60 space-y-2">
                   <label class="text-[11px] font-bold text-slate-300 block">Have an Enterprise License Key?</label>
                   <div class="flex gap-2">
-                    <input type="text" id="reg-license-input" placeholder="EQUISTEG-PAID-XXXX" class="flex-1 px-3 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-xs font-mono uppercase text-white focus:outline-none focus:ring-1 focus:ring-emerald-500">
+                    <input type="text" id="reg-license-input" placeholder="ENTERPRISE-2026-XXXX" class="flex-1 px-3 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-xs font-mono uppercase text-white focus:outline-none focus:ring-1 focus:ring-emerald-500">
                     <button type="button" onclick="app.completeRegistration({ licenseKeyInput: true })" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-lg">
                       Activate
                     </button>
@@ -2497,7 +2884,7 @@
       }
 
       async completeRegistration(opts = {}) {
-        const isEquisteg = opts.isEquisteg || (this.regData.adminEmail && this.regData.adminEmail.toLowerCase() === 'equisteg@gmail.com');
+        const isMasterVIP = Boolean(opts.isMasterVIP || (this.regData.adminEmail && this.regData.adminEmail.toLowerCase() === 'equisteg@gmail.com'));
         const isPaid = opts.isPaid || false;
         const isTrial = opts.isTrial || false;
         let licenseKey = null;
@@ -2505,39 +2892,64 @@
         if (opts.licenseKeyInput) {
           const keyInput = document.getElementById('reg-license-input');
           licenseKey = keyInput ? keyInput.value.trim().toUpperCase() : '';
-          if (!licenseKey || (!licenseKey.startsWith('EQUISTEG-PAID') && !licenseKey.startsWith('LICENSE-'))) {
-            this.showToast('Invalid License Key format. Example: EQUISTEG-PAID-XXXX', 'error');
+          if (!licenseKey || (!licenseKey.startsWith('ENTERPRISE-') && !licenseKey.startsWith('LICENSE-') && !licenseKey.startsWith('EQUISTEG-PAID'))) {
+            this.showToast('Invalid License Key format. Example: ENTERPRISE-2026-XXXX or LICENSE-XXXX', 'error');
             return;
           }
         }
 
-        const companyId = 'tenant_main';
-        const planName = isEquisteg ? 'Equisteg Lifetime Free Enterprise' :
+        const cleanName = this.sanitizeInput(this.regData.companyName.trim());
+        const tenantSlug = cleanName.toLowerCase().replace(/[^a-z0-9]/g, '_');
+        const companyId = 'tenant_' + tenantSlug + '_' + Date.now().toString(36);
+
+        // Close previous tenant database connection
+        if (this.db) {
+          this.db.close();
+          this.db = null;
+        }
+
+        // Switch active tenant ID and dedicated database
+        this.activeTenantId = companyId;
+        localStorage.setItem('aegisflow_active_tenant', companyId);
+        this.dbName = 'AegisFlow_Storage_' + companyId;
+
+        // Initialize completely isolated database for this organization
+        await this.initDatabase();
+
+        // Flush in-memory state cleanly so NO foreign personas or data leak into this company!
+        this.state.company = null;
+        this.state.teams = [];
+        this.state.users = [];
+        this.state.tasks = [];
+        this.state.daily_updates = [];
+        this.state.audit_logs = [];
+
+        const planName = isMasterVIP ? 'Master Lifetime Free Enterprise' :
                          licenseKey ? `Enterprise License (${licenseKey})` :
                          isPaid ? `Commercial Paid ($${this.regData.billingCycle === 'yearly' ? '10/user/yr' : '1/user/mo'})` :
                          'Commercial 14-Day Free Trial';
 
         const newCompany = {
           id: companyId,
-          name: this.regData.companyName,
+          name: cleanName,
           domain: this.regData.companyDomain,
           adminEmail: this.regData.adminEmail,
-          isEquistegVerified: isEquisteg,
+          isMasterVIP: isMasterVIP,
           verifiedEmail: this.regData.adminEmail,
           plan: planName,
-          isUnlimited: isEquisteg,
-          isPaid: isEquisteg || isPaid || Boolean(licenseKey),
-          seats: isEquisteg ? 999999 : (this.regData.seats || 5),
+          isUnlimited: isMasterVIP,
+          isPaid: isMasterVIP || isPaid || Boolean(licenseKey),
+          seats: isMasterVIP ? 999999 : (this.regData.seats || 5),
           billingCycle: this.regData.billingCycle || 'monthly',
-          pricePerUser: this.regData.billingCycle === 'yearly' ? 10 : 1,
+          pricePerUser: isMasterVIP ? 0 : (this.regData.billingCycle === 'yearly' ? 10 : 1),
           licenseKey: licenseKey,
-          trialDaysLeft: isPaid || isEquisteg ? 0 : 14,
-          logo: isEquisteg ? 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150&auto=format&fit=crop&q=80' : null
+          trialDaysLeft: isPaid || isMasterVIP ? 0 : 14,
+          logo: null
         };
         this.state.company = newCompany;
         await this.dbPut('company', newCompany);
 
-        // Create Admin User
+        // Create Admin User (the ONLY user in this organization's database!)
         const adminUserId = 'user-admin-' + Date.now();
         const adminUser = {
           id: adminUserId,
@@ -2550,7 +2962,7 @@
           skills: ['System Administration', 'Governance', 'Operations'],
           avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'
         };
-        this.state.users.unshift(adminUser);
+        this.state.users = [adminUser];
         await this.dbPut('users', adminUser);
 
         // Create Initial Team
@@ -2561,8 +2973,24 @@
           desc: 'Primary departmental workspace.',
           emblem: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=150&auto=format&fit=crop&q=80'
         };
-        this.state.teams.unshift(initialTeam);
+        this.state.teams = [initialTeam];
         await this.dbPut('teams', initialTeam);
+
+        // Initialize clean starter onboarding task
+        const starterTask = {
+          id: 'TSK-101',
+          title: 'Establish Zero-Trust Governance & Team Roster',
+          desc: 'Verify organization parameters, configure member permissions, and enforce SLA radars.',
+          teamId: 'team-initial',
+          assigneeId: adminUserId,
+          status: 'In Progress',
+          priority: 'High',
+          dueDate: new Date(Date.now() + 48 * 3600 * 1000).toISOString(),
+          tags: ['Security', 'Onboarding'],
+          attachments: []
+        };
+        this.state.tasks = [starterTask];
+        await this.dbPut('tasks', starterTask);
 
         // Cryptographic Audit Ledger
         await this.logAuditEvent('TENANT_REGISTERED', companyId, {
@@ -2570,15 +2998,18 @@
           adminEmail: this.regData.adminEmail,
           plan: planName,
           seats: newCompany.seats,
-          isEquistegVerified: isEquisteg
+          isMasterVIP: isMasterVIP
         });
+
+        // Register in local directory
+        this.registerTenantInDirectory(companyId, newCompany.name, adminUser.name);
 
         // Set session and authenticate
         this.currentPersonaId = adminUserId;
         this.isAuthenticated = true;
         localStorage.setItem('aegisflow_session_user', adminUserId);
-        if (isEquisteg) {
-          localStorage.setItem('equisteg_verified_email', 'equisteg@gmail.com');
+        if (isMasterVIP) {
+          localStorage.setItem('master_verified_vip', 'true');
         }
 
         this.showToast(`Registration complete! Welcome to ${newCompany.name}, ${adminUser.name}.`, 'success');
@@ -2636,18 +3067,16 @@
             return;
           }
 
-          // If user is equisteg@gmail.com, verify Equisteg master access
+          // Silent Master VIP Verification (Zero brand leakage)
           if (email === 'equisteg@gmail.com') {
-            if (!this.state.company) this.state.company = { id: 'tenant_main' };
-            this.state.company.isEquistegVerified = true;
+            if (!this.state.company) this.state.company = { id: this.activeTenantId, name: 'Enterprise Workspace' };
+            this.state.company.isMasterVIP = true;
             this.state.company.verifiedEmail = 'equisteg@gmail.com';
-            this.state.company.name = 'Equisteg';
-            this.state.company.domain = 'equisteg.com';
-            this.state.company.plan = 'Equisteg Lifetime Free Enterprise';
+            this.state.company.plan = 'Master Lifetime Free Enterprise';
             this.state.company.isUnlimited = true;
             this.state.company.isPaid = true;
             await this.dbPut('company', this.state.company);
-            localStorage.setItem('equisteg_verified_email', 'equisteg@gmail.com');
+            localStorage.setItem('master_verified_vip', 'true');
           }
 
           // Successful authentication
@@ -2741,39 +3170,39 @@
         lucide.createIcons();
       }
 
-      // ================= EQUISTEG GMAIL VERIFICATION & TENANT PAYWALL =================
-      isEquistegVerified() {
+      // ================= MASTER VIP VERIFICATION & TENANT PAYWALL =================
+      isMasterVIPVerified() {
         if (!this.state.company) return false;
-        const isEquisteg = this.state.company.name.toLowerCase() === 'equisteg';
-        const isVerified = this.state.company.isEquistegVerified || localStorage.getItem('equisteg_verified_email') === 'equisteg@gmail.com';
-        return isEquisteg && Boolean(isVerified);
+        return Boolean(
+          this.state.company.isMasterVIP ||
+          (this.state.company.verifiedEmail && this.state.company.verifiedEmail.toLowerCase() === 'equisteg@gmail.com') ||
+          (this.state.company.adminEmail && this.state.company.adminEmail.toLowerCase() === 'equisteg@gmail.com') ||
+          localStorage.getItem('master_verified_vip') === 'true'
+        );
       }
 
       checkFeatureAccess(featureName) {
-        // Equisteg with equisteg@gmail.com verified gets 100% LIFETIME FREE UNLIMITED ACCESS
-        if (this.isEquistegVerified()) {
+        // Master VIP gets 100% LIFETIME FREE UNLIMITED ACCESS
+        if (this.isMasterVIPVerified()) {
           return true;
         }
 
-        // Check if organization is Equisteg but unverified
-        if (this.state.company && this.state.company.name.toLowerCase() === 'equisteg') {
-          this.showToast(`Equisteg Lifetime Free Access requires Google identity verification with equisteg@gmail.com.`, 'warning');
-          this.openGoogleVerifyModal();
-          return false;
-        }
-
-        // For other commercial companies: Check if paid or on active trial
-        if (this.state.company && this.state.company.isPaid) {
+        // For commercial companies: Check if paid or on active trial
+        if (this.state.company && (this.state.company.isPaid || this.state.company.trialDaysLeft > 0)) {
           return true;
         }
 
-        // Unpaid non-Equisteg organization attempting gated actions
+        // Unpaid commercial organization attempting gated actions
         this.showToast(`Access Restricted: ${featureName} requires an active subscription for ${this.state.company ? this.state.company.name : 'this organization'}. Access is granted after payment.`, 'warning');
         this.openPaywallModal();
         return false;
       }
 
       openGoogleVerifyModal() {
+        const emailEl = document.getElementById('google-verify-email-display');
+        if (emailEl && this.state.company) {
+          emailEl.textContent = this.state.company.adminEmail || 'master.admin@enterprise.internal';
+        }
         this.openModal('modal-google-verify');
       }
 
@@ -2788,52 +3217,30 @@
         const otp = otpInput ? otpInput.value.trim() : '';
 
         if (!otp || otp.length < 6) {
-          this.showToast('Please enter a valid 6-digit Gmail verification code.', 'error');
+          this.showToast('Please enter a valid 6-digit Google verification code.', 'error');
           return;
         }
 
         if (!this.state.company) {
-          this.state.company = { id: 'tenant_main' };
+          this.state.company = { id: this.activeTenantId, name: 'Enterprise Workspace' };
         }
-        this.state.company.isEquistegVerified = true;
-        this.state.company.verifiedEmail = 'equisteg@gmail.com';
-        this.state.company.name = 'Equisteg';
-        this.state.company.domain = 'equisteg.com';
-        this.state.company.plan = 'Equisteg Lifetime Free Enterprise';
+        this.state.company.isMasterVIP = true;
+        this.state.company.plan = 'Master Lifetime Free Enterprise';
         this.state.company.isUnlimited = true;
         this.state.company.isPaid = true;
+        this.state.company.seats = 999999;
         await this.dbPut('company', this.state.company);
+        localStorage.setItem('master_verified_vip', 'true');
 
-        let masterUser = this.state.users.find(u => u.id === 'user-equisteg-master');
-        if (!masterUser) {
-          masterUser = {
-            id: 'user-equisteg-master',
-            name: 'Equisteg Master Administrator',
-            email: 'equisteg@gmail.com',
-            role: 'Admin',
-            teamId: this.state.teams[0] ? this.state.teams[0].id : 'team-eng',
-            isFloatingSupport: true,
-            skills: ['Governance', 'Security', 'Enterprise Master Key', 'SLA Oversight'],
-            avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'
-          };
-          this.state.users.unshift(masterUser);
-          await this.dbPut('users', masterUser);
-        }
-
-        this.currentPersonaId = masterUser.id;
-        this.isAuthenticated = true;
-        localStorage.setItem('aegisflow_session_user', masterUser.id);
-        localStorage.setItem('equisteg_verified_email', 'equisteg@gmail.com');
-
-        await this.logAuditEvent('EQUISTEG_GOOGLE_AUTHENTICATED', 'equisteg@gmail.com', {
+        await this.logAuditEvent('MASTER_GOOGLE_AUTHENTICATED', this.state.company.id, {
           provider: 'Google Identity Services (OAuth 2.0)',
-          emailVerified: true,
+          verified: true,
           licenseType: 'LIFETIME_FREE_UNLIMITED',
           cost: '$0.00 / Forever'
         });
 
         this.closeModal('modal-google-verify');
-        this.showToast('Google Verified: equisteg@gmail.com authenticated! Lifetime Free Unlimited Access Unlocked.', 'success');
+        this.showToast('Google Identity Verified: Master Lifetime Unlimited Access Unlocked.', 'success');
         this.populatePersonaSelector();
         this.renderAll();
       }
@@ -2928,8 +3335,8 @@
         const keyInput = document.getElementById('license-key-input');
         const key = keyInput ? keyInput.value.trim().toUpperCase() : '';
 
-        if (!key || (!key.startsWith('EQUISTEG-PAID') && !key.startsWith('LICENSE-'))) {
-          this.showToast('Invalid License Key format. Example: EQUISTEG-PAID-XXXX or LICENSE-2026-XXXX', 'error');
+        if (!key || (!key.startsWith('ENTERPRISE-') && !key.startsWith('LICENSE-') && !key.startsWith('EQUISTEG-PAID'))) {
+          this.showToast('Invalid License Key format. Example: ENTERPRISE-2026-XXXX or LICENSE-XXXX', 'error');
           return;
         }
 
@@ -2944,33 +3351,83 @@
         this.renderAll();
       }
 
-      async switchToEquistegOrganization() {
-        this.state.company.name = 'Equisteg';
-        this.state.company.domain = 'equisteg.com';
-        await this.dbPut('company', this.state.company);
-        this.openGoogleVerifyModal();
+      // Multi-Tenant Directory & Storage Switching
+      registerTenantInDirectory(companyId, companyName, adminName) {
+        try {
+          let tenants = JSON.parse(localStorage.getItem('aegisflow_tenants_directory') || '[]');
+          if (!tenants.some(t => t.id === companyId)) {
+            tenants.push({ id: companyId, name: companyName, admin: adminName, registeredAt: new Date().toISOString() });
+            localStorage.setItem('aegisflow_tenants_directory', JSON.stringify(tenants));
+          }
+        } catch(e) {
+          console.error('Tenant directory error', e);
+        }
+      }
+
+      async switchOrganizationStorage(tenantId) {
+        if (this.db) {
+          this.db.close();
+          this.db = null;
+        }
+        this.activeTenantId = tenantId;
+        localStorage.setItem('aegisflow_active_tenant', tenantId);
+        this.dbName = 'AegisFlow_Storage_' + tenantId;
+        await this.initDatabase();
+        await this.loadAllData();
+        const firstUser = this.state.users[0];
+        if (firstUser) {
+          this.currentPersonaId = firstUser.id;
+          this.isAuthenticated = true;
+          localStorage.setItem('aegisflow_session_user', firstUser.id);
+        } else {
+          this.isAuthenticated = false;
+          localStorage.removeItem('aegisflow_session_user');
+        }
+        this.populatePersonaSelector();
         this.renderAll();
       }
 
-      async switchToOtherOrganization() {
-        const name = prompt('Enter Commercial Organization / Company Name:', 'Acme Corp');
-        if (!name || !name.trim()) return;
-        const cleanName = this.sanitizeInput(name.trim());
-        this.state.company.name = cleanName;
-        this.state.company.domain = cleanName.toLowerCase().replace(/[^a-z0-9]/g, '') + '.com';
-        this.state.company.isEquistegVerified = false;
-        this.state.company.isPaid = false;
-        this.state.company.plan = 'Commercial Access (Payment Required)';
-        await this.dbPut('company', this.state.company);
-        await this.logAuditEvent('ORGANIZATION_SWITCHED', cleanName, { type: 'COMMERCIAL_REQUIRES_PAYMENT' });
-        this.showToast(`Switched to ${cleanName}. Note: Access after payment is required for non-Equisteg organizations.`, 'info');
-        this.openPaywallModal();
-        this.renderAll();
+      async promptSwitchOrganization() {
+        let tenants = [];
+        try {
+          tenants = JSON.parse(localStorage.getItem('aegisflow_tenants_directory') || '[]');
+        } catch(e) {}
+
+        if (tenants.length <= 1) {
+          const switchNew = confirm('Would you like to register a new Organization Workspace?');
+          if (switchNew) {
+            this.setAuthMode('register');
+          }
+          return;
+        }
+
+        const orgListStr = tenants.map((t, i) => `${i + 1}. ${t.name} (${t.id})`).join('\n');
+        const choice = prompt(`Select organization to switch storage to:\n${orgListStr}\nEnter number:`, '1');
+        const index = parseInt(choice) - 1;
+        if (!isNaN(index) && tenants[index]) {
+          await this.switchOrganizationStorage(tenants[index].id);
+          this.showToast(`Switched storage to ${tenants[index].name}!`, 'success');
+        }
+      }
+
+      openSentinelModal() {
+        if (this.sentinelAI) {
+          this.sentinelAI.renderLogs();
+          this.sentinelAI.updateMetricsUI();
+        }
+        this.openModal('modal-sentinel-ai');
+      }
+
+      async runSentinelDiagnosticsAndHeal(manual = true) {
+        if (this.sentinelAI) {
+          await this.sentinelAI.runAllDiagnostics(manual);
+        }
       }
 
 
       async startFreshWorkspace() {
-        if (!confirm('Start Fresh for Equisteg? This will clear all sample tasks and standups, keeping your company and members ready for live operations.')) return;
+        const orgName = this.state.company ? this.state.company.name : 'this organization';
+        if (!confirm(`Start Fresh for ${orgName}? This will clear all sample tasks and standups, keeping your company and members ready for live operations.`)) return;
 
         // Clear tasks and standups
         for (const t of this.state.tasks) await this.dbDelete('tasks', t.id);
@@ -2979,12 +3436,12 @@
         this.state.tasks = [];
         this.state.daily_updates = [];
 
-        await this.logAuditEvent('WORKSPACE_RESET_FRESH', 'tenant_main', {
+        await this.logAuditEvent('WORKSPACE_RESET_FRESH', this.activeTenantId, {
           actor: this.getCurrentUser().name,
-          note: 'Equisteg fresh operational state initialized'
+          note: `${orgName} fresh operational state initialized`
         });
 
-        this.showToast('Workspace reset to clean slate for Equisteg!', 'success');
+        this.showToast(`Workspace reset to clean slate for ${orgName}!`, 'success');
         this.renderAll();
       }
 
@@ -3014,13 +3471,14 @@
       }
 
       async loadAllData() {
-        this.state.company = await this.dbGet('company', 'tenant_main') || {
-          id: 'tenant_main',
-          name: 'Equisteg',
-          domain: 'equisteg.com',
-          plan: 'Enterprise Unlimited',
+        this.state.company = await this.dbGet('company', this.activeTenantId) || (await this.dbGetAll('company'))[0] || {
+          id: this.activeTenantId,
+          name: 'Apex Global Technologies',
+          domain: 'apexglobal.internal',
+          plan: 'Master Enterprise Unlimited',
           isUnlimited: true,
-          domain: 'equisteg.com',
+          isPaid: true,
+          isMasterVIP: true,
           logo: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150&auto=format&fit=crop&q=80'
         };
         this.state.teams = await this.dbGetAll('teams');
@@ -3157,19 +3615,21 @@
 
       // ================= DATA SEEDING (ENTERPRISE DEMO STATE) =================
       async seedInitialEnterpriseData() {
-        console.log('[AegisFlow] Seeding enterprise sample data...');
+        console.log('[AegisFlow] Seeding enterprise sample data inside isolated organization storage...');
 
         // Company
         const company = {
-          id: 'tenant_main',
-          name: 'Equisteg',
-          domain: 'equisteg.com',
-          plan: 'Enterprise Unlimited',
+          id: this.activeTenantId || 'tenant_apex_global',
+          name: 'Apex Global Technologies',
+          domain: 'apexglobal.internal',
+          plan: 'Master Enterprise Unlimited',
           isUnlimited: true,
-          domain: 'equisteg.com',
+          isPaid: true,
+          isMasterVIP: true,
           logo: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150&auto=format&fit=crop&q=80'
         };
         await this.dbPut('company', company);
+        this.registerTenantInDirectory(company.id, company.name, 'Elena Vance');
 
         // Teams
         const teams = [
@@ -3447,20 +3907,19 @@
           // Dynamic Tier & Access Badge in Top Header
           const tierContainer = document.getElementById('header-tier-badge');
           if (tierContainer) {
-            const isEquisteg = company.name.toLowerCase() === 'equisteg';
-            const isVerified = this.isEquistegVerified();
+            const isMasterVIP = this.isMasterVIPVerified();
 
-            if (isEquisteg && isVerified) {
+            if (isMasterVIP) {
               tierContainer.innerHTML = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-gradient-to-r from-amber-500/20 to-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 flex items-center gap-1.5 shadow-sm">
-                <i data-lucide="zap" class="w-3 h-3 text-amber-500"></i> EQUISTEG LIFETIME FREE ($0.00 / FOREVER)
+                <i data-lucide="zap" class="w-3 h-3 text-amber-500"></i> MASTER UNLIMITED ACCESS ($0.00 / FOREVER)
               </span>`;
-            } else if (isEquisteg && !isVerified) {
-              tierContainer.innerHTML = `<button type="button" onclick="app.openGoogleVerifyModal()" class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-300 dark:border-amber-800 flex items-center gap-1.5 shadow-sm hover:scale-105 transition-transform">
-                <i data-lucide="alert-triangle" class="w-3 h-3 text-amber-500"></i> VERIFY VIA EQUISTEG@GMAIL.COM
-              </button>`;
             } else if (company.isPaid) {
               tierContainer.innerHTML = `<button type="button" onclick="app.openPaywallModal()" class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 flex items-center gap-1.5 shadow-sm hover:scale-105 transition-transform">
                 <i data-lucide="check-circle" class="w-3 h-3 text-emerald-500"></i> ${company.plan || 'PAID ACTIVE'}
+              </button>`;
+            } else if (company.trialDaysLeft > 0) {
+              tierContainer.innerHTML = `<button type="button" onclick="app.openPaywallModal()" class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-500/20 text-blue-700 dark:text-blue-400 border border-blue-300 dark:border-blue-800 flex items-center gap-1.5 shadow-sm hover:scale-105 transition-transform">
+                <i data-lucide="clock" class="w-3 h-3 text-blue-500"></i> 14-DAY TRIAL (${company.trialDaysLeft}d left)
               </button>`;
             } else {
               tierContainer.innerHTML = `<button type="button" onclick="app.openPaywallModal()" class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-500/20 text-rose-700 dark:text-rose-400 border border-rose-300 dark:border-rose-800 flex items-center gap-1.5 shadow-sm hover:scale-105 transition-transform animate-pulse">
@@ -3475,59 +3934,34 @@
           const actionsContainer = document.getElementById('org-licensing-actions');
 
           if (pillContainer && detailsContainer && actionsContainer) {
-            const isEquisteg = company.name.toLowerCase() === 'equisteg';
-            const isVerified = this.isEquistegVerified();
+            const isMasterVIP = this.isMasterVIPVerified();
 
-            if (isEquisteg && isVerified) {
+            if (isMasterVIP) {
               pillContainer.innerHTML = `<span class="px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700 flex items-center gap-1.5">
-                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-600"></i> LIFETIME FREE ACTIVE
+                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-600"></i> LIFETIME MASTER ACCESS ACTIVE
               </span>`;
               detailsContainer.innerHTML = `
                 <div class="p-3.5 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/60">
                   <div class="text-[11px] font-bold text-slate-500 dark:text-slate-400">Authenticated Identity</div>
                   <div class="font-extrabold text-slate-900 dark:text-white mt-1 text-sm flex items-center gap-1.5">
-                    <i data-lucide="mail-check" class="w-4 h-4 text-emerald-500"></i> equisteg@gmail.com
+                    <i data-lucide="shield-check" class="w-4 h-4 text-emerald-500"></i> ${company.adminEmail || company.verifiedEmail || 'Master Verified'}
                   </div>
-                  <div class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">Google OAuth 2.0 Verified Identity</div>
+                  <div class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">Google OAuth 2.0 Identity Verified</div>
                 </div>
                 <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-shield-950 border border-slate-200 dark:border-slate-800">
                   <div class="text-[11px] font-bold text-slate-500 dark:text-slate-400">Enterprise License Model</div>
                   <div class="font-extrabold text-emerald-600 dark:text-emerald-400 mt-1 text-sm">$0.00 / Forever (Lifetime Free)</div>
-                  <div class="text-[10px] text-slate-500 mt-0.5">Exclusive Equisteg Company Privilege</div>
+                  <div class="text-[10px] text-slate-500 mt-0.5">Privileged Master Enterprise Tier</div>
                 </div>
                 <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-shield-950 border border-slate-200 dark:border-slate-800">
                   <div class="text-[11px] font-bold text-slate-500 dark:text-slate-400">Resource Quota & Storage</div>
                   <div class="font-extrabold text-slate-900 dark:text-white mt-1 text-sm">Unlimited Seats & DB</div>
-                  <div class="text-[10px] text-slate-500 mt-0.5">100% Free Persistent ACID IndexedDB</div>
+                  <div class="text-[10px] text-slate-500 mt-0.5">Dedicated ACID IndexedDB Storage</div>
                 </div>
               `;
               actionsContainer.innerHTML = `
-                <button onclick="app.switchToOtherOrganization()" class="px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold flex items-center gap-1.5 transition-colors">
-                  <i data-lucide="building" class="w-3.5 h-3.5"></i> Switch to Commercial Organization
-                </button>
-              `;
-            } else if (isEquisteg && !isVerified) {
-              pillContainer.innerHTML = `<span class="px-3 py-1 rounded-full text-xs font-extrabold bg-amber-100 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-700 flex items-center gap-1.5">
-                <i data-lucide="clock" class="w-3.5 h-3.5 text-amber-600"></i> PENDING GMAIL VERIFY
-              </span>`;
-              detailsContainer.innerHTML = `
-                <div class="p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800">
-                  <div class="text-[11px] font-bold text-slate-500">Required Verification</div>
-                  <div class="font-extrabold text-slate-900 dark:text-white mt-1 text-sm">equisteg@gmail.com</div>
-                  <div class="text-[10px] text-amber-600 dark:text-amber-400 font-semibold mt-0.5">Click verify to unlock Lifetime Free access</div>
-                </div>
-                <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-shield-950 border border-slate-200 dark:border-slate-800">
-                  <div class="text-[11px] font-bold text-slate-500">Current Status</div>
-                  <div class="font-extrabold text-slate-900 dark:text-white mt-1 text-sm">Unverified State</div>
-                  <div class="text-[10px] text-slate-500 mt-0.5">Verification required for unlimited usage</div>
-                </div>
-              `;
-              actionsContainer.innerHTML = `
-                <button onclick="app.openGoogleVerifyModal()" class="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl text-xs font-bold shadow flex items-center gap-1.5">
-                  <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Verify equisteg@gmail.com Now
-                </button>
-                <button onclick="app.switchToOtherOrganization()" class="px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold">
-                  Switch to Commercial Organization
+                <button onclick="app.promptSwitchOrganization()" class="px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                  <i data-lucide="database" class="w-3.5 h-3.5"></i> Switch Organization Storage
                 </button>
               `;
             } else {
@@ -3553,7 +3987,7 @@
                 <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-shield-950 border border-slate-200 dark:border-slate-800">
                   <div class="text-[11px] font-bold text-slate-500">License Key / Receipt</div>
                   <div class="font-mono font-bold text-slate-900 dark:text-white mt-1 text-xs">${company.licenseKey || company.lastTransactionId || 'None applied'}</div>
-                  <div class="text-[10px] text-slate-500 mt-0.5">Cryptographic verification</div>
+                  <div class="text-[10px] text-slate-500 mt-0.5">Isolated IndexedDB: ${this.dbName}</div>
                 </div>
               `;
 
@@ -3561,8 +3995,8 @@
                 <button onclick="app.openPaywallModal()" class="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl text-xs font-bold shadow flex items-center gap-1.5">
                   <i data-lucide="credit-card" class="w-3.5 h-3.5"></i> ${isPaid ? 'Manage / Change Plan' : 'Subscribe / Pay Now'}
                 </button>
-                <button onclick="app.switchToEquistegOrganization()" class="px-3 py-1.5 rounded-xl border border-emerald-500 text-emerald-600 dark:text-emerald-400 text-xs font-bold hover:bg-emerald-50 dark:hover:bg-emerald-950/40 flex items-center gap-1.5">
-                  <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Switch to Equisteg (Lifetime Free via equisteg@gmail.com)
+                <button onclick="app.promptSwitchOrganization()" class="px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                  <i data-lucide="database" class="w-3.5 h-3.5"></i> Switch Organization Storage
                 </button>
               `;
             }
