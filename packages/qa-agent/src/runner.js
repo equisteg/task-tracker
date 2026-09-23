@@ -436,7 +436,7 @@ export class QARunner {
         })()
       `);
       assert(!step2Alert.toLowerCase().includes('equisteg'), 'Step 2 alert contains ZERO mentions of "Equisteg"');
-      assert(step2Alert.includes('Commercial Enterprise Organization'), 'Step 2 classifies Acme Global as Commercial Enterprise');
+      assert(step2Alert.includes('choose a plan') && step2Alert.includes('Acme Global'), 'Step 2 classifies Acme Global as Commercial Enterprise');
 
       // OTP Verification
       await cdp.eval(`
@@ -455,7 +455,7 @@ export class QARunner {
         })()
       `);
       assert(!step3Content.toLowerCase().includes('equisteg'), 'Step 3 payment screen has ZERO mentions of "Equisteg"');
-      assert(step3Content.includes('$1 / user / month') || step3Content.includes('$1/user/month'), 'Pricing clearly presents commercial $1/user/mo and $10/user/yr');
+      assert(step3Content.includes('$1 per member / month') || step3Content.includes('$1 / user / month'), 'Pricing clearly presents commercial $1/user/mo and $10/user/yr');
 
       // Complete Registration
       await cdp.eval(`(async () => { await app.completeRegistration({ isTrial: true }); })()`);
