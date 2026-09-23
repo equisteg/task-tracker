@@ -30,9 +30,5 @@
     "autonomous-healing"
   ],
   "author": "Platform Operations",
-  "license": "UNLICENSED",
-  "dependencies": {
-    "nodemailer": "^10.0.10",
-    "pg": "^8.23.0"
-  }
+  "license": "UNLICENSED"
 }
