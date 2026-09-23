@@ -216,7 +216,10 @@
               </div>
 
               <div class="space-y-1.5">
-                <label for="auth-input-password" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Password</label>
+                <div class="flex items-center justify-between">
+                  <label for="auth-input-password" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Password</label>
+                  <button type="button" id="auth-forgot-link" onclick="app.startForgotPassword()" class="text-sm font-medium text-brand-600 dark:text-brand-400 hover:underline">Forgot password?</button>
+                </div>
                 <div class="relative">
                   <input type="password" id="auth-input-password" required autocomplete="current-password" placeholder="Enter your password" class="w-full h-11 pl-3.5 pr-11 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-sm text-slate-900 dark:text-white placeholder-slate-400">
                   <button type="button" onclick="app.togglePasswordVisibility()" class="absolute inset-y-0 right-0 w-11 flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200" aria-label="Show or hide password">
@@ -261,6 +264,51 @@
               <summary class="text-xs text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 cursor-pointer text-center font-medium select-none">Try a demo account</summary>
               <div id="quick-persona-list" class="mt-3 space-y-2 max-h-56 overflow-y-auto pr-1"></div>
             </details>
+          </div>
+
+          <!-- ================= FORGOT PASSWORD ================= -->
+          <div id="auth-view-forgot" class="hidden space-y-5">
+            <!-- Step 1: email -->
+            <form id="forgot-step-email" onsubmit="app.forgotSendCode(event)" class="space-y-4">
+              <p class="text-sm text-slate-600 dark:text-slate-400">Enter the email you sign in with. We'll send you a 6-digit code to reset your password.</p>
+              <div class="space-y-1.5">
+                <label for="forgot-email" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Work email</label>
+                <input type="email" id="forgot-email" required autocomplete="username" placeholder="name@company.com" class="w-full h-11 px-3.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-sm text-slate-900 dark:text-white placeholder-slate-400">
+              </div>
+              <button type="submit" id="forgot-send-btn" class="w-full h-11 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm rounded-lg transition-colors disabled:opacity-60">Send code</button>
+            </form>
+
+            <!-- Step 2: code -->
+            <form id="forgot-step-code" onsubmit="app.forgotVerifyCode(event)" class="hidden space-y-4">
+              <div class="flex gap-3 p-4 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                <i data-lucide="mail-check" class="w-5 h-5 text-brand-600 dark:text-brand-400 shrink-0 mt-0.5"></i>
+                <p class="text-sm text-slate-600 dark:text-slate-400">If <strong id="forgot-email-echo" class="font-semibold text-slate-900 dark:text-white break-all"></strong> has an account, we've sent it a 6-digit code. It expires in 10 minutes.</p>
+              </div>
+              <div class="space-y-1.5">
+                <label for="forgot-code" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Verification code</label>
+                <input type="text" id="forgot-code" required maxlength="6" inputmode="numeric" autocomplete="one-time-code" placeholder="••••••" class="w-full h-12 px-3.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white font-mono text-center text-xl tracking-[0.5em] font-semibold">
+                <div class="text-sm text-slate-500 text-center pt-1">
+                  Didn't get it? Check spam, or
+                  <button type="button" id="forgot-resend-btn" onclick="app.forgotResend()" class="text-brand-600 dark:text-brand-400 font-semibold hover:underline disabled:text-slate-400 disabled:no-underline">resend code</button>
+                </div>
+              </div>
+              <button type="submit" id="forgot-verify-btn" class="w-full h-11 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm rounded-lg transition-colors disabled:opacity-60">Verify code</button>
+            </form>
+
+            <!-- Step 3: new password -->
+            <form id="forgot-step-password" onsubmit="app.forgotSetPassword(event)" class="hidden space-y-4">
+              <div class="space-y-1.5">
+                <label for="forgot-new-password" class="block text-sm font-medium text-slate-700 dark:text-slate-300">New password</label>
+                <input type="password" id="forgot-new-password" required minlength="8" autocomplete="new-password" placeholder="At least 8 characters, letters and numbers" class="w-full h-11 px-3.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-sm text-slate-900 dark:text-white placeholder-slate-400">
+              </div>
+              <div class="space-y-1.5">
+                <label for="forgot-new-password-confirm" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Confirm new password</label>
+                <input type="password" id="forgot-new-password-confirm" required minlength="8" autocomplete="new-password" class="w-full h-11 px-3.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-sm text-slate-900 dark:text-white placeholder-slate-400">
+              </div>
+              <button type="submit" id="forgot-save-btn" class="w-full h-11 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm rounded-lg transition-colors disabled:opacity-60">Save password and sign in</button>
+            </form>
+
+            <button type="button" onclick="app.setAuthMode('signin')" class="w-full h-10 text-sm font-medium text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">← Back to sign in</button>
           </div>
 
           <!-- ================= FIRST SIGN-IN: SET NEW PASSWORD ================= -->
@@ -2650,6 +2698,7 @@
         const signinView = document.getElementById('auth-view-signin');
         const registerView = document.getElementById('auth-view-register');
         const changeView = document.getElementById('auth-view-change-password');
+        const forgotView = document.getElementById('auth-view-forgot');
         const tabSignin = document.getElementById('auth-tab-signin');
         const tabRegister = document.getElementById('auth-tab-register');
         const headerTitle = document.getElementById('auth-header-title');
@@ -2659,19 +2708,24 @@
         if (changeView) changeView.classList.toggle('hidden', mode !== 'change-password');
         if (signinView) signinView.classList.toggle('hidden', mode !== 'signin');
         if (registerView) registerView.classList.toggle('hidden', mode !== 'register');
-        if (tabs) tabs.classList.toggle('hidden', mode === 'change-password');
+        if (forgotView) forgotView.classList.toggle('hidden', mode !== 'forgot');
+        if (tabs) tabs.classList.toggle('hidden', mode === 'change-password' || mode === 'forgot');
         if (tabSignin) tabSignin.classList.toggle('is-active', mode === 'signin');
         if (tabRegister) tabRegister.classList.toggle('is-active', mode === 'register');
 
         const copy = {
           signin: ['Welcome back', 'Sign in to your company workspace.'],
           register: ['Create your workspace', 'Set up your company in three quick steps.'],
-          'change-password': ['Choose a new password', 'Finish setting up your account.']
+          'change-password': ['Choose a new password', 'Finish setting up your account.'],
+          forgot: ['Reset your password', "We'll email you a code to verify it's you."]
         }[mode];
         if (copy && headerTitle) headerTitle.textContent = copy[0];
         if (copy && headerSubtitle) headerSubtitle.textContent = copy[1];
 
         if (mode === 'register') this.goToRegistrationStep(1);
+        const banner = document.getElementById('auth-mode-banner');
+        if (banner && mode === 'forgot') banner.classList.add('hidden');
+        else if (banner && this._bannerClass) banner.className = this._bannerClass;
         lucide.createIcons();
       }
 
@@ -6078,6 +6132,8 @@
         if (storageLabel) storageLabel.textContent = cloud ? 'Cloud Workspace (Dedicated Postgres Schema)' : 'Offline Demo Storage (IndexedDB)';
 
         const banner = document.getElementById('auth-mode-banner');
+        const forgotLink = document.getElementById('auth-forgot-link');
+        if (forgotLink) forgotLink.classList.toggle('hidden', !cloud);
         if (banner) {
           if (!cloud) {
             banner.className = 'text-sm px-3.5 py-2.5 rounded-lg border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 text-amber-800 dark:text-amber-300';
@@ -6088,6 +6144,7 @@
           } else {
             banner.className = 'hidden';
           }
+          this._bannerClass = banner.className;
         }
       }
 
@@ -6329,6 +6386,135 @@
           } else if (err.status === 401 || err.status === 402) {
             this.setAuthMode('signin');
             this.showToast(err.status === 401 ? 'That sign-in attempt expired. Please sign in again with your temporary password.' : err.message, 'error');
+          } else {
+            this.showToast(err.message, 'error');
+          }
+        } finally {
+          btn.disabled = false;
+        }
+      }
+
+      // ---------- Forgot password (cloud) ----------
+      startForgotPassword() {
+        const email = document.getElementById('auth-input-email').value.trim();
+        this.forgot = { resetId: null, resetToken: null, email: '' };
+        document.getElementById('forgot-email').value = email;
+        document.getElementById('forgot-code').value = '';
+        document.getElementById('forgot-new-password').value = '';
+        document.getElementById('forgot-new-password-confirm').value = '';
+        this.showForgotStep('email');
+        this.setAuthMode('forgot');
+        document.getElementById('forgot-email').focus();
+      }
+
+      showForgotStep(step) {
+        ['email', 'code', 'password'].forEach(s => document.getElementById(`forgot-step-${s}`).classList.toggle('hidden', s !== step));
+        lucide.createIcons();
+      }
+
+      async forgotSendCode(e) {
+        if (e) e.preventDefault();
+        const email = document.getElementById('forgot-email').value.trim().toLowerCase();
+        const btn = document.getElementById('forgot-send-btn');
+        btn.disabled = true;
+        try {
+          const res = await this.api('auth', { action: 'forgot-password', email }, { token: null });
+          this.forgot = { resetId: res.resetId, resetToken: null, email };
+          document.getElementById('forgot-email-echo').textContent = email;
+          document.getElementById('forgot-code').value = '';
+          this.showForgotStep('code');
+          this.startForgotCooldown(res.resendAfterSeconds || 60);
+          document.getElementById('forgot-code').focus();
+        } catch (err) {
+          this.showToast(err.message, 'error');
+        } finally {
+          btn.disabled = false;
+        }
+      }
+
+      startForgotCooldown(seconds) {
+        const btn = document.getElementById('forgot-resend-btn');
+        clearInterval(this._forgotTimer);
+        let left = seconds;
+        btn.disabled = true;
+        btn.textContent = `resend code (${left}s)`;
+        this._forgotTimer = setInterval(() => {
+          left--;
+          if (left <= 0) {
+            clearInterval(this._forgotTimer);
+            btn.disabled = false;
+            btn.textContent = 'resend code';
+          } else {
+            btn.textContent = `resend code (${left}s)`;
+          }
+        }, 1000);
+      }
+
+      async forgotResend() {
+        document.getElementById('forgot-email').value = this.forgot.email;
+        const btn = document.getElementById('forgot-resend-btn');
+        btn.disabled = true;
+        try {
+          const res = await this.api('auth', { action: 'forgot-password', email: this.forgot.email }, { token: null });
+          this.forgot.resetId = res.resetId;
+          this.startForgotCooldown(res.resendAfterSeconds || 60);
+          this.showToast('A new code is on its way.', 'success');
+        } catch (err) {
+          btn.disabled = false;
+          this.showToast(err.message, 'error');
+        }
+      }
+
+      async forgotVerifyCode(e) {
+        e.preventDefault();
+        const code = document.getElementById('forgot-code').value.trim();
+        if (!/^\d{6}$/.test(code)) {
+          this.showToast('Enter the 6-digit code from your email.', 'error');
+          return;
+        }
+        const btn = document.getElementById('forgot-verify-btn');
+        btn.disabled = true;
+        try {
+          const res = await this.api('auth', { action: 'verify-reset-code', resetId: this.forgot.resetId, code }, { token: null });
+          this.forgot.resetToken = res.resetToken;
+          this.showForgotStep('password');
+          document.getElementById('forgot-new-password').focus();
+        } catch (err) {
+          this.showToast(err.message, 'error');
+          if (err.code === 'RESET_LOCKED' || err.code === 'RESET_CODE_EXPIRED') document.getElementById('forgot-code').value = '';
+        } finally {
+          btn.disabled = false;
+        }
+      }
+
+      async forgotSetPassword(e) {
+        e.preventDefault();
+        const p1 = document.getElementById('forgot-new-password').value;
+        const p2 = document.getElementById('forgot-new-password-confirm').value;
+        if (p1 !== p2) {
+          this.showToast('The two passwords do not match.', 'error');
+          return;
+        }
+        const btn = document.getElementById('forgot-save-btn');
+        btn.disabled = true;
+        try {
+          const res = await this.api('auth', { action: 'reset-password', resetToken: this.forgot.resetToken, newPassword: p1 }, { token: null });
+          document.getElementById('forgot-new-password').value = '';
+          document.getElementById('forgot-new-password-confirm').value = '';
+          this.forgot = null;
+          this.showToast('Password updated.', 'success');
+          await this.startCloudFromAuth(res);
+        } catch (err) {
+          if (err.status === 402 && err.data && err.data.paymentToken) {
+            this.setAuthMode('signin');
+            this.showToast('Password updated.', 'success');
+            this.showPaymentRequired(err);
+          } else if (err.status === 402) {
+            this.setAuthMode('signin');
+            this.showToast(`Password updated. ${err.message}`, 'error');
+          } else if (err.code === 'RESET_EXPIRED') {
+            this.showToast(err.message, 'error');
+            this.showForgotStep('email');
           } else {
             this.showToast(err.message, 'error');
           }
