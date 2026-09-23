@@ -16,9 +16,22 @@ Alternatively, from the terminal, you can open it directly:
 open -a "/Applications/Android Studio.app" /Users/tejonarasimhavemulapalli/Downloads/files/android
 ```
 
+## Connect the app to your live site (required for real accounts)
+
+The app shows your deployed Task Tracker web app, so accounts, data and the UI are shared with the website.
+
+1. Open `gradle.properties` and set your site address:
+   ```properties
+   appUrl=https://your-app.vercel.app
+   ```
+   (or pass it at build time: `./gradlew assembleRelease -PappUrl=https://your-app.vercel.app`)
+2. Build and install as usual.
+
+If `appUrl` is empty the app opens the bundled **offline demo** instead (data stays on the device; emails and payments are simulated). If the phone is offline, a "You're offline — Try again" screen is shown.
+
 ## Features Included in Android App
 
-- **Bundled Offline Assets**: `index.html` is embedded directly into `app/src/main/assets/index.html` for offline-first performance and zero hosting cost.
+- **Live site + offline demo**: opens `appUrl` when set; `app/src/main/assets/index.html` is the bundled offline demo and `offline.html` the no-connection screen.
 - **Native File Chooser Integration**: `WebChromeClient.onShowFileChooser` is configured so that tapping profile picture uploads, team emblem uploads, or file attachments triggers Android's native system file picker.
 - **Hardware Acceleration & DOM Storage**: Full IndexedDB and HTML5 localStorage enabled.
-- **Safe External Navigation**: Hyperlinks to external websites (GitHub, Figma, Docs) open in the system default browser.
+- **Safe External Navigation**: Your own site and the Razorpay checkout stay in the app; other websites open in the browser, and UPI / payment-app links open the matching app.

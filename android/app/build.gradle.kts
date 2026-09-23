@@ -15,6 +15,11 @@ android {
         versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Hosted web app the app opens (e.g. https://your-app.vercel.app). Set `appUrl` in
+        // gradle.properties or pass -PappUrl=... ; leave empty to ship the offline demo only.
+        val appUrl = (project.findProperty("appUrl") as String?)?.trim() ?: ""
+        buildConfigField("String", "APP_URL", "\"$appUrl\"")
     }
 
     buildTypes {
@@ -35,6 +40,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
