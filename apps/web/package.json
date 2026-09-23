@@ -10,8 +10,8 @@
     "test": "node ../../scratch/run_e2e_tests.js"
   },
   "dependencies": {
-    "@product/shared-types": "workspace:*",
-    "@product/api-client": "workspace:*",
+    "@product/shared-types": "*",
+    "@product/api-client": "*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "lucide": "^0.368.0",

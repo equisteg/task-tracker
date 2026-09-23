@@ -12,8 +12,8 @@
     "daemon": "node src/index.js --daemon"
   },
   "dependencies": {
-    "@product/shared-types": "workspace:*",
-    "@product/api-client": "workspace:*"
+    "@product/shared-types": "*",
+    "@product/api-client": "*"
   },
   "devDependencies": {
     "typescript": "^5.4.0"
