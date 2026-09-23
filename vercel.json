@@ -1,7 +1,14 @@
 {
-  "version": 2,
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
   "cleanUrls": true,
-  "public": true,
-  "buildCommand": "echo 'Build complete'",
-  "outputDirectory": "."
+  "installCommand": "echo 'Dependencies satisfied'",
+  "buildCommand": "mkdir -p dist/reports && cp index.html dist/index.html && cp -r reports/* dist/reports/ 2>/dev/null || true",
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }
