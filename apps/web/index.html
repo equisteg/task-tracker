@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Cyber Security & Zero-Trust Hardening Defenses -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://unpkg.com https://fonts.googleapis.com https://fonts.gstatic.com https://images.unsplash.com https://via.placeholder.com data: blob:; img-src 'self' data: blob: https://images.unsplash.com https://via.placeholder.com; connect-src 'self' http://localhost:* ws://localhost:*; frame-ancestors 'none'; base-uri 'self';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://unpkg.com https://fonts.googleapis.com https://fonts.gstatic.com https://images.unsplash.com https://via.placeholder.com https://checkout.razorpay.com https://api.razorpay.com data: blob:; img-src 'self' data: blob: https://images.unsplash.com https://via.placeholder.com https://*.razorpay.com; connect-src 'self' http://localhost:* ws://localhost:* https://api.razorpay.com https://lumberjack.razorpay.com; frame-ancestors 'none'; base-uri 'self';">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="X-Frame-Options" content="DENY">
   <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
@@ -107,6 +107,8 @@
         </button>
       </div>
 
+      <div id="auth-mode-banner" class="hidden text-[11px] text-center px-3 py-2 rounded-xl border"></div>
+
       <!-- ================= SIGN IN VIEW (100% SECURE, NO EXPOSED EMAILS) ================= -->
       <div id="auth-view-signin" class="space-y-4">
         <form id="form-auth" onsubmit="app.handleAuthSubmit(event)" class="space-y-3.5 text-xs">
@@ -146,7 +148,7 @@
               <input type="checkbox" id="auth-remember-me" checked class="w-3.5 h-3.5 text-emerald-600 rounded bg-slate-800 border-slate-700">
               <span>Remember Session</span>
             </label>
-            <button type="button" onclick="app.toggleMFAField()" class="text-emerald-400 hover:underline">
+            <button type="button" id="auth-mfa-toggle-btn" onclick="app.toggleMFAField()" class="text-emerald-400 hover:underline">
               <span id="auth-mfa-toggle-text">+ Require 2FA Token</span>
             </button>
           </div>
@@ -168,7 +170,7 @@
         </div>
 
         <!-- Collapsed Developer Persona Testing Drawer -->
-        <details class="pt-3 border-t border-slate-800/80 text-left">
+        <details id="auth-demo-drawer" class="pt-3 border-t border-slate-800/80 text-left">
           <summary class="text-[10px] text-slate-500 hover:text-slate-400 cursor-pointer text-center font-semibold select-none">
             ▼ Developer Simulation / Demo Accounts
           </summary>
@@ -176,6 +178,31 @@
             <!-- Populated dynamically -->
           </div>
         </details>
+      </div>
+
+      <!-- ================= FIRST SIGN-IN: SET NEW PASSWORD ================= -->
+      <div id="auth-view-change-password" class="hidden space-y-4">
+        <div class="p-4 rounded-2xl bg-shield-950 border border-amber-700/60 text-center space-y-1.5">
+          <div class="w-10 h-10 rounded-full bg-amber-500/20 text-amber-300 mx-auto flex items-center justify-center">
+            <i data-lucide="key-round" class="w-5 h-5"></i>
+          </div>
+          <div class="font-extrabold text-sm text-white">Set your own password</div>
+          <p class="text-xs text-slate-400">You signed in with a temporary password. Choose a new password to access the workspace.</p>
+        </div>
+        <form onsubmit="app.handleChangePasswordSubmit(event)" class="space-y-3 text-xs">
+          <div>
+            <label class="block font-semibold text-slate-300 mb-1">New password</label>
+            <input type="password" id="auth-new-password" required minlength="8" autocomplete="new-password" placeholder="At least 8 characters, letters and numbers" class="w-full px-3 py-2.5 bg-shield-950/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-300 mb-1">Confirm new password</label>
+            <input type="password" id="auth-new-password-confirm" required minlength="8" autocomplete="new-password" class="w-full px-3 py-2.5 bg-shield-950/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+          <button type="submit" id="auth-change-password-btn" class="w-full py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
+            <i data-lucide="check-circle" class="w-4 h-4"></i> Save Password & Continue
+          </button>
+          <button type="button" onclick="app.setAuthMode('signin')" class="w-full py-2 text-slate-400 hover:text-white text-xs">Cancel</button>
+        </form>
       </div>
 
       <!-- ================= REGISTER WORKSPACE VIEW ================= -->
@@ -239,7 +266,7 @@
           </div>
 
           <div class="pt-2">
-            <button type="button" onclick="app.submitRegStep1()" class="w-full py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
+            <button type="button" id="reg-step1-btn" onclick="app.submitRegStep1()" class="w-full py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
               <span>Continue to Email Verification</span>
               <i data-lucide="arrow-right" class="w-4 h-4"></i>
             </button>
@@ -267,18 +294,22 @@
           <div class="space-y-1.5">
             <label class="block font-semibold text-slate-300 flex items-center justify-between text-[11px]">
               <span>Enter 6-Digit Email Verification Code</span>
-              <button type="button" onclick="app.autoFillRegCode()" class="text-[10px] text-emerald-400 hover:underline">
+              <button type="button" id="reg-code-hint-btn" onclick="app.autoFillRegCode()" class="text-[10px] text-emerald-400 hover:underline">
                 Auto-Fill Code: <span id="reg-code-hint" class="font-mono font-bold">849201</span>
               </button>
             </label>
-            <input type="text" id="reg-otp-input" maxlength="6" placeholder="849201" class="w-full py-2.5 px-3 bg-shield-950/80 border border-slate-700 rounded-xl text-white font-mono text-center text-lg tracking-widest font-bold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+            <input type="text" id="reg-otp-input" maxlength="6" inputmode="numeric" autocomplete="one-time-code" placeholder="••••••" class="w-full py-2.5 px-3 bg-shield-950/80 border border-slate-700 rounded-xl text-white font-mono text-center text-lg tracking-widest font-bold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+            <div id="reg-resend-row" class="hidden text-[11px] text-slate-400 text-center pt-1">
+              Didn't get it? Check spam, or
+              <button type="button" id="reg-resend-btn" onclick="app.resendRegistrationCode()" class="text-emerald-400 font-bold hover:underline disabled:text-slate-500 disabled:no-underline">resend code</button>
+            </div>
           </div>
 
           <div class="flex items-center gap-2 pt-2">
             <button type="button" onclick="app.goToRegistrationStep(1)" class="px-4 py-2.5 rounded-xl border border-slate-700 text-slate-400 hover:text-white text-xs font-semibold">
               ← Back
             </button>
-            <button type="button" onclick="app.verifyRegistrationEmail()" class="flex-1 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
+            <button type="button" id="reg-verify-btn" onclick="app.verifyRegistrationEmail()" class="flex-1 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
               <i data-lucide="check-circle" class="w-4 h-4"></i> Verify Email Identity & Continue
             </button>
           </div>
@@ -315,7 +346,7 @@
           </span>
         </div>
         <p class="text-xs text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1.5">
-          <span>Free Persistent Database (IndexedDB)</span>
+          <span id="header-storage-label">Free Persistent Database (IndexedDB)</span>
           <span class="inline-block w-1 h-1 rounded-full bg-emerald-500"></span>
           <span id="header-db-status" class="text-emerald-600 dark:text-emerald-400">ACID Synchronized</span>
         </p>
@@ -325,7 +356,7 @@
     <!-- Active Persona Switcher, Quick Actions & Theme Toggle -->
     <div class="flex items-center gap-3">
       <!-- Persona Simulator Switcher -->
-      <div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-800/80 rounded-xl p-1.5 border border-slate-200 dark:border-slate-700">
+      <div id="persona-switcher-wrap" class="flex items-center gap-2 bg-slate-100 dark:bg-slate-800/80 rounded-xl p-1.5 border border-slate-200 dark:border-slate-700">
         <div class="flex items-center gap-1.5 pl-2 pr-1">
           <i data-lucide="user-check" class="w-4 h-4 text-slate-500 dark:text-slate-400"></i>
           <span class="text-xs font-semibold text-slate-600 dark:text-slate-300 hidden sm:inline">Active Persona:</span>
@@ -1033,6 +1064,9 @@
           </div>
         </div>
 
+        <!-- Cloud workspace settings (admin only): company SMTP & database access -->
+        <div id="org-cloud-settings" class="hidden grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
+
         <!-- Teams Management Section -->
         <div class="space-y-4">
           <div class="flex items-center justify-between">
@@ -1063,7 +1097,7 @@
               <h3 class="font-heading font-bold text-lg text-slate-900 dark:text-white">Directory: Admins, Leads, TMs & Support</h3>
               <p class="text-xs text-slate-500">Upload profile avatars, adjust permissions, and toggle cross-team floating support roles.</p>
             </div>
-            <button onclick="app.openNewUserModal()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl transition-colors flex items-center gap-1.5">
+            <button id="add-member-btn" onclick="app.openNewUserModal()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl transition-colors flex items-center gap-1.5">
               <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Add Member
             </button>
           </div>
@@ -1074,7 +1108,7 @@
               <thead class="bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-800">
                 <tr>
                   <th class="p-3.5">Member / Avatar</th>
-                  <th class="p-3.5">Role</th>
+                  <th class="p-3.5">Role / Access</th>
                   <th class="p-3.5">Primary Team</th>
                   <th class="p-3.5">Cross-Team Flex?</th>
                   <th class="p-3.5">Active Tasks</th>
@@ -1758,7 +1792,7 @@
 
   <!-- 6. User Profile & Avatar Upload Modal -->
   <div id="modal-user-profile" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-shield-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-md w-full shadow-2xl overflow-hidden">
+    <div class="bg-white dark:bg-shield-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-md w-full shadow-2xl max-h-[90vh] overflow-y-auto">
       <div class="p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-shield-950/50">
         <h3 id="modal-user-profile-title" class="font-heading font-bold text-base text-slate-900 dark:text-white">Edit Profile & Avatar</h3>
         <button onclick="app.closeModal('modal-user-profile')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
@@ -1786,6 +1820,12 @@
         <div>
           <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Full Name</label>
           <input type="text" id="user-profile-name" required class="w-full p-2.5 bg-slate-50 dark:bg-shield-950 border border-slate-200 dark:border-slate-700 rounded-xl">
+        </div>
+
+        <div id="user-profile-email-wrap" class="hidden">
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Work Email (login)</label>
+          <input type="email" id="user-profile-email" placeholder="name@company.com" class="w-full p-2.5 bg-slate-50 dark:bg-shield-950 border border-slate-200 dark:border-slate-700 rounded-xl">
+          <p id="user-profile-email-hint" class="text-[10px] text-slate-500 mt-1">We'll email a sign-in link and a temporary password. The member must set their own password on first sign-in.</p>
         </div>
 
         <div>
@@ -1824,7 +1864,7 @@
           <button type="button" onclick="app.closeModal('modal-user-profile')" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 font-semibold hover:bg-slate-100">
             Cancel
           </button>
-          <button type="submit" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-md">
+          <button type="submit" id="user-profile-submit-btn" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-md">
             Save Profile
           </button>
         </div>
@@ -2021,7 +2061,7 @@
         <div class="space-y-3">
           <div class="flex items-center justify-between">
             <span class="font-bold text-slate-700 dark:text-slate-300 text-xs">Choose Payment Method:</span>
-            <button type="button" onclick="app.openBankDetailsModal()" class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1">
+            <button type="button" id="paywall-bank-settings-link" onclick="app.openBankDetailsModal()" class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1">
               <i data-lucide="settings" class="w-3 h-3"></i> Merchant Bank Settlement
             </button>
           </div>
@@ -2040,7 +2080,11 @@
 
           <!-- Section 1: Card & Gateway Checkout -->
           <div id="paywall-section-card" class="space-y-3">
-            <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-shield-950 border border-slate-200 dark:border-slate-800 space-y-2.5">
+            <div id="paywall-razorpay-note" class="hidden p-3.5 rounded-2xl bg-slate-50 dark:bg-shield-950 border border-slate-200 dark:border-slate-800 text-[11px] text-slate-600 dark:text-slate-400 flex items-center gap-2">
+              <i data-lucide="shield-check" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+              <span>You'll pay securely in the Razorpay checkout window (cards, UPI, net banking). Your subscription activates as soon as the payment is verified.</span>
+            </div>
+            <div id="paywall-card-fields" class="p-3.5 rounded-2xl bg-slate-50 dark:bg-shield-950 border border-slate-200 dark:border-slate-800 space-y-2.5">
               <div class="flex items-center justify-between text-[11px] text-slate-500">
                 <span>Payment Gateway Integration (Stripe / Cards):</span>
                 <span class="font-mono text-emerald-600 dark:text-emerald-400">256-Bit SSL Encrypted</span>
@@ -2085,7 +2129,7 @@
                   <strong id="paywall-bank-routing" class="text-slate-800 dark:text-slate-200">121000358</strong>
                 </div>
               </div>
-              <p class="text-[10px] text-slate-500 leading-tight">
+              <p id="paywall-wire-help" class="text-[10px] text-slate-500 leading-tight">
                 Transfer the calculated amount to the verified bank account above via Wire / ACH / NEFT / IMPS, then submit the reference number below for instant confirmation.
               </p>
             </div>
@@ -2122,7 +2166,7 @@
 
         <!-- 14-Day Free Trial Option -->
         <div class="pt-2 border-t border-slate-200 dark:border-slate-800">
-          <button type="button" onclick="app.startPaywallTrial()" class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-shield-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-center font-semibold text-xs text-slate-700 dark:text-slate-300 transition-all flex items-center justify-center gap-1.5">
+          <button type="button" id="paywall-trial-btn" onclick="app.startPaywallTrial()" class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-shield-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-center font-semibold text-xs text-slate-700 dark:text-slate-300 transition-all flex items-center justify-center gap-1.5">
             <i data-lucide="calendar" class="w-3.5 h-3.5 text-emerald-500"></i>
             <span>Or Start 14-Day Free Evaluation Trial ($0.00 today)</span>
           </button>
@@ -2661,7 +2705,24 @@
           isEmailVerified: false
         };
         this.regExpectedOTP = '';
+        this.regId = null;
+        this.regIsMasterVIP = false;
         this.paywallCycle = 'monthly';
+
+        // Cloud mode: server-backed accounts, email, payments & data (enabled when /api/health responds).
+        this.cloud = {
+          enabled: false,
+          token: null,
+          paymentToken: null,
+          changeToken: null,
+          billing: null,
+          missing: [],
+          queue: [],
+          flushTimer: null,
+          flushing: null,
+          hydrating: false,
+          refreshTimer: null
+        };
         this.paywallSeats = 5;
 
         // In-memory cache for ultra-fast reactive rendering
@@ -2678,6 +2739,11 @@
 
       async init() {
         console.log('[AegisFlow] Initializing zero-trust client engine with organization storage & Sentinel AI...');
+        await this.detectCloud();
+        if (this.cloud.enabled) {
+          await this.initCloud();
+          return;
+        }
         await this.initDatabase();
         await this.loadAllData();
         if (!this.state.company || this.state.users.length === 0) {
@@ -2686,6 +2752,7 @@
         }
         this.checkSession();
         this.initTheme();
+        this.applyModeUI();
         this.populatePersonaSelector();
         this.renderAll();
         lucide.createIcons();
@@ -2721,7 +2788,7 @@
 
       renderQuickPersonaCards() {
         const list = document.getElementById('quick-persona-list');
-        if (!list) return;
+        if (!list || this.cloud.enabled) return;
 
         list.innerHTML = this.state.users.map(u => {
           const roleBadgeColor = u.role === 'Admin' ? 'bg-purple-900/60 text-purple-300 border-purple-700' :
@@ -2755,6 +2822,14 @@
         this.authMode = mode;
         const signinView = document.getElementById('auth-view-signin');
         const registerView = document.getElementById('auth-view-register');
+        const changeView = document.getElementById('auth-view-change-password');
+        if (changeView) changeView.classList.toggle('hidden', mode !== 'change-password');
+        if (mode === 'change-password') {
+          if (signinView) signinView.classList.add('hidden');
+          if (registerView) registerView.classList.add('hidden');
+          lucide.createIcons();
+          return;
+        }
         const tabSignin = document.getElementById('auth-tab-signin');
         const tabRegister = document.getElementById('auth-tab-register');
         const headerTitle = document.getElementById('auth-header-title');
@@ -2822,7 +2897,12 @@
         this.regData.adminPassword = adminPassword;
         this.regData.initialTeam = this.sanitizeInput(initialTeam);
 
-        // Generate random 6-digit OTP
+        if (this.cloud.enabled) {
+          this.sendRegistrationCode();
+          return;
+        }
+
+        // Offline demo: simulated 6-digit OTP shown on screen
         this.regExpectedOTP = Math.floor(100000 + Math.random() * 900000).toString();
 
         this.goToRegistrationStep(2);
@@ -2851,7 +2931,7 @@
           if (targetEl) targetEl.textContent = this.regData.adminEmail;
 
           const hintEl = document.getElementById('reg-code-hint');
-          if (hintEl) hintEl.textContent = this.regExpectedOTP;
+          if (hintEl) hintEl.textContent = this.cloud.enabled ? '' : this.regExpectedOTP;
 
           const alertEl = document.getElementById('reg-email-classification-alert');
           if (alertEl) {
@@ -2903,6 +2983,15 @@
         const input = document.getElementById('reg-otp-input');
         const code = input ? input.value.trim() : '';
 
+        if (this.cloud.enabled) {
+          if (!/^\d{6}$/.test(code)) {
+            this.showToast('Enter the 6-digit code from your email.', 'error');
+            return;
+          }
+          this.verifyRegistrationCodeCloud(code);
+          return;
+        }
+
         if (!code || code !== this.regExpectedOTP) {
           this.showToast(`Invalid verification code. Please enter: ${this.regExpectedOTP}`, 'error');
           return;
@@ -2917,7 +3006,9 @@
         const container = document.getElementById('reg-step-3-content');
         if (!container) return;
 
-        const isMasterVIP = this.regData.adminEmail && this.regData.adminEmail.toLowerCase() === 'equisteg@gmail.com';
+        const isMasterVIP = this.cloud.enabled
+          ? this.regIsMasterVIP
+          : this.regData.adminEmail && this.regData.adminEmail.toLowerCase() === 'equisteg@gmail.com';
 
         if (isMasterVIP) {
           container.innerHTML = `
@@ -3009,16 +3100,18 @@
                   <span class="px-2 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold text-[10px]">Free Trial</span>
                 </button>
 
-                <!-- Option 2: Pay & Activate Now -->
+                <!-- Option 2: Pay & Activate Now (hidden in cloud mode until Razorpay is configured) -->
+                ${this.cloud.enabled && !(this.cloud.billing && this.cloud.billing.onlinePaymentsEnabled) ? '' : `
                 <button type="button" onclick="app.completeRegistration({ isPaid: true })" class="w-full p-3 rounded-xl border-2 border-emerald-500 bg-emerald-950/20 hover:bg-emerald-950/40 text-left flex items-center justify-between transition-all shadow-md">
                   <div>
                     <div class="font-bold text-white text-xs flex items-center gap-1.5">
                       <i data-lucide="credit-card" class="w-3.5 h-3.5 text-emerald-400"></i> Pay & Activate Now
                     </div>
-                    <div class="text-[10px] text-slate-400">Instant activation via Simulated Card / Stripe / Corporate Transfer.</div>
+                    <div class="text-[10px] text-slate-400">${this.cloud.enabled ? 'Secure checkout via Razorpay (cards, UPI, net banking).' : 'Instant activation via Simulated Card / Stripe / Corporate Transfer.'}</div>
                   </div>
                   <span id="reg-pay-now-btn-badge" class="px-2.5 py-1 rounded-lg bg-emerald-500 text-shield-950 font-extrabold text-[11px] shadow">$${currentTotal}.00</span>
                 </button>
+                `}
 
                 <!-- Option 3: Enterprise License Key -->
                 <div class="p-3 rounded-xl border border-slate-700 bg-slate-900/60 space-y-2">
@@ -3072,6 +3165,7 @@
       }
 
       async completeRegistration(opts = {}) {
+        if (this.cloud.enabled) return this.completeCloudRegistration(opts);
         const isMasterVIP = Boolean(opts.isMasterVIP || (this.regData.adminEmail && this.regData.adminEmail.toLowerCase() === 'equisteg@gmail.com'));
         const isPaid = opts.isPaid || false;
         const isTrial = opts.isTrial || false;
@@ -3218,6 +3312,11 @@
         const password = document.getElementById('auth-input-password').value;
         const mfa = document.getElementById('auth-input-mfa')?.value.trim();
 
+        if (this.cloud.enabled) {
+          await this.cloudSignIn(email, password);
+          return;
+        }
+
         const submitBtn = document.getElementById('auth-submit-btn');
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> Verifying Cryptographic Identity...';
@@ -3309,6 +3408,7 @@
       }
 
       quickLogin(personaId) {
+        if (this.cloud.enabled) return;
         const user = this.state.users.find(u => u.id === personaId);
         if (!user) return;
         this.currentPersonaId = user.id;
@@ -3324,6 +3424,13 @@
         await this.logAuditEvent('USER_LOGOUT', user ? user.id : 'unknown', {
           reason: 'Manual session termination'
         });
+
+        if (this.cloud.enabled) {
+          await this.flushCloudSync();
+          await this.endCloudSession();
+          this.showToast('Signed out. Local workspace cache cleared from this browser.', 'info');
+          return;
+        }
 
         this.isAuthenticated = false;
         localStorage.removeItem('aegisflow_session_user');
@@ -3361,6 +3468,7 @@
       // ================= MASTER VIP VERIFICATION & TENANT PAYWALL =================
       isMasterVIPVerified() {
         if (!this.state.company) return false;
+        if (this.cloud.enabled) return Boolean(this.state.company.isMasterVIP);
         return Boolean(
           this.state.company.isMasterVIP ||
           (this.state.company.verifiedEmail && this.state.company.verifiedEmail.toLowerCase() === 'equisteg@gmail.com') ||
@@ -3401,6 +3509,11 @@
       }
 
       async confirmGoogleVerification() {
+        if (this.cloud.enabled) {
+          this.closeModal('modal-google-verify');
+          this.showToast('Master access is granted at registration after email verification.', 'info');
+          return;
+        }
         const otpInput = document.getElementById('gmail-otp-input');
         const otp = otpInput ? otpInput.value.trim() : '';
 
@@ -3532,7 +3645,17 @@
       }
 
       populatePaywallBankDetails() {
-        const details = this.getMerchantBankSettlement();
+        const cloudBank = this.cloud.enabled && this.cloud.billing ? this.cloud.billing.bank || {} : null;
+        const details = cloudBank
+          ? {
+              accountHolder: cloudBank.accountHolder || 'Contact support',
+              bankName: cloudBank.bankName || '—',
+              accountNumber: cloudBank.accountNumber || '—',
+              routingOrIfsc: cloudBank.routingOrIfsc || '—'
+            }
+          : this.getMerchantBankSettlement();
+        const help = document.getElementById('paywall-wire-help');
+        if (help && cloudBank) help.textContent = 'Transfer the amount shown above, then submit the reference number. Access unlocks once the platform confirms the transfer (usually within 1 business day).';
         const holderEl = document.getElementById('paywall-bank-holder');
         const nameEl = document.getElementById('paywall-bank-name');
         const accEl = document.getElementById('paywall-bank-acc');
@@ -3577,6 +3700,7 @@
           this.showToast('Please enter your Bank Wire / UTR / Transaction Reference Number.', 'error');
           return;
         }
+        if (this.cloud.enabled) return this.cloudSubmitWire(ref);
 
         const isYearly = this.paywallCycle === 'yearly';
         const rate = isYearly ? 10 : 1;
@@ -3606,6 +3730,27 @@
       }
 
       openPaywallModal() {
+        if (this.cloud.enabled) {
+          if (this.isAuthenticated && !this.isCloudAdmin()) {
+            this.showToast('Only your company admin can manage the subscription.', 'info');
+            return;
+          }
+          const company = this.state.company || {};
+          const trialBtn = document.getElementById('paywall-trial-btn');
+          if (trialBtn) trialBtn.classList.toggle('hidden', Boolean(company.trialUsed || company.isPaid));
+          const note = document.getElementById('paywall-razorpay-note');
+          const paymentsOn = Boolean(this.cloud.billing && this.cloud.billing.onlinePaymentsEnabled);
+          if (note && !paymentsOn) {
+            note.querySelector('span').textContent = 'Online card payments are not available right now. Use a bank transfer or a license key.';
+          }
+          const payBtn = document.querySelector('#paywall-section-card > button');
+          if (payBtn) {
+            payBtn.disabled = !paymentsOn;
+            payBtn.classList.toggle('opacity-40', !paymentsOn);
+            payBtn.classList.toggle('cursor-not-allowed', !paymentsOn);
+          }
+          if (company.seats && company.seats < 999999) this.paywallSeats = Math.max(this.paywallSeats, company.seats);
+        }
         this.updatePaywallCalculation(this.paywallSeats);
         this.populatePaywallBankDetails();
         this.openModal('modal-paywall');
@@ -3658,6 +3803,7 @@
       }
 
       async processPaywallPayment() {
+        if (this.cloud.enabled) return this.cloudPayNow();
         const isYearly = this.paywallCycle === 'yearly';
         const rate = isYearly ? 10 : 1;
         const total = this.paywallSeats * rate;
@@ -3683,6 +3829,7 @@
       }
 
       async startPaywallTrial() {
+        if (this.cloud.enabled) return this.cloudStartTrial();
         this.state.company.plan = 'Commercial 14-Day Free Trial';
         this.state.company.trialDaysLeft = 14;
         await this.dbPut('company', this.state.company);
@@ -3701,6 +3848,7 @@
           this.showToast('Invalid License Key format. Example: ENTERPRISE-2026-XXXX or LICENSE-XXXX', 'error');
           return;
         }
+        if (this.cloud.enabled) return this.cloudRedeemLicense(key);
 
         this.state.company.isPaid = true;
         this.state.company.plan = 'Enterprise License (Active)';
@@ -3750,6 +3898,7 @@
       }
 
       async promptSwitchOrganization() {
+        if (this.cloud.enabled) return;
         let tenants = [];
         try {
           tenants = JSON.parse(localStorage.getItem('aegisflow_tenants_directory') || '[]');
@@ -3872,7 +4021,18 @@
         });
       }
 
-      dbPut(storeName, item) {
+      async dbPut(storeName, item) {
+        const key = await this.dbPutLocal(storeName, item);
+        this.queueCloudSync({ op: 'put', store: storeName, item });
+        return key;
+      }
+
+      async dbDelete(storeName, key) {
+        await this.dbDeleteLocal(storeName, key);
+        this.queueCloudSync({ op: 'delete', store: storeName, id: key });
+      }
+
+      dbPutLocal(storeName, item) {
         return new Promise((resolve, reject) => {
           const tx = this.db.transaction(storeName, 'readwrite');
           const store = tx.objectStore(storeName);
@@ -3882,7 +4042,7 @@
         });
       }
 
-      dbDelete(storeName, key) {
+      dbDeleteLocal(storeName, key) {
         return new Promise((resolve, reject) => {
           const tx = this.db.transaction(storeName, 'readwrite');
           const store = tx.objectStore(storeName);
@@ -3904,6 +4064,7 @@
         const blockHash = await this.sha256(blockString);
 
         const auditItem = {
+          id: Date.now() * 1000 + Math.floor(Math.random() * 1000),
           timestamp,
           actorId: actor ? actor.id : 'system',
           actorName: actor ? actor.name : 'System',
@@ -4232,6 +4393,7 @@
       }
 
       switchPersona(userId) {
+        if (this.cloud.enabled) return;
         this.currentPersonaId = userId;
         const user = this.getCurrentUser();
         this.showToast(`Switched active persona to ${user.name} (${user.role})`, 'info');
@@ -4321,7 +4483,7 @@
                   <div class="text-[10px] text-slate-500 mt-0.5">Dedicated ACID IndexedDB Storage</div>
                 </div>
               `;
-              actionsContainer.innerHTML = `
+              actionsContainer.innerHTML = this.cloud.enabled ? '' : `
                 <button onclick="app.promptSwitchOrganization()" class="px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold flex items-center gap-1.5 transition-colors">
                   <i data-lucide="database" class="w-3.5 h-3.5"></i> Switch Organization Storage
                 </button>
@@ -4344,16 +4506,23 @@
                 <div class="p-3.5 rounded-xl ${isPaid ? 'bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200' : 'bg-rose-50 dark:bg-rose-950/20 border-rose-200'} border">
                   <div class="text-[11px] font-bold text-slate-500">Pricing & Billing Model</div>
                   <div class="font-extrabold ${isPaid ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600'} mt-1 text-sm">${company.plan || (isPaid ? 'Paid Active' : 'Trial Active')}</div>
-                  <div class="text-[10px] text-slate-500 mt-0.5">$1/user/mo • $10/user/yr (${company.seats || 5} Seats Quota)</div>
+                  <div class="text-[10px] text-slate-500 mt-0.5">$1/user/mo • $10/user/yr (${this.cloud.enabled ? `${this.state.users.length} of ${company.seats || 5} seats used` : `${company.seats || 5} Seats Quota`})</div>
                 </div>
                 <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-shield-950 border border-slate-200 dark:border-slate-800">
                   <div class="text-[11px] font-bold text-slate-500">License Key / Receipt</div>
                   <div class="font-mono font-bold text-slate-900 dark:text-white mt-1 text-xs">${company.licenseKey || company.lastTransactionId || 'None applied'}</div>
-                  <div class="text-[10px] text-slate-500 mt-0.5">Isolated IndexedDB: ${this.dbName}</div>
+                  <div class="text-[10px] text-slate-500 mt-0.5">${this.cloud.enabled ? `Postgres schema: ${company.schemaName || '—'}` : `Isolated IndexedDB: ${this.dbName}`}</div>
+                  ${company.pendingWireReference && !isPaid ? `<div class="text-[10px] text-amber-600 dark:text-amber-400 mt-0.5">Bank transfer ${company.pendingWireReference} awaiting confirmation</div>` : ''}
                 </div>
               `;
 
-              actionsContainer.innerHTML = `
+              actionsContainer.innerHTML = this.cloud.enabled ? (this.isCloudAdmin() ? `
+                <button onclick="app.openPaywallModal()" class="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl text-xs font-bold shadow flex items-center gap-1.5">
+                  <i data-lucide="credit-card" class="w-3.5 h-3.5"></i> ${isPaid ? 'Renew / Add Seats' : 'Subscribe / Pay Now'}
+                </button>
+                ${!isPaid && company.trialDaysLeft > 0 ? `<span class="text-[11px] text-blue-600 dark:text-blue-400 font-semibold">Free trial: ${company.trialDaysLeft} day(s) left</span>` : ''}
+                ${isPaid && company.paidUntil ? `<span class="text-[11px] text-slate-500">Paid through ${new Date(company.paidUntil).toLocaleDateString()}</span>` : ''}
+              ` : '<span class="text-[11px] text-slate-500">Your company admin manages the subscription.</span>') : `
                 <button onclick="app.openPaywallModal()" class="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl text-xs font-bold shadow flex items-center gap-1.5">
                   <i data-lucide="credit-card" class="w-3.5 h-3.5"></i> ${isPaid ? 'Manage / Change Plan' : 'Subscribe / Pay Now'}
                 </button>
@@ -4988,6 +5157,9 @@
       // ================= TEAMS, USERS & PROFILE UPLOADS =================
       renderTeamsAndUsers() {
         document.getElementById('company-member-count').textContent = `${this.state.users.length} Members`;
+        const addMemberBtn = document.getElementById('add-member-btn');
+        if (addMemberBtn) addMemberBtn.classList.toggle('hidden', this.cloud.enabled && !this.isCloudAdmin());
+        this.renderCloudSettings();
         document.getElementById('company-team-count').textContent = `${this.state.teams.length} Teams`;
 
         // Render Teams Cards
@@ -5044,8 +5216,8 @@
                 <div class="flex items-center gap-3">
                   <img src="${u.avatar}" class="w-9 h-9 rounded-full object-cover border-2 border-emerald-500/40">
                   <div>
-                    <div class="font-bold text-slate-900 dark:text-white">${u.name}</div>
-                    <div class="text-[11px] text-slate-400 font-mono">${u.id}</div>
+                    <div class="font-bold text-slate-900 dark:text-white">${u.name}${u.id === this.currentPersonaId && this.cloud.enabled ? ' <span class="text-[10px] text-slate-400 font-normal">(you)</span>' : ''}</div>
+                    <div class="text-[11px] text-slate-400 font-mono">${this.cloud.enabled ? this.escapeHTML(u.email || '') : u.id}</div>
                   </div>
                 </div>
               </td>
@@ -5053,6 +5225,7 @@
                 <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${u.role === 'Admin' ? 'bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300' : u.role === 'Lead' ? 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300' : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300'}">
                   ${u.role}
                 </span>
+                ${this.cloud.enabled && u.inviteStatus === 'pending' ? '<div class="mt-1 text-[10px] font-semibold text-amber-600 dark:text-amber-400" title="Invited — has not set a password yet">Invite pending</div>' : ''}
               </td>
               <td class="p-3.5 text-slate-600 dark:text-slate-300 font-medium">${team ? team.name : 'None'}</td>
               <td class="p-3.5">
@@ -5068,13 +5241,8 @@
                   ${(u.skills || []).map(s => `<span class="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[10px] text-slate-600 dark:text-slate-400">${s}</span>`).join('')}
                 </div>
               </td>
-              <td class="p-3.5 text-right space-x-1">
-                <button onclick="app.openUserProfileModal('${u.id}')" class="px-2.5 py-1 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300">
-                  Edit
-                </button>
-                <button onclick="app.deleteUser('${u.id}')" class="px-2 py-1 text-xs font-semibold rounded-lg border border-rose-200 dark:border-rose-900 hover:bg-rose-50 dark:hover:bg-rose-950 text-rose-600 dark:text-rose-400" title="Delete member">
-                  Delete
-                </button>
+              <td class="p-3.5 text-right space-x-1 whitespace-nowrap">
+                ${this.renderMemberActions(u)}
               </td>
             </tr>
           `;
@@ -5980,6 +6148,7 @@
         document.getElementById('user-profile-skills').value = (targetUser.skills || []).join(', ');
         document.getElementById('user-profile-avatar-preview').src = targetUser.avatar || '';
         this.currentDraftAvatar = null;
+        this.configureMemberModal({ isNew: false, email: targetUser.email });
 
         this.openModal('modal-user-profile');
       }
@@ -5997,8 +6166,28 @@
         document.getElementById('user-profile-skills').value = '';
         document.getElementById('user-profile-avatar-preview').src = 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80';
         this.currentDraftAvatar = null;
+        this.configureMemberModal({ isNew: true, email: '' });
 
         this.openModal('modal-user-profile');
+      }
+
+      // Cloud mode: new members need a login email; only admins can change role / team / flex settings.
+      configureMemberModal({ isNew, email }) {
+        const cloud = this.cloud.enabled;
+        const wrap = document.getElementById('user-profile-email-wrap');
+        const input = document.getElementById('user-profile-email');
+        const hint = document.getElementById('user-profile-email-hint');
+        wrap.classList.toggle('hidden', !cloud);
+        input.value = email || '';
+        input.readOnly = !isNew;
+        input.required = cloud && isNew;
+        input.classList.toggle('opacity-60', !isNew);
+        hint.classList.toggle('hidden', !isNew);
+        const locked = cloud && !this.isCloudAdmin();
+        ['user-profile-role', 'user-profile-team', 'user-profile-floating'].forEach(id => {
+          document.getElementById(id).disabled = locked;
+        });
+        document.getElementById('user-profile-submit-btn').textContent = cloud && isNew ? 'Send Invitation' : 'Save Profile';
       }
 
       async handleSaveUserProfile(e) {
@@ -6009,6 +6198,11 @@
         const teamId = document.getElementById('user-profile-team').value;
         const isFloatingSupport = document.getElementById('user-profile-floating').checked;
         const skills = document.getElementById('user-profile-skills').value.split(',').map(s => s.trim()).filter(Boolean);
+
+        if (this.cloud.enabled) {
+          await this.saveMemberCloud({ userId, name, role, teamId, isFloatingSupport, skills });
+          return;
+        }
 
         let user = this.state.users.find(u => u.id === userId);
         if (!user) {
@@ -6107,6 +6301,924 @@
         await this.dbPut('settings', { key: 'allowCrossAssign', value: enabled });
         await this.logAuditEvent('POLICY_UPDATE', 'allowCrossAssign', { value: enabled });
         this.showToast(`Cross-Team Flex Assignment policy: ${enabled ? 'ENABLED' : 'DISABLED'}`, 'info');
+      }
+
+      // ================= CLOUD MODE: SERVER ACCOUNTS, EMAIL, PAYMENTS & SYNCED DATA =================
+      // When /api is reachable the server is the source of truth; IndexedDB becomes a local cache.
+      async detectCloud() {
+        if (location.protocol === 'file:') return;
+        try {
+          const ctrl = new AbortController();
+          const timer = setTimeout(() => ctrl.abort(), 8000);
+          const res = await fetch('/api/health', { cache: 'no-store', signal: ctrl.signal });
+          clearTimeout(timer);
+          const type = res.headers.get('content-type') || '';
+          if (res.status === 404 || !type.includes('application/json')) return; // static host: offline demo mode
+          const body = await res.json().catch(() => ({}));
+          this.cloud.enabled = true;
+          this.cloud.billing = body.billing || null;
+          this.cloud.missing = body.missing || [];
+          if (this.cloud.missing.length) console.warn('[Cloud] Server configuration incomplete:', this.cloud.missing.join(', '));
+        } catch (e) {
+          // Network failure on a hosted deployment: stay in cloud mode so sign-in shows a clear error.
+          if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') this.cloud.enabled = true;
+        }
+      }
+
+      async api(endpoint, body = {}, { method = 'POST', token } = {}) {
+        const auth = token !== undefined ? token : this.cloud.token;
+        const opts = { method, headers: { 'Content-Type': 'application/json' } };
+        if (auth) opts.headers.Authorization = `Bearer ${auth}`;
+        let url = `/api/${endpoint}`;
+        if (method === 'GET') url += `?action=${encodeURIComponent(body.action || 'get')}`;
+        else opts.body = JSON.stringify(body);
+        let res;
+        try {
+          res = await fetch(url, opts);
+        } catch (e) {
+          throw Object.assign(new Error('Cannot reach the server. Check your connection and try again.'), { status: 0 });
+        }
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || data.ok === false) {
+          throw Object.assign(new Error(data.error || `Request failed (${res.status})`), { status: res.status, code: data.code, data });
+        }
+        return data;
+      }
+
+      readStoredToken() {
+        try {
+          return localStorage.getItem('aegisflow_cloud_token') || sessionStorage.getItem('aegisflow_cloud_token');
+        } catch (e) {
+          return null;
+        }
+      }
+
+      storeToken(token) {
+        this.cloud.token = token;
+        try {
+          const remember = document.getElementById('auth-remember-me');
+          localStorage.removeItem('aegisflow_cloud_token');
+          sessionStorage.removeItem('aegisflow_cloud_token');
+          (remember && !remember.checked ? sessionStorage : localStorage).setItem('aegisflow_cloud_token', token);
+        } catch (e) {}
+      }
+
+      async initCloud() {
+        this.initTheme();
+        this.applyModeUI();
+        this.cloud.token = this.readStoredToken();
+
+        const params = new URLSearchParams(location.search);
+        const invitedEmail = params.get('invite');
+        if (invitedEmail) {
+          const emailInput = document.getElementById('auth-input-email');
+          if (emailInput) emailInput.value = invitedEmail;
+          history.replaceState(null, '', location.pathname);
+          this.cloud.token = null;
+          setTimeout(() => this.showToast('Welcome! Sign in with the temporary password from your invitation email.', 'info'), 300);
+        }
+
+        if (this.cloud.token) {
+          try {
+            const { snapshot } = await this.api('data', { action: 'get' }, { method: 'GET' });
+            await this.applySnapshot(snapshot);
+            this.isAuthenticated = true;
+          } catch (e) {
+            await this.handleCloudAuthError(e, { silent: e.status === 401 });
+          }
+        }
+        this.populatePersonaSelector();
+        this.renderAll();
+        lucide.createIcons();
+        if (this.isAuthenticated) this.startCloudSession();
+        console.log(`[AegisFlow] Cloud mode active${this.isAuthenticated ? ' — session restored' : ''}.`);
+      }
+
+      applyModeUI() {
+        const cloud = this.cloud.enabled;
+        const toggle = (id, hidden) => {
+          const el = document.getElementById(id);
+          if (el) el.classList.toggle('hidden', hidden);
+        };
+        toggle('auth-demo-drawer', cloud);
+        toggle('auth-mfa-toggle-btn', cloud);
+        toggle('reg-code-hint-btn', cloud);
+        toggle('reg-resend-row', !cloud);
+        toggle('persona-switcher-wrap', cloud);
+        toggle('header-bank-settlement-btn', cloud);
+        toggle('paywall-bank-settings-link', cloud);
+        toggle('paywall-card-fields', cloud);
+        toggle('paywall-razorpay-note', !cloud);
+
+        const storageLabel = document.getElementById('header-storage-label');
+        if (storageLabel) storageLabel.textContent = cloud ? 'Cloud Workspace (Dedicated Postgres Schema)' : 'Offline Demo Storage (IndexedDB)';
+
+        const banner = document.getElementById('auth-mode-banner');
+        if (banner) {
+          if (!cloud) {
+            banner.className = 'text-[11px] text-center px-3 py-2 rounded-xl border border-amber-700/60 bg-amber-950/40 text-amber-300';
+            banner.textContent = 'Offline demo mode: data stays in this browser and emails / payments are simulated. Deploy with the /api server for real accounts.';
+          } else if (this.cloud.missing.length) {
+            banner.className = 'text-[11px] text-center px-3 py-2 rounded-xl border border-rose-800/60 bg-rose-950/40 text-rose-300';
+            banner.textContent = 'Server setup is incomplete — sign-in, registration emails or payments may be unavailable. (Administrators: see the browser console.)';
+          } else {
+            banner.className = 'hidden';
+          }
+        }
+      }
+
+      // Replace the local cache with the server snapshot for the signed-in company.
+      async applySnapshot(snap) {
+        this.cloud.hydrating = true;
+        try {
+          const tenantId = snap.company.id;
+          if (!this.db || this.activeTenantId !== tenantId || !this.dbName.startsWith('AegisFlow_Cloud_')) {
+            if (this.db) {
+              this.db.close();
+              this.db = null;
+            }
+            this.activeTenantId = tenantId;
+            this.dbName = 'AegisFlow_Cloud_' + tenantId;
+            await this.initDatabase();
+          }
+          await this.dbReplaceStore('company', [snap.company]);
+          for (const store of ['teams', 'users', 'tasks', 'daily_updates', 'audit_logs', 'settings']) {
+            await this.dbReplaceStore(store, snap[store] || []);
+          }
+          this.state.company = snap.company;
+          this.state.teams = snap.teams || [];
+          this.state.users = snap.users || [];
+          this.state.tasks = snap.tasks || [];
+          this.state.daily_updates = snap.daily_updates || [];
+          this.state.audit_logs = snap.audit_logs || [];
+          const policy = (snap.settings || []).find(s => s.key === 'allowCrossAssign');
+          this.state.settings.allowCrossAssign = policy ? policy.value : true;
+          this.currentPersonaId = snap.me;
+        } finally {
+          this.cloud.hydrating = false;
+        }
+      }
+
+      async startCloudFromAuth({ token, snapshot }) {
+        this.storeToken(token);
+        this.cloud.paymentToken = null;
+        this.cloud.changeToken = null;
+        this.cloud.settings = null;
+        await this.applySnapshot(snapshot);
+        this.isAuthenticated = true;
+        this.failedAttempts = 0;
+        this.setAuthMode('signin');
+        const pw = document.getElementById('auth-input-password');
+        if (pw) pw.value = '';
+        this.populatePersonaSelector();
+        this.renderAll();
+        this.startCloudSession();
+        const user = this.getCurrentUser();
+        await this.logAuditEvent('USER_LOGIN', user ? user.id : 'unknown', { role: user ? user.role : null, authMethod: 'CLOUD_PASSWORD' });
+        this.showToast(`Welcome${user ? ', ' + user.name : ''}! Signed in to ${snapshot.company.name}.`, 'success');
+      }
+
+      startCloudSession() {
+        const user = this.getCurrentUser();
+        // Only admins run the autonomous healer, so members' browsers don't race each other rewriting shared data.
+        if (user && user.role === 'Admin') this.sentinelAI.start();
+        else this.sentinelAI.stop();
+        clearInterval(this.cloud.refreshTimer);
+        this.cloud.refreshTimer = setInterval(() => this.refreshFromCloud(), 30000);
+        if (!this._cloudFocusHandler) {
+          this._cloudFocusHandler = () => this.refreshFromCloud();
+          window.addEventListener('focus', this._cloudFocusHandler);
+        }
+      }
+
+      // Pull teammates' changes. Skipped while local edits are pending or a dialog is open.
+      async refreshFromCloud() {
+        if (!this.cloud.enabled || !this.isAuthenticated || !this.cloud.token || document.hidden) return;
+        if (this.cloud.queue.length || this.cloud.flushing) return;
+        if (document.querySelector('[id^="modal-"]:not(.hidden)')) return;
+        if (Date.now() - (this.cloud.lastRefresh || 0) < 10000) return;
+        this.cloud.lastRefresh = Date.now();
+        try {
+          const { snapshot } = await this.api('data', { action: 'get' }, { method: 'GET' });
+          if (this.cloud.queue.length || this.cloud.flushing) return;
+          await this.applySnapshot(snapshot);
+          this.populatePersonaSelector();
+          this.renderAll();
+        } catch (e) {
+          if ([401, 402, 403].includes(e.status)) await this.handleCloudAuthError(e);
+        }
+      }
+
+      queueCloudSync(op) {
+        if (!this.cloud.enabled || !this.cloud.token || this.cloud.hydrating || !this.isAuthenticated) return;
+        if (!['tasks', 'daily_updates', 'teams', 'settings', 'audit_logs', 'company'].includes(op.store)) return;
+        this.cloud.queue.push(op);
+        this.setSyncStatus('pending');
+        clearTimeout(this.cloud.flushTimer);
+        this.cloud.flushTimer = setTimeout(() => this.flushCloudSync(), 250);
+      }
+
+      flushCloudSync() {
+        if (this.cloud.flushing) return this.cloud.flushing;
+        const run = async () => {
+          while (this.cloud.queue.length) {
+            const batch = this.cloud.queue.splice(0, 100);
+            const ops = batch.map(o => (o.op === 'delete' ? o : { ...o, item: JSON.parse(JSON.stringify(o.item)) }));
+            try {
+              const { results } = await this.api('data', { action: 'sync', ops });
+              (results || []).forEach((r, i) => {
+                if (r.skipped) console.info('[Cloud] Not saved:', batch[i].store, '-', r.reason);
+              });
+              this.cloud.syncFailing = false;
+            } catch (e) {
+              if ([401, 402, 403].includes(e.status)) {
+                await this.handleCloudAuthError(e);
+                return;
+              }
+              this.cloud.queue.unshift(...batch);
+              this.setSyncStatus('error');
+              if (!this.cloud.syncFailing) this.showToast(`Changes not saved to the server yet (${e.message}). Retrying…`, 'error');
+              this.cloud.syncFailing = true;
+              this.cloud.flushTimer = setTimeout(() => this.flushCloudSync(), 5000);
+              return;
+            }
+          }
+          this.setSyncStatus('ok');
+        };
+        this.cloud.flushing = run().finally(() => {
+          this.cloud.flushing = null;
+        });
+        return this.cloud.flushing;
+      }
+
+      setSyncStatus(status) {
+        const el = document.getElementById('header-db-status');
+        if (!el) return;
+        const map = {
+          ok: ['Cloud Synced', 'text-emerald-600 dark:text-emerald-400'],
+          pending: ['Saving…', 'text-amber-600 dark:text-amber-400'],
+          error: ['Sync Error — Retrying', 'text-rose-600 dark:text-rose-400']
+        };
+        const [text, cls] = map[status] || map.ok;
+        el.textContent = text;
+        el.className = cls;
+      }
+
+      async handleCloudAuthError(e, { silent = false } = {}) {
+        if (e.status === 401 || e.status === 402 || e.code === 'PASSWORD_CHANGE_REQUIRED') {
+          await this.endCloudSession();
+          if (!silent) {
+            const msg = e.status === 402 && !/admin/i.test(e.message) ? `${e.message} Sign in as an admin to renew.` : e.message;
+            this.showToast(msg, 'error');
+          }
+        } else if (!silent) {
+          this.showToast(e.message, 'error');
+        }
+      }
+
+      // Signs out locally and wipes the cached company data from this browser.
+      async endCloudSession() {
+        this.isAuthenticated = false;
+        this.cloud.token = null;
+        this.cloud.queue = [];
+        this.cloud.settings = null;
+        clearTimeout(this.cloud.flushTimer);
+        clearInterval(this.cloud.refreshTimer);
+        this.sentinelAI.stop();
+        try {
+          localStorage.removeItem('aegisflow_cloud_token');
+          sessionStorage.removeItem('aegisflow_cloud_token');
+        } catch (e) {}
+        if (this.db) {
+          this.db.close();
+          this.db = null;
+        }
+        if (this.dbName && this.dbName.startsWith('AegisFlow_Cloud_')) {
+          try { indexedDB.deleteDatabase(this.dbName); } catch (e) {}
+        }
+        this.state.company = null;
+        this.state.teams = [];
+        this.state.users = [];
+        this.state.tasks = [];
+        this.state.daily_updates = [];
+        this.state.audit_logs = [];
+        this.renderAuthState();
+      }
+
+      showPaymentRequired(e) {
+        this.cloud.paymentToken = e.data.paymentToken;
+        this.state.company = e.data.company;
+        this.showToast(e.message, 'error');
+        this.openPaywallModal();
+      }
+
+      async cloudSignIn(email, password) {
+        const submitBtn = document.getElementById('auth-submit-btn');
+        const lockoutEl = document.getElementById('auth-lockout-msg');
+        if (lockoutEl) lockoutEl.classList.add('hidden');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> Signing in...';
+        lucide.createIcons();
+        try {
+          const res = await this.api('auth', { action: 'login', email, password }, { token: null });
+          if (res.requiresPasswordChange) {
+            this.cloud.changeToken = res.changeToken;
+            document.getElementById('auth-input-password').value = '';
+            this.setAuthMode('change-password');
+            return;
+          }
+          await this.startCloudFromAuth(res);
+        } catch (e) {
+          if (e.status === 402 && e.data && e.data.paymentToken) {
+            this.showPaymentRequired(e);
+          } else if (lockoutEl) {
+            lockoutEl.classList.remove('hidden');
+            lockoutEl.textContent = e.message;
+          }
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<i data-lucide="log-in" class="w-4 h-4"></i> Sign In to Workspace';
+          lucide.createIcons();
+        }
+      }
+
+      async handleChangePasswordSubmit(e) {
+        e.preventDefault();
+        const p1 = document.getElementById('auth-new-password').value;
+        const p2 = document.getElementById('auth-new-password-confirm').value;
+        if (p1 !== p2) {
+          this.showToast('The two passwords do not match.', 'error');
+          return;
+        }
+        const btn = document.getElementById('auth-change-password-btn');
+        btn.disabled = true;
+        try {
+          const res = await this.api('auth', { action: 'change-password', newPassword: p1 }, { token: this.cloud.changeToken });
+          document.getElementById('auth-new-password').value = '';
+          document.getElementById('auth-new-password-confirm').value = '';
+          this.showToast('Password updated.', 'success');
+          await this.startCloudFromAuth(res);
+        } catch (err) {
+          if (err.status === 402 && err.data && err.data.paymentToken) {
+            this.setAuthMode('signin');
+            this.showPaymentRequired(err);
+          } else if (err.status === 401 || err.status === 402) {
+            this.setAuthMode('signin');
+            this.showToast(err.status === 401 ? 'That sign-in attempt expired. Please sign in again with your temporary password.' : err.message, 'error');
+          } else {
+            this.showToast(err.message, 'error');
+          }
+        } finally {
+          btn.disabled = false;
+        }
+      }
+
+      // ---------- Registration (cloud) ----------
+      async sendRegistrationCode() {
+        const btn = document.getElementById('reg-step1-btn');
+        if (btn) btn.disabled = true;
+        try {
+          const res = await this.api('register', {
+            action: 'send-otp',
+            companyName: this.regData.companyName,
+            companyDomain: this.regData.companyDomain,
+            adminName: this.regData.adminName,
+            adminEmail: this.regData.adminEmail,
+            password: this.regData.adminPassword,
+            initialTeam: this.regData.initialTeam
+          }, { token: null });
+          this.regId = res.registrationId;
+          this.regData.adminPassword = '';
+          const pwInput = document.getElementById('reg-admin-password');
+          if (pwInput) pwInput.value = '';
+          document.getElementById('reg-otp-input').value = '';
+          this.goToRegistrationStep(2);
+          this.startResendCooldown(res.resendAfterSeconds || 60);
+          this.showToast(`Verification code sent to ${this.regData.adminEmail}.`, 'success');
+        } catch (e) {
+          this.showToast(e.message, 'error');
+          if (e.code === 'EMAIL_TAKEN') {
+            this.setAuthMode('signin');
+            document.getElementById('auth-input-email').value = this.regData.adminEmail;
+          }
+        } finally {
+          if (btn) btn.disabled = false;
+        }
+      }
+
+      startResendCooldown(seconds) {
+        const btn = document.getElementById('reg-resend-btn');
+        if (!btn) return;
+        clearInterval(this._resendTimer);
+        let left = seconds;
+        btn.disabled = true;
+        btn.textContent = `resend code (${left}s)`;
+        this._resendTimer = setInterval(() => {
+          left--;
+          if (left <= 0) {
+            clearInterval(this._resendTimer);
+            btn.disabled = false;
+            btn.textContent = 'resend code';
+          } else {
+            btn.textContent = `resend code (${left}s)`;
+          }
+        }, 1000);
+      }
+
+      async resendRegistrationCode() {
+        if (!this.regId) return;
+        try {
+          const res = await this.api('register', { action: 'resend-otp', registrationId: this.regId }, { token: null });
+          this.startResendCooldown(res.resendAfterSeconds || 60);
+          this.showToast(`A new code was sent to ${this.regData.adminEmail}.`, 'success');
+        } catch (e) {
+          this.showToast(e.message, 'error');
+          if (e.code === 'REGISTRATION_EXPIRED') this.goToRegistrationStep(1);
+        }
+      }
+
+      async verifyRegistrationCodeCloud(code) {
+        const btn = document.getElementById('reg-verify-btn');
+        if (btn) btn.disabled = true;
+        try {
+          const res = await this.api('register', { action: 'verify-otp', registrationId: this.regId, code }, { token: null });
+          this.regData.isEmailVerified = true;
+          this.regIsMasterVIP = Boolean(res.isMasterVIP);
+          this.showToast(`Email verified for ${this.regData.adminEmail}!`, 'success');
+          this.goToRegistrationStep(3);
+        } catch (e) {
+          this.showToast(e.message, 'error');
+          if (e.code === 'REGISTRATION_EXPIRED') this.goToRegistrationStep(1);
+        } finally {
+          if (btn) btn.disabled = false;
+        }
+      }
+
+      async completeCloudRegistration(opts) {
+        if (!this.regId || !this.regData.isEmailVerified) {
+          this.showToast('Please verify your email first.', 'error');
+          this.goToRegistrationStep(this.regId ? 2 : 1);
+          return;
+        }
+        const base = { action: 'complete', registrationId: this.regId };
+        try {
+          let res;
+          if (opts.isMasterVIP) {
+            res = await this.api('register', { ...base, mode: 'master' }, { token: null });
+          } else if (opts.licenseKeyInput) {
+            const key = (document.getElementById('reg-license-input')?.value || '').trim().toUpperCase();
+            if (!key) {
+              this.showToast('Enter your license key.', 'error');
+              return;
+            }
+            res = await this.api('register', { ...base, mode: 'license', licenseKey: key }, { token: null });
+          } else if (opts.isPaid) {
+            const order = await this.api('register', { action: 'create-order', registrationId: this.regId, seats: this.regData.seats, cycle: this.regData.billingCycle }, { token: null });
+            const payment = await this.payWithRazorpay(order, `${order.companyName}: ${order.seats} seats (${order.cycle})`);
+            this.showToast('Payment received — verifying…', 'info');
+            res = await this.api('register', { ...base, mode: 'paid', ...payment }, { token: null });
+          } else if (opts.isTrial) {
+            res = await this.api('register', { ...base, mode: 'trial', seats: this.regData.seats, cycle: this.regData.billingCycle }, { token: null });
+          } else {
+            return;
+          }
+          this.regId = null;
+          this.regData.isEmailVerified = false;
+          ['reg-company-name', 'reg-company-domain', 'reg-admin-name', 'reg-admin-email', 'reg-admin-password', 'reg-otp-input'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.value = '';
+          });
+          await this.startCloudFromAuth(res);
+        } catch (e) {
+          if (e.cancelled) {
+            this.showToast('Payment cancelled. Your workspace has not been created yet.', 'info');
+            return;
+          }
+          this.showToast(e.message, 'error');
+          if (e.code === 'REGISTRATION_EXPIRED') this.goToRegistrationStep(1);
+          if (e.code === 'EMAIL_TAKEN' || e.code === 'REGISTRATION_COMPLETED') this.setAuthMode('signin');
+        }
+      }
+
+      // ---------- Razorpay Checkout ----------
+      loadRazorpay() {
+        if (window.Razorpay) return Promise.resolve();
+        if (!this._razorpayLoader) {
+          this._razorpayLoader = new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+            script.onload = () => resolve();
+            script.onerror = () => {
+              this._razorpayLoader = null;
+              reject(new Error('Could not load the Razorpay checkout. Check your connection or ad blocker.'));
+            };
+            document.head.appendChild(script);
+          });
+        }
+        return this._razorpayLoader;
+      }
+
+      async payWithRazorpay(orderRes, description) {
+        await this.loadRazorpay();
+        return new Promise((resolve, reject) => {
+          const checkout = new window.Razorpay({
+            key: orderRes.keyId,
+            order_id: orderRes.order.id,
+            amount: orderRes.order.amount,
+            currency: orderRes.order.currency,
+            name: orderRes.companyName || 'Task Tracker',
+            description,
+            prefill: orderRes.prefill || {},
+            theme: { color: '#059669' },
+            handler: (response) => resolve(response),
+            modal: { ondismiss: () => reject(Object.assign(new Error('Payment cancelled.'), { cancelled: true })) }
+          });
+          // Razorpay lets the user retry inside the same window, so a failure is only reported, not final.
+          checkout.on('payment.failed', (r) => this.showToast((r.error && r.error.description) || 'Payment failed. You can try again.', 'error'));
+          checkout.open();
+        });
+      }
+
+      // ---------- Subscription (cloud) ----------
+      billingToken() {
+        return this.cloud.paymentToken || this.cloud.token;
+      }
+
+      async afterCloudBilling(res, message) {
+        this.closeModal('modal-paywall');
+        if (res.token) {
+          await this.startCloudFromAuth(res);
+          this.showToast(message, 'success');
+          return;
+        }
+        if (res.company) {
+          this.state.company = res.company;
+          if (this.db) await this.dbPutLocal('company', res.company);
+        }
+        this.showToast(message, 'success');
+        this.renderAll();
+      }
+
+      async cloudPayNow() {
+        try {
+          const order = await this.api('company', { action: 'create-order', seats: this.paywallSeats, cycle: this.paywallCycle }, { token: this.billingToken() });
+          const payment = await this.payWithRazorpay(order, `${order.seats} seats (${order.cycle})`);
+          this.showToast('Payment received — verifying…', 'info');
+          const res = await this.api('company', { action: 'confirm-payment', ...payment }, { token: this.billingToken() });
+          await this.logAuditEvent('SUBSCRIPTION_ACTIVATED', res.company.id, { seats: res.company.seats, cycle: res.company.billingCycle, transactionId: res.company.lastTransactionId });
+          await this.afterCloudBilling(res, `Payment verified. Subscription active for ${res.company.seats} seats.`);
+        } catch (e) {
+          this.showToast(e.cancelled ? 'Payment cancelled.' : e.message, e.cancelled ? 'info' : 'error');
+        }
+      }
+
+      async cloudSubmitWire(reference) {
+        try {
+          const res = await this.api('company', { action: 'submit-wire', reference }, { token: this.billingToken() });
+          if (this.isAuthenticated) {
+            this.state.company = res.company;
+            await this.dbPutLocal('company', res.company);
+            this.renderAll();
+          }
+          this.closeModal('modal-paywall');
+          this.showToast(`Transfer reference ${reference} submitted. Access unlocks once the payment is confirmed.`, 'info');
+        } catch (e) {
+          this.showToast(e.message, 'error');
+        }
+      }
+
+      async cloudRedeemLicense(key) {
+        try {
+          const res = await this.api('company', { action: 'redeem-license', licenseKey: key }, { token: this.billingToken() });
+          await this.afterCloudBilling(res, `License ${key} activated.`);
+        } catch (e) {
+          this.showToast(e.message, 'error');
+        }
+      }
+
+      async cloudStartTrial() {
+        try {
+          const res = await this.api('company', { action: 'start-trial' }, { token: this.billingToken() });
+          await this.afterCloudBilling(res, '14-day free trial activated.');
+        } catch (e) {
+          this.showToast(e.message, 'error');
+        }
+      }
+
+      // ---------- Members (cloud) ----------
+      isCloudAdmin() {
+        const user = this.getCurrentUser();
+        return Boolean(user && user.role === 'Admin');
+      }
+
+      canEditMember(u) {
+        if (!this.cloud.enabled) return true;
+        return this.isCloudAdmin() || u.id === this.currentPersonaId;
+      }
+
+      showCredentialFallback(member, res) {
+        alert(
+          `The invitation email could not be sent${res.emailError ? ` (${res.emailError})` : ''}.\n\n` +
+          `Share these sign-in details with ${member.name} securely:\n\n` +
+          `Link: ${res.loginUrl}\nEmail: ${member.email}\nTemporary password: ${res.tempPassword}\n\n` +
+          'They must set a new password when they first sign in.'
+        );
+      }
+
+      async saveMemberCloud({ userId, name, role, teamId, isFloatingSupport, skills }) {
+        const existing = this.state.users.find(u => u.id === userId);
+        const btn = document.getElementById('user-profile-submit-btn');
+        if (btn) btn.disabled = true;
+        try {
+          let saved;
+          if (!existing) {
+            const email = document.getElementById('user-profile-email').value.trim().toLowerCase();
+            if (!email) {
+              this.showToast('Enter the member\'s work email.', 'error');
+              return;
+            }
+            const res = await this.api('members', { action: 'invite', name, email, role, teamId, isFloatingSupport, skills, avatar: this.currentDraftAvatar });
+            saved = res.user;
+            this.state.users.push(saved);
+            await this.logAuditEvent('MEMBER_INVITED', saved.id, { name, role, emailSent: res.emailSent });
+            if (res.emailSent) this.showToast(`Invitation emailed to ${email}.`, 'success');
+            else this.showCredentialFallback(saved, res);
+          } else {
+            const res = await this.api('members', { action: 'update', userId, name, role, teamId, isFloatingSupport, skills, avatar: this.currentDraftAvatar || undefined });
+            saved = { ...existing, ...res.user };
+            this.state.users = this.state.users.map(u => (u.id === userId ? saved : u));
+            await this.logAuditEvent('USER_PROFILE_UPDATE', userId, { name, role, isFloatingSupport });
+            this.showToast(`Profile for ${name} saved`, 'success');
+          }
+          await this.dbPutLocal('users', saved);
+          this.closeModal('modal-user-profile');
+          this.populatePersonaSelector();
+          this.renderAll();
+        } catch (e) {
+          this.showToast(e.message, 'error');
+        } finally {
+          if (btn) btn.disabled = false;
+        }
+      }
+
+      async resendInvite(userId) {
+        const member = this.state.users.find(u => u.id === userId);
+        if (!member) return;
+        try {
+          const res = await this.api('members', { action: 'resend-invite', userId });
+          if (res.emailSent) this.showToast(`New invitation sent to ${member.email}. The previous temporary password no longer works.`, 'success');
+          else this.showCredentialFallback(member, res);
+        } catch (e) {
+          this.showToast(e.message, 'error');
+        }
+      }
+
+      renderMemberActions(u) {
+        const btn = 'px-2.5 py-1 text-xs font-semibold rounded-lg border';
+        const parts = [];
+        if (this.cloud.enabled && this.isCloudAdmin() && u.inviteStatus === 'pending') {
+          parts.push(`<button onclick="app.resendInvite('${u.id}')" class="${btn} border-amber-200 dark:border-amber-900 hover:bg-amber-50 dark:hover:bg-amber-950 text-amber-700 dark:text-amber-400" title="Email a new sign-in link and temporary password">Resend Invite</button>`);
+        }
+        if (this.canEditMember(u)) {
+          parts.push(`<button onclick="app.openUserProfileModal('${u.id}')" class="${btn} border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300">Edit</button>`);
+        }
+        if (!this.cloud.enabled || (this.isCloudAdmin() && u.id !== this.currentPersonaId)) {
+          parts.push(`<button onclick="app.deleteUser('${u.id}')" class="${btn} border-rose-200 dark:border-rose-900 hover:bg-rose-50 dark:hover:bg-rose-950 text-rose-600 dark:text-rose-400" title="Delete member">Delete</button>`);
+        }
+        return parts.join(' ') || '<span class="text-[11px] text-slate-400">—</span>';
+      }
+
+      // ---------- Company settings: SMTP & database access (cloud, admin only) ----------
+      async loadCloudSettings() {
+        if (this.cloud.settingsLoading) return;
+        this.cloud.settingsLoading = true;
+        try {
+          const res = await this.api('company', { action: 'settings' }, { method: 'GET' });
+          this.cloud.settings = { smtp: res.smtp, database: res.database };
+          this.cloud.settingsVersion = (this.cloud.settingsVersion || 0) + 1;
+          this.renderCloudSettings();
+        } catch (e) {
+          if ([401, 402].includes(e.status)) await this.handleCloudAuthError(e);
+          else console.warn('[Cloud] Settings unavailable:', e.message);
+        } finally {
+          this.cloud.settingsLoading = false;
+        }
+      }
+
+      renderCloudSettings() {
+        const container = document.getElementById('org-cloud-settings');
+        if (!container) return;
+        if (!this.cloud.enabled || !this.isAuthenticated || !this.isCloudAdmin()) {
+          container.classList.add('hidden');
+          container.innerHTML = '';
+          return;
+        }
+        container.classList.remove('hidden');
+        if (!this.cloud.settings) {
+          container.innerHTML = '<div class="glass-panel p-6 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs text-slate-500">Loading company settings…</div>';
+          this.loadCloudSettings();
+          return;
+        }
+        // Don't wipe a half-filled form on background refreshes.
+        if (container.dataset.version === String(this.cloud.settingsVersion)) return;
+        container.dataset.version = String(this.cloud.settingsVersion);
+
+        const esc = (v) => this.escapeHTML(v == null ? '' : v);
+        const smtp = this.cloud.settings.smtp || {};
+        const dbi = this.cloud.settings.database || {};
+        const input = 'w-full p-2 bg-slate-50 dark:bg-shield-950 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-900 dark:text-white';
+        const label = 'block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1';
+
+        container.innerHTML = `
+          <div class="glass-panel p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <h3 class="font-heading font-extrabold text-base text-slate-900 dark:text-white flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-emerald-500"></i> Company Email (SMTP)</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Member invitations are sent from your own mailbox. ${smtp.configured ? '' : 'Until configured, invites are sent from the platform mailbox.'}</p>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${smtp.configured ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'}">${smtp.configured ? 'Configured' : 'Using platform mail'}</span>
+            </div>
+            <div class="grid grid-cols-3 gap-3">
+              <div class="col-span-2"><label class="${label}">SMTP host</label><input id="smtp-host" class="${input}" placeholder="smtp.gmail.com" value="${esc(smtp.host)}"></div>
+              <div><label class="${label}">Port</label><input id="smtp-port" type="number" class="${input}" value="${esc(smtp.port || 587)}"></div>
+              <div class="col-span-2"><label class="${label}">Username</label><input id="smtp-user" class="${input}" autocomplete="off" placeholder="mailer@yourcompany.com" value="${esc(smtp.user)}"></div>
+              <div><label class="${label}">Password</label><input id="smtp-pass" type="password" autocomplete="new-password" class="${input}" placeholder="${smtp.hasPassword ? '•••••••• (unchanged)' : 'App password'}"></div>
+              <div><label class="${label}">From name</label><input id="smtp-from-name" class="${input}" placeholder="Acme HR" value="${esc(smtp.fromName)}"></div>
+              <div class="col-span-2"><label class="${label}">From email</label><input id="smtp-from-email" type="email" class="${input}" placeholder="noreply@yourcompany.com" value="${esc(smtp.fromEmail)}"></div>
+            </div>
+            <label class="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400"><input id="smtp-secure" type="checkbox" ${smtp.secure ? 'checked' : ''} class="w-3.5 h-3.5"> Use SSL/TLS (port 465). Leave off for STARTTLS on 587.</label>
+            <div class="flex flex-wrap gap-2">
+              <button onclick="app.saveCompanySmtp()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl">Save SMTP</button>
+              <button onclick="app.testCompanySmtp()" ${smtp.configured ? '' : 'disabled'} class="px-3.5 py-2 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-xs rounded-xl disabled:opacity-40">Send Test Email</button>
+              ${smtp.configured ? '<button onclick="app.clearCompanySmtp()" class="px-3.5 py-2 text-rose-600 dark:text-rose-400 font-semibold text-xs rounded-xl hover:bg-rose-50 dark:hover:bg-rose-950/40">Remove</button>' : ''}
+            </div>
+          </div>
+
+          <div class="glass-panel p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <h3 class="font-heading font-extrabold text-base text-slate-900 dark:text-white flex items-center gap-2"><i data-lucide="database" class="w-4 h-4 text-cyan-500"></i> Direct Database Access</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Your data lives in its own Postgres schema <code class="font-mono text-cyan-600 dark:text-cyan-400">${esc(dbi.schema)}</code>. Generate a read-only login to query it from DBeaver, pgAdmin, Metabase, Power BI or Excel.</p>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${dbi.enabled ? 'bg-cyan-100 text-cyan-700 dark:bg-cyan-950 dark:text-cyan-300' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'}">${dbi.enabled ? 'Enabled' : 'Disabled'}</span>
+            </div>
+            ${dbi.enabled ? `
+              <div class="grid grid-cols-2 gap-2 text-[11px] font-mono bg-slate-50 dark:bg-shield-950 p-3 rounded-xl border border-slate-200 dark:border-slate-800">
+                <div><span class="text-slate-400 block font-sans">Host</span>${esc(dbi.host)}</div>
+                <div><span class="text-slate-400 block font-sans">Port / Database</span>${esc(dbi.port)} / ${esc(dbi.database)}</div>
+                <div><span class="text-slate-400 block font-sans">Username</span>${esc(dbi.username)}</div>
+                <div><span class="text-slate-400 block font-sans">SSL</span>require</div>
+              </div>
+              ${dbi.connectionString ? `
+                <div class="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 space-y-2">
+                  <div class="text-[11px] font-bold text-amber-800 dark:text-amber-300">Copy the password now — it won't be shown again.</div>
+                  <div class="text-[11px] font-mono break-all text-slate-800 dark:text-slate-200">Password: ${esc(dbi.password)}</div>
+                  <textarea id="db-conn-string" readonly rows="2" class="${input} font-mono">${esc(dbi.connectionString)}</textarea>
+                  <button onclick="app.copyField('db-conn-string')" class="px-3 py-1.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-[11px] rounded-lg">Copy connection string</button>
+                </div>` : ''}
+              <p class="text-[11px] text-slate-500">Friendly views: ${(dbi.views || []).map(v => `<code class="font-mono">${esc(v)}</code>`).join(', ')}. Access is read-only and limited to your company's schema.</p>
+            ` : '<p class="text-[11px] text-slate-500">No database login exists yet. Generating one creates a read-only Postgres user that can only see your company\'s schema.</p>'}
+            <div class="flex flex-wrap gap-2">
+              <button onclick="app.generateDbCredentials()" class="px-3.5 py-2 bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs rounded-xl">${dbi.enabled ? 'Reset Password' : 'Generate Read-Only Login'}</button>
+              ${dbi.enabled ? '<button onclick="app.revokeDbAccess()" class="px-3.5 py-2 text-rose-600 dark:text-rose-400 font-semibold text-xs rounded-xl hover:bg-rose-50 dark:hover:bg-rose-950/40">Revoke Access</button>' : ''}
+            </div>
+          </div>
+        `;
+        lucide.createIcons();
+      }
+
+      updateCloudSettings(patch) {
+        this.cloud.settings = { ...this.cloud.settings, ...patch };
+        this.cloud.settingsVersion = (this.cloud.settingsVersion || 0) + 1;
+        this.renderCloudSettings();
+      }
+
+      async saveCompanySmtp() {
+        const val = (id) => document.getElementById(id).value.trim();
+        try {
+          const res = await this.api('company', {
+            action: 'save-smtp',
+            host: val('smtp-host'),
+            port: Number(val('smtp-port')) || 587,
+            user: val('smtp-user'),
+            pass: document.getElementById('smtp-pass').value,
+            fromName: val('smtp-from-name'),
+            fromEmail: val('smtp-from-email'),
+            secure: document.getElementById('smtp-secure').checked
+          });
+          this.updateCloudSettings({ smtp: res.smtp });
+          await this.logAuditEvent('SMTP_SETTINGS_UPDATED', this.state.company.id, { host: res.smtp.host });
+          this.showToast('SMTP settings saved. Send a test email to confirm they work.', 'success');
+        } catch (e) {
+          this.showToast(e.message, 'error');
+        }
+      }
+
+      async testCompanySmtp() {
+        try {
+          const res = await this.api('company', { action: 'test-smtp' });
+          this.showToast(`Test email sent to ${res.sentTo}.`, 'success');
+        } catch (e) {
+          this.showToast(e.message, 'error');
+        }
+      }
+
+      async clearCompanySmtp() {
+        if (!confirm('Remove your company SMTP settings? Invitations will be sent from the platform mailbox.')) return;
+        try {
+          const res = await this.api('company', { action: 'save-smtp', clear: true });
+          this.updateCloudSettings({ smtp: res.smtp });
+          this.showToast('Company SMTP removed.', 'info');
+        } catch (e) {
+          this.showToast(e.message, 'error');
+        }
+      }
+
+      async generateDbCredentials() {
+        const enabled = this.cloud.settings && this.cloud.settings.database && this.cloud.settings.database.enabled;
+        if (enabled && !confirm('Reset the database password? Tools using the current password will be disconnected.')) return;
+        try {
+          const res = await this.api('company', { action: 'db-credentials' });
+          this.updateCloudSettings({ database: { ...this.cloud.settings.database, ...res.database } });
+          await this.logAuditEvent('DB_ACCESS_CREDENTIALS_ISSUED', this.state.company.id, { username: res.database.username });
+          this.showToast('Read-only database login created. Copy the password now.', 'success');
+        } catch (e) {
+          this.showToast(e.message, 'error');
+        }
+      }
+
+      async revokeDbAccess() {
+        if (!confirm('Revoke direct database access? Existing connections will be closed.')) return;
+        try {
+          const res = await this.api('company', { action: 'revoke-db-access' });
+          this.updateCloudSettings({ database: { ...this.cloud.settings.database, ...res.database, connectionString: null, password: null } });
+          await this.logAuditEvent('DB_ACCESS_REVOKED', this.state.company.id, {});
+          this.showToast('Database access revoked.', 'info');
+        } catch (e) {
+          this.showToast(e.message, 'error');
+        }
+      }
+
+      copyField(id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const done = () => this.showToast('Copied to clipboard.', 'success');
+        if (navigator.clipboard) navigator.clipboard.writeText(el.value).then(done, () => { el.select(); document.execCommand('copy'); done(); });
+        else { el.select(); document.execCommand('copy'); done(); }
+      }
+
+      // ---------- Members & teams (both modes) ----------
+      async deleteUser(userId) {
+        const user = this.state.users.find(u => u.id === userId);
+        if (!user) return;
+        if (user.id === this.currentPersonaId) {
+          this.showToast("You can't delete your own account.", 'error');
+          return;
+        }
+        if (!confirm(`Remove ${user.name}? They will lose access immediately.`)) return;
+        if (this.cloud.enabled) {
+          try {
+            await this.api('members', { action: 'delete', userId });
+          } catch (e) {
+            this.showToast(e.message, 'error');
+            return;
+          }
+        }
+        await this.dbDelete('users', userId);
+        this.state.users = this.state.users.filter(u => u.id !== userId);
+        await this.logAuditEvent('MEMBER_REMOVED', userId, { name: user.name, role: user.role });
+        this.showToast(`${user.name} was removed.`, 'success');
+        this.populatePersonaSelector();
+        this.renderAll();
+      }
+
+      async deleteTeam(teamId) {
+        const team = this.state.teams.find(t => t.id === teamId);
+        if (!team) return;
+        const members = this.state.users.filter(u => u.teamId === teamId).length;
+        const openTasks = this.state.tasks.filter(t => t.teamId === teamId && t.status !== 'Completed').length;
+        if (members || openTasks) {
+          this.showToast(`Move ${members} member(s) and ${openTasks} open task(s) out of ${team.name} before deleting it.`, 'error');
+          return;
+        }
+        if (!confirm(`Delete the ${team.name} team?`)) return;
+        await this.dbDelete('teams', teamId);
+        this.state.teams = this.state.teams.filter(t => t.id !== teamId);
+        await this.logAuditEvent('TEAM_DELETED', teamId, { name: team.name });
+        this.showToast(`Team ${team.name} deleted.`, 'success');
+        this.renderAll();
+      }
+
+      // ---------- IndexedDB primitives ----------
+      dbReplaceStore(storeName, items) {
+        return new Promise((resolve, reject) => {
+          const tx = this.db.transaction(storeName, 'readwrite');
+          const store = tx.objectStore(storeName);
+          store.clear();
+          for (const item of items) store.put(item);
+          tx.oncomplete = () => resolve();
+          tx.onerror = (e) => reject(e);
+        });
       }
 
       // ================= UTILITIES, TABS, TOASTS & SANITIZATION =================

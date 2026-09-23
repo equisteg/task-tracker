@@ -2,12 +2,17 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "cleanUrls": true,
-  "installCommand": "echo 'Dependencies satisfied'",
+  "installCommand": "npm install --workspaces=false --no-audit --no-fund",
   "buildCommand": "mkdir -p dist/reports && cp index.html dist/index.html && cp -r reports/* dist/reports/ 2>/dev/null || true",
   "outputDirectory": "dist",
+  "functions": {
+    "api/*.js": {
+      "maxDuration": 30
+    }
+  },
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/((?!api/).*)",
       "destination": "/index.html"
     }
   ]
