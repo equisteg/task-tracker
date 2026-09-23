@@ -3860,6 +3860,167 @@
         lucide.createIcons();
       }
 
+      // ================= OPERATIONS & SLA CALENDAR =================
+      calendarPrevMonth() {
+        this.currentCalendarDate.setMonth(this.currentCalendarDate.getMonth() - 1);
+        this.renderCalendar();
+      }
+
+      calendarNextMonth() {
+        this.currentCalendarDate.setMonth(this.currentCalendarDate.getMonth() + 1);
+        this.renderCalendar();
+      }
+
+      calendarToday() {
+        this.currentCalendarDate = new Date();
+        this.renderCalendar();
+      }
+
+      renderCalendar() {
+        const grid = document.getElementById('calendar-days-grid');
+        const monthYearLabel = document.getElementById('calendar-month-year-label');
+        if (!grid || !monthYearLabel) return;
+
+        // Populate calendar team filter
+        const teamFilter = document.getElementById('calendar-filter-team');
+        if (teamFilter && teamFilter.options.length <= 1) {
+          teamFilter.innerHTML = '<option value="all">All Teams</option>' +
+            this.state.teams.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+        }
+
+        const selectedTeam = teamFilter ? teamFilter.value : 'all';
+        const priorityFilter = document.getElementById('calendar-filter-priority')?.value || 'all';
+
+        const year = this.currentCalendarDate.getFullYear();
+        const month = this.currentCalendarDate.getMonth();
+
+        const monthNames = [
+          'January', 'February', 'March', 'April', 'May', 'June',
+          'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+        monthYearLabel.textContent = `${monthNames[month]} ${year}`;
+
+        // First day of month & total days
+        const firstDayIndex = new Date(year, month, 1).getDay(); // 0 = Sun
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+        const today = new Date();
+        const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+        let html = '';
+        let monthTaskCount = 0;
+
+        // 1. Previous month trailing days
+        for (let i = firstDayIndex - 1; i >= 0; i--) {
+          const dayNum = daysInPrevMonth - i;
+          const prevDate = new Date(year, month - 1, dayNum);
+          const dateStr = `${prevDate.getFullYear()}-${String(prevDate.getMonth() + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
+          html += this.renderCalendarDayCell(dateStr, dayNum, false, false, selectedTeam, priorityFilter);
+        }
+
+        // 2. Current month days
+        for (let day = 1; day <= daysInMonth; day++) {
+          const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+          const isToday = dateStr === todayStr;
+          html += this.renderCalendarDayCell(dateStr, day, true, isToday, selectedTeam, priorityFilter);
+          
+          const matchingTasks = this.state.tasks.filter(t => t.dueDate && t.dueDate.startsWith(dateStr));
+          monthTaskCount += matchingTasks.length;
+        }
+
+        // 3. Next month leading days (to complete 35 or 42 grid cells)
+        const totalCells = firstDayIndex + daysInMonth;
+        const remainingCells = (totalCells <= 35 ? 35 : 42) - totalCells;
+        for (let day = 1; day <= remainingCells; day++) {
+          const nextDate = new Date(year, month + 1, day);
+          const dateStr = `${nextDate.getFullYear()}-${String(nextDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+          html += this.renderCalendarDayCell(dateStr, day, false, false, selectedTeam, priorityFilter);
+        }
+
+        grid.innerHTML = html;
+        const badgeCal = document.getElementById('badge-calendar-events');
+        if (badgeCal) badgeCal.textContent = `${monthTaskCount} Tasks`;
+        lucide.createIcons();
+      }
+
+      renderCalendarDayCell(dateStr, dayNum, isCurrentMonth, isToday, teamFilter, priorityFilter) {
+        // Tasks due on this day
+        let dayTasks = this.state.tasks.filter(t => t.dueDate && t.dueDate.startsWith(dateStr));
+        if (teamFilter !== 'all') dayTasks = dayTasks.filter(t => t.teamId === teamFilter);
+        if (priorityFilter !== 'all') dayTasks = dayTasks.filter(t => t.priority === priorityFilter);
+
+        // Daily standups submitted on this day
+        const dayStandups = this.state.daily_updates.filter(s => s.date === dateStr);
+
+        const bgClass = isToday ? 'bg-emerald-50/40 dark:bg-emerald-950/20' : isCurrentMonth ? 'bg-white dark:bg-shield-900/60' : 'bg-slate-100/50 dark:bg-shield-950/40 opacity-60';
+
+        return `
+          <div class="p-2.5 min-h-[110px] flex flex-col justify-between ${bgClass} transition-colors group relative border-b border-r border-slate-200 dark:border-slate-800">
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-xs font-bold ${isToday ? 'w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-md' : isCurrentMonth ? 'text-slate-800 dark:text-slate-200' : 'text-slate-400'}">
+                  ${dayNum}
+                </span>
+
+                <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button onclick="app.quickCreateTaskOnDate('${dateStr}')" class="p-1 rounded bg-slate-100 dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-emerald-950 text-slate-500 hover:text-emerald-600" title="Schedule task on ${dateStr}">
+                    <i data-lucide="plus" class="w-3 h-3"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Day Tasks List -->
+              <div class="space-y-1 overflow-hidden">
+                ${dayTasks.slice(0, 3).map(t => {
+                  const priorityBg = t.priority === 'Critical' ? 'bg-rose-500 text-white' :
+                                    t.priority === 'High' ? 'bg-amber-500 text-white' :
+                                    t.priority === 'Medium' ? 'bg-blue-500 text-white' :
+                                    'bg-slate-400 text-white';
+                  const assignee = this.state.users.find(u => u.id === t.assigneeId);
+
+                  return `
+                    <div onclick="event.stopPropagation(); app.openTaskDetail('${t.id}')" class="px-2 py-1 rounded-md text-[10px] font-bold ${priorityBg} truncate cursor-pointer hover:opacity-90 shadow-sm flex items-center justify-between gap-1" title="${this.escapeHTML(t.title)} (${t.priority})">
+                      <span class="truncate">${this.escapeHTML(t.title)}</span>
+                      ${t.escalationTier > 0 ? '<span class="text-[8px] bg-black/40 px-1 rounded">L' + t.escalationTier + '</span>' : ''}
+                    </div>
+                  `;
+                }).join('')}
+
+                ${dayTasks.length > 3 ? `
+                  <div onclick="app.openDateDayTasks('${dateStr}')" class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 cursor-pointer hover:underline text-center pt-0.5">
+                    +${dayTasks.length - 3} more
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+
+            <!-- Standup submission indicator at bottom of cell -->
+            ${dayStandups.length > 0 ? `
+              <div class="pt-1 border-t border-slate-100 dark:border-slate-800 flex items-center gap-1 text-[9px] text-purple-600 dark:text-purple-400 font-semibold">
+                <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+                <span>${dayStandups.length} Standup${dayStandups.length > 1 ? 's' : ''}</span>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }
+
+      quickCreateTaskOnDate(dateStr) {
+        this.openNewTaskModal();
+        const dueInput = document.getElementById('task-input-duedate');
+        if (dueInput) {
+          dueInput.value = `${dateStr}T17:00`;
+        }
+      }
+
+      openDateDayTasks(dateStr) {
+        const tasks = this.state.tasks.filter(t => t.dueDate && t.dueDate.startsWith(dateStr));
+        let promptText = `Tasks scheduled for ${dateStr}:\n\n` +
+          tasks.map(t => `• [${t.id}] ${t.title} (${t.priority} - ${t.status})`).join('\n');
+        alert(promptText);
+      }
+
       // ================= DAILY STANDUPS & PROGRESS FEED =================
       renderStandupFeed() {
         const dateFilter = document.getElementById('standup-filter-date')?.value;
