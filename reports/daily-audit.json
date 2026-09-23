@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-23T12:33:33.477Z",
+  "timestamp": "2026-09-23T13:42:17.600Z",
   "totalSuites": 14,
   "passedSuites": 14,
   "totalTests": 55,
@@ -13,7 +13,7 @@
       "total": 3,
       "passed": 3,
       "failed": 0,
-      "durationMs": 4,
+      "durationMs": 31,
       "status": "PASSED",
       "details": [
         "[PASS] Login screen has ZERO mentions of \"Equisteg\"",
@@ -27,7 +27,7 @@
       "total": 6,
       "passed": 6,
       "failed": 0,
-      "durationMs": 651,
+      "durationMs": 630,
       "status": "PASSED",
       "details": [
         "[PASS] Strict Content-Security-Policy (CSP) meta header enforced",
@@ -44,7 +44,7 @@
       "total": 11,
       "passed": 11,
       "failed": 0,
-      "durationMs": 2085,
+      "durationMs": 2366,
       "status": "PASSED",
       "details": [
         "[PASS] Step 2 alert contains ZERO mentions of \"Equisteg\"",
@@ -52,8 +52,8 @@
         "[PASS] Step 3 payment screen has ZERO mentions of \"Equisteg\"",
         "[PASS] Pricing clearly presents commercial $1/user/mo and $10/user/yr",
         "[PASS] Acme Global admin successfully authenticated",
-        "[PASS] Storage mapped to dedicated tenant: tenant_acme_global_technologies_mue33ha8",
-        "[PASS] IndexedDB strictly isolated: AegisFlow_Storage_tenant_acme_global_technologies_mue33ha8",
+        "[PASS] Storage mapped to dedicated tenant: tenant_acme_global_technologies_mue5jvea",
+        "[PASS] IndexedDB strictly isolated: AegisFlow_Storage_tenant_acme_global_technologies_mue5jvea",
         "[PASS] Workspace name reflects registered company",
         "[PASS] Acme Global database contains ONLY 1 registered user",
         "[PASS] Zero foreign admins present in Acme Global database",
@@ -79,7 +79,7 @@
       "total": 3,
       "passed": 3,
       "failed": 0,
-      "durationMs": 785,
+      "durationMs": 1094,
       "status": "PASSED",
       "details": [
         "[PASS] Task created successfully in tenant IndexedDB",
@@ -93,7 +93,7 @@
       "total": 2,
       "passed": 2,
       "failed": 0,
-      "durationMs": 3,
+      "durationMs": 2,
       "status": "PASSED",
       "details": [
         "[PASS] Auto-Allocate AI trigger present in navigation header",
@@ -106,7 +106,7 @@
       "total": 2,
       "passed": 2,
       "failed": 0,
-      "durationMs": 460,
+      "durationMs": 486,
       "status": "PASSED",
       "details": [
         "[PASS] SLA Milestone Calendar tab rendered in viewport",
@@ -119,7 +119,7 @@
       "total": 1,
       "passed": 1,
       "failed": 0,
-      "durationMs": 373,
+      "durationMs": 430,
       "status": "PASSED",
       "details": [
         "[PASS] Daily standup report submitted and recorded in team history"
@@ -131,7 +131,7 @@
       "total": 1,
       "passed": 1,
       "failed": 0,
-      "durationMs": 416,
+      "durationMs": 386,
       "status": "PASSED",
       "details": [
         "[PASS] Teams management interface visible with tenant directory"
@@ -143,14 +143,14 @@
       "total": 5,
       "passed": 5,
       "failed": 0,
-      "durationMs": 584,
+      "durationMs": 532,
       "status": "PASSED",
       "details": [
         "[PASS] AegisFlowSentinelAI instance active in production",
-        "[PASS] Sentinel Health Score verified at 100%",
+        "[PASS] Sentinel Health Score verified at 96%",
         "[PASS] Sentinel SLA Radar: Automatically escalated impending deadline task to Urgent priority",
         "[PASS] Sentinel Orphan Healer: Automatically rebound unlinked task to active Lead/Admin",
-        "[PASS] Sentinel AI executed 2 autonomous defect resolutions in background"
+        "[PASS] Sentinel AI executed 4 autonomous defect resolutions in background"
       ]
     },
     {
@@ -159,7 +159,7 @@
       "total": 6,
       "passed": 6,
       "failed": 0,
-      "durationMs": 752,
+      "durationMs": 703,
       "status": "PASSED",
       "details": [
         "[PASS] Merchant Bank Details Modal rendered successfully",
@@ -176,7 +176,7 @@
       "total": 7,
       "passed": 7,
       "failed": 0,
-      "durationMs": 1109,
+      "durationMs": 1060,
       "status": "PASSED",
       "details": [
         "[PASS] Payment Gateway (Card / Stripe) checkout form visible",
@@ -194,7 +194,7 @@
       "total": 4,
       "passed": 4,
       "failed": 0,
-      "durationMs": 53,
+      "durationMs": 2,
       "status": "PASSED",
       "details": [
         "[PASS] Cryptographic ledger holds 4 audit blocks",
@@ -209,7 +209,7 @@
       "total": 2,
       "passed": 2,
       "failed": 0,
-      "durationMs": 70,
+      "durationMs": 20,
       "status": "PASSED",
       "details": [
         "[PASS] Autonomous Agent detected missing settlement and executed self-healing repair",
@@ -227,7 +227,7 @@
       },
       "success": true,
       "actionTaken": "Reconstituted valid merchant receiving bank settlement details and synchronized payout gateway.",
-      "timestamp": "2026-09-23T12:33:33.347Z",
+      "timestamp": "2026-09-23T13:42:17.581Z",
       "verified": true
     }
   ],

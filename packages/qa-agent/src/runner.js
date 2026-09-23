@@ -1,4 +1,7 @@
 import http from 'http';
+import fs from 'fs';
+import path from 'path';
+import { spawn } from 'child_process';
 import { AutonomousHealer } from './healer.js';
 import { QAReporter } from './reporter.js';
 
@@ -20,6 +23,85 @@ function httpRequest(options, postData = null) {
     req.end();
   });
 }
+
+function findChromeExecutable() {
+  const envChrome = process.env.CHROME_PATH || process.env.PUPPETEER_EXECUTABLE_PATH;
+  if (envChrome && fs.existsSync(envChrome)) return envChrome;
+
+  if (process.platform === 'darwin') {
+    const macPaths = [
+      '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+      '/Applications/Chromium.app/Contents/MacOS/Chromium',
+      `${process.env.HOME || ''}/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`
+    ];
+    for (const p of macPaths) {
+      if (fs.existsSync(p)) return p;
+    }
+  } else if (process.platform === 'linux') {
+    const linuxPaths = [
+      '/usr/bin/google-chrome',
+      '/usr/bin/google-chrome-stable',
+      '/usr/bin/chromium-browser',
+      '/usr/bin/chromium'
+    ];
+    for (const p of linuxPaths) {
+      if (fs.existsSync(p)) return p;
+    }
+  } else if (process.platform === 'win32') {
+    const winPaths = [
+      'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+      'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
+    ];
+    for (const p of winPaths) {
+      if (fs.existsSync(p)) return p;
+    }
+  }
+  return 'google-chrome';
+}
+
+function startStaticServer(port = 8000) {
+  const server = http.createServer((req, res) => {
+    let cleanUrl = req.url.split('?')[0];
+    if (cleanUrl === '/' || cleanUrl === '') cleanUrl = '/index.html';
+    
+    const candidates = [
+      path.resolve(process.cwd(), cleanUrl.replace(/^\//, '')),
+      path.resolve(process.cwd(), 'apps/web', cleanUrl.replace(/^\//, '')),
+      path.resolve('/Users/tejonarasimhavemulapalli/task-tracker', cleanUrl.replace(/^\//, '')),
+      path.resolve('/Users/tejonarasimhavemulapalli/Downloads/files', cleanUrl.replace(/^\//, ''))
+    ];
+    
+    let filePath = candidates.find(c => fs.existsSync(c) && fs.statSync(c).isFile());
+    if (!filePath && cleanUrl.endsWith('.html')) {
+      filePath = candidates.find(c => fs.existsSync(c));
+    }
+    
+    if (filePath && fs.existsSync(filePath)) {
+      const ext = path.extname(filePath);
+      const mimeTypes = {
+        '.html': 'text/html; charset=utf-8',
+        '.js': 'application/javascript',
+        '.json': 'application/json',
+        '.css': 'text/css',
+        '.png': 'image/png',
+        '.jpg': 'image/jpeg',
+        '.svg': 'image/svg+xml'
+      };
+      res.writeHead(200, { 'Content-Type': mimeTypes[ext] || 'text/plain' });
+      res.end(fs.readFileSync(filePath));
+    } else {
+      res.writeHead(404);
+      res.end('Not found');
+    }
+  });
+
+  return new Promise((resolve) => {
+    server.listen(port, '127.0.0.1', () => {
+      resolve(server);
+    });
+  });
+}
+
 
 export class CDPClient {
   constructor(wsUrl) {
@@ -82,6 +164,96 @@ export class QARunner {
   constructor(baseUrl = 'http://localhost:8000/index.html', cdpPort = 9222) {
     this.baseUrl = baseUrl;
     this.cdpPort = cdpPort;
+    this.spawnedServer = null;
+    this.spawnedChrome = null;
+  }
+
+  async ensureEnvironment() {
+    // 1. Check HTTP server
+    let serverRunning = false;
+    try {
+      const res = await httpRequest({
+        hostname: '127.0.0.1',
+        port: 8000,
+        path: '/index.html',
+        method: 'GET',
+        timeout: 1000
+      });
+      if (res && (res.status === 200 || res.status === 304)) serverRunning = true;
+    } catch (e) {
+      serverRunning = false;
+    }
+
+    if (!serverRunning) {
+      this.spawnedServer = await startStaticServer(8000);
+      console.log('-> Embedded QA Static HTTP Server auto-started on http://127.0.0.1:8000');
+    }
+
+    // 2. Check CDP Chrome
+    let cdpReady = false;
+    try {
+      const res = await httpRequest({
+        hostname: '127.0.0.1',
+        port: this.cdpPort,
+        path: '/json/version',
+        method: 'GET',
+        timeout: 1000
+      });
+      if (res && res.data && res.data.Browser) cdpReady = true;
+    } catch (e) {
+      cdpReady = false;
+    }
+
+    if (!cdpReady) {
+      const chromeBin = findChromeExecutable();
+      const profileDir = path.join(process.platform === 'win32' ? (process.env.TEMP || 'C:\\temp') : '/tmp', 'qa-chrome-profile-' + Date.now());
+      this.spawnedChrome = spawn(chromeBin, [
+        '--headless=new',
+        `--remote-debugging-port=${this.cdpPort}`,
+        `--user-data-dir=${profileDir}`,
+        '--disable-gpu',
+        '--no-first-run',
+        '--no-default-browser-check'
+      ], {
+        detached: true,
+        stdio: 'ignore'
+      });
+      this.spawnedChrome.unref();
+
+      for (let i = 0; i < 25; i++) {
+        await new Promise(r => setTimeout(r, 200));
+        try {
+          const res = await httpRequest({
+            hostname: '127.0.0.1',
+            port: this.cdpPort,
+            path: '/json/version',
+            method: 'GET',
+            timeout: 500
+          });
+          if (res && res.data && res.data.Browser) {
+            cdpReady = true;
+            break;
+          }
+        } catch (e) {}
+      }
+      if (!cdpReady) {
+        throw new Error(`Chrome DevTools remote debugging could not be started on port ${this.cdpPort}`);
+      }
+      console.log(`-> Headless Chrome auto-spawned with remote debugging on port ${this.cdpPort}`);
+    }
+  }
+
+  async teardown() {
+    if (this.spawnedServer) {
+      try { this.spawnedServer.close(); } catch (e) {}
+      this.spawnedServer = null;
+    }
+    if (this.spawnedChrome) {
+      try { process.kill(-this.spawnedChrome.pid); } catch (e) {
+        try { this.spawnedChrome.kill(); } catch (e2) {}
+      }
+      this.spawnedChrome = null;
+    }
   }
 
   async runAll(autoHeal = true) {
@@ -90,28 +262,41 @@ export class QARunner {
     console.log('======================================================================');
     console.log(`-> Target Platform: ${this.baseUrl}`);
 
-    // Create target tab in headless Chrome
-    const tabRes = await httpRequest({
-      hostname: 'localhost',
-      port: this.cdpPort,
-      path: `/json/new?${encodeURIComponent(this.baseUrl)}`,
-      method: 'PUT'
-    });
+    await this.ensureEnvironment();
 
-    const tab = tabRes.data;
-    if (!tab || !tab.webSocketDebuggerUrl) {
-      throw new Error(`Failed to create Chrome DevTools target: ${JSON.stringify(tabRes)}`);
-    }
+    let tab;
+    let cdp;
+    try {
+      const tabRes = await httpRequest({
+        hostname: 'localhost',
+        port: this.cdpPort,
+        path: `/json/new?${encodeURIComponent(this.baseUrl)}`,
+        method: 'PUT'
+      });
 
-    const cdp = new CDPClient(tab.webSocketDebuggerUrl);
-    await cdp.connect();
-    await cdp.send('Page.enable');
-    await cdp.send('Runtime.enable');
+      tab = tabRes.data;
+      if (!tab || !tab.webSocketDebuggerUrl) {
+        throw new Error(`Failed to create Chrome DevTools target: ${JSON.stringify(tabRes)}`);
+      }
 
-    // Fresh session preparation
-    await cdp.eval(`localStorage.clear();`);
-    await cdp.send('Page.reload', { ignoreCache: true });
-    await cdp.sleep(2000);
+      cdp = new CDPClient(tab.webSocketDebuggerUrl);
+      await cdp.connect();
+      await cdp.send('Page.enable');
+      await cdp.send('Runtime.enable');
+
+      // Navigate and wait for document to load
+      await cdp.send('Page.navigate', { url: this.baseUrl });
+      await cdp.sleep(1500);
+
+      // Fresh session preparation
+      try {
+        await cdp.eval(`localStorage.clear();`);
+      } catch (e) {
+        await cdp.sleep(1000);
+        await cdp.eval(`localStorage.clear();`);
+      }
+      await cdp.send('Page.reload', { ignoreCache: true });
+      await cdp.sleep(2000);
 
     const healer = new AutonomousHealer(cdp);
     const suites = [];
@@ -630,15 +815,6 @@ export class QARunner {
       assert(Boolean(healedBank && healedBank.accountNumber), 'Autonomous Agent reconstituted verified bank settlement parameters');
     });
 
-    // Clean up test tab
-    cdp.close();
-    await httpRequest({
-      hostname: 'localhost',
-      port: this.cdpPort,
-      path: `/json/close/${tab.id}`,
-      method: 'GET'
-    });
-
     // Calculate aggregated metrics
     const totalSuites = suites.length;
     const passedSuites = suites.filter(s => s.status === 'PASSED' || s.status === 'HEALED').length;
@@ -684,5 +860,22 @@ export class QARunner {
     console.log('======================================================================\n');
 
     return reportData;
+    } finally {
+      if (cdp) {
+        try { cdp.close(); } catch (e) {}
+      }
+      if (tab && tab.id) {
+        try {
+          await httpRequest({
+            hostname: 'localhost',
+            port: this.cdpPort,
+            path: `/json/close/${tab.id}`,
+            method: 'GET'
+          });
+        } catch (e) {}
+      }
+      await this.teardown();
+    }
   }
 }
+
