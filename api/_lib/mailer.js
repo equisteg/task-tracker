@@ -1,6 +1,6 @@
 'use strict';
 
-const nodemailer = require('nodemailer');
+const { nodemailer } = require('./vendor');
 const { decryptSecret } = require('./security');
 
 function platformSmtpConfig() {

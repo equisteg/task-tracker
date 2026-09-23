@@ -1,6 +1,6 @@
 'use strict';
 
-const { Pool } = require('pg');
+const { Pool } = require('./vendor').pg;
 
 let pool = null;
 let bootstrapPromise = null;
