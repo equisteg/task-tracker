@@ -12,7 +12,10 @@
     "build": "npm run build --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
-    "clean": "npm run clean --workspaces --if-present"
+    "clean": "npm run clean --workspaces --if-present",
+    "qa": "node packages/qa-agent/src/index.js",
+    "qa:agent": "node packages/qa-agent/src/index.js --heal",
+    "qa:daemon": "node packages/qa-agent/src/index.js --daemon"
   },
   "keywords": [
     "monorepo",
@@ -22,8 +25,10 @@
     "express",
     "task-tracker",
     "zero-trust",
-    "sentinel-ai"
+    "sentinel-ai",
+    "qa-agent",
+    "autonomous-healing"
   ],
-  "author": "Equisteg",
+  "author": "Platform Operations",
   "license": "UNLICENSED"
 }

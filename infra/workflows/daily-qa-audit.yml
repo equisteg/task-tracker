@@ -1,0 +1,62 @@
+name: Autonomous Daily QA & Agentic Self-Healing Audit
+
+on:
+  schedule:
+    # Runs automatically every day at 00:00 UTC
+    - cron: '0 0 * * *'
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  autonomous-qa:
+    name: Run Autonomous QA & Self-Healing Agent
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install System Dependencies for Headless Browser
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
+      - name: Start Local Web Application
+        run: |
+          python3 -m http.server 8000 &
+          sleep 2
+
+      - name: Start Headless Chrome with Remote Debugging
+        run: |
+          google-chrome-stable --headless=new --remote-debugging-port=9222 --no-sandbox --disable-gpu --disable-dev-shm-usage about:blank &
+          sleep 3
+
+      - name: Execute Autonomous QA Agent (14 Suites + Auto-Fix)
+        run: |
+          node packages/qa-agent/src/index.js --heal
+
+      - name: Commit & Publish Automated Daily Health Report
+        if: always()
+        run: |
+          git config --global user.name "Autonomous QA Agent"
+          git config --global user.email "qa-agent@platform.internal"
+          git add reports/
+          if git diff --staged --quiet; then
+            echo "No report changes detected."
+          else
+            git commit -m "chore(qa): update automated daily QA audit report [skip ci]"
+            git push origin main
+          fi

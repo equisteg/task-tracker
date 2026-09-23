@@ -1,0 +1,21 @@
+{
+  "name": "@product/qa-agent",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Autonomous End-to-End QA Testing, Self-Healing, and Daily Audit Reporting Engine",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node src/index.js --run",
+    "heal": "node src/index.js --heal",
+    "report": "node src/index.js --report",
+    "daemon": "node src/index.js --daemon"
+  },
+  "dependencies": {
+    "@product/shared-types": "workspace:*",
+    "@product/api-client": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  }
+}
