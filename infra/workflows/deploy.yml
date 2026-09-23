@@ -1,0 +1,41 @@
+name: CD Deployment Pipeline
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy-web:
+    name: Build & Deploy Web Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Web Application
+        run: npm run build --workspace=apps/web --if-present
+
+  deploy-api:
+    name: Build & Deploy Backend API
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Build Backend Services
+        run: npm run build --workspace=apps/api --if-present

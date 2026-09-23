@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile.api
+    ports:
+      - "4000:4000"
+    environment:
+      - PORT=4000
+      - NODE_ENV=production
+      - BANK_HOLDER_NAME=${BANK_HOLDER_NAME:-Equisteg Holdings}
+      - BANK_NAME=${BANK_NAME:-Federal Reserve Bank}
+      - BANK_ACCOUNT_NUMBER=${BANK_ACCOUNT_NUMBER:-998877665544}
+      - BANK_IFSC_ROUTING=${BANK_IFSC_ROUTING:-FEDR0001234}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile.web
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+    restart: unless-stopped

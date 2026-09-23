@@ -1,0 +1,29 @@
+{
+  "name": "product-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Standard monorepo for web, mobile, and backend — built once, deployed everywhere.",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "clean": "npm run clean --workspaces --if-present"
+  },
+  "keywords": [
+    "monorepo",
+    "react",
+    "react-native",
+    "expo",
+    "express",
+    "task-tracker",
+    "zero-trust",
+    "sentinel-ai"
+  ],
+  "author": "Equisteg",
+  "license": "UNLICENSED"
+}

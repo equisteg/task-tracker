@@ -1,20 +1,40 @@
-# macOS
-.DS_Store
-.AppleDouble
-.LSOverride
-
-# Android Studio & Gradle
-.gradle/
-build/
-android/.gradle/
-android/build/
-android/app/build/
-android/.idea/
-android/*.iml
-android/app/*.iml
-local.properties
-.cxx/
-
-# Node / Scratch
+# Dependencies
 node_modules/
+.pnp
+.pnp.js
+
+# Environment variables & secrets (CRITICAL)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Production & Build outputs
+dist/
+build/
+out/
+.expo/
+.next/
+
+# Android & IDE build artifacts
+android/.gradle/
+android/app/build/
+android/local.properties
+apps/mobile/android/.gradle/
+apps/mobile/android/app/build/
+apps/mobile/android/local.properties
+*.keystore
+.idea/
+*.iml
+
+# Logs & Temporary Files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.system_generated/
 *.log
+
+# OS files
+.DS_Store
+Thumbs.db
