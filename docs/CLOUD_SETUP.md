@@ -15,6 +15,7 @@ In cloud mode, accounts, email, payments and all workspace data live on the serv
 | Email | Registration OTPs use the platform SMTP. Invitations use the company's own SMTP (Teams → Company Email) and fall back to the platform SMTP when it isn't configured. SMTP passwords are AES-256-GCM encrypted at rest. |
 | Payments | Razorpay Checkout. Amounts are computed server-side. The payment signature is verified server-side before activation. A payment can't be reused. |
 | Company DB access | Admin → Teams → Direct Database Access generates a **read-only** Postgres login that can only see that company's schema. Friendly views are included: `v_tasks`, `v_members`, `v_teams`, `v_daily_updates`, `v_audit_logs`. |
+| Forgot password | "Forgot password?" on sign-in → 6-digit code emailed (company SMTP, else platform SMTP; 10 min expiry, 5 attempts, 60 s resend, 5 requests/hour) → new password. The reply is the same whether or not the email exists. Other sessions are signed out and any sign-in lockout is cleared. |
 | Delete organization | People & teams → Danger zone (admins only). Requires typing the company name and the admin password. Permanently drops the company schema, its read-only database login and all member accounts; everyone is signed out. The email addresses can then register again. |
 | Roles | Only Admins manage members, SMTP, DB access and billing. Admins/Leads manage teams. Auditors are read-only. Sessions are revoked when a member is deleted or changes password. |
 

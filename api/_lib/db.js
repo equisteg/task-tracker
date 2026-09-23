@@ -122,6 +122,19 @@ CREATE TABLE IF NOT EXISTS platform.registrations (
 );
 CREATE INDEX IF NOT EXISTS registrations_email_idx ON platform.registrations(email);
 
+CREATE TABLE IF NOT EXISTS platform.password_resets (
+  id           text PRIMARY KEY,
+  user_id      text NOT NULL REFERENCES platform.accounts(user_id) ON DELETE CASCADE,
+  otp_hash     text NOT NULL,
+  expires_at   timestamptz NOT NULL,
+  attempts     integer NOT NULL DEFAULT 0,
+  sent_at      timestamptz NOT NULL DEFAULT now(),
+  verified     boolean NOT NULL DEFAULT false,
+  used         boolean NOT NULL DEFAULT false,
+  created_at   timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS password_resets_user_idx ON platform.password_resets(user_id);
+
 CREATE TABLE IF NOT EXISTS platform.license_keys (
   key          text PRIMARY KEY,
   seats        integer NOT NULL DEFAULT 50,

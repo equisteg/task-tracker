@@ -110,6 +110,18 @@ function inviteEmail({ memberName, companyName, invitedBy, email, tempPassword, 
   };
 }
 
+function resetEmail({ name, companyName, code }) {
+  return {
+    subject: `${code} is your password reset code`,
+    text: `Hi ${name},\n\nUse this code to reset your ${companyName} password on Task Tracker: ${code}\n\nThe code expires in 10 minutes. If you didn't ask to reset your password, you can ignore this email and your password won't change.`,
+    html: layout('Reset your password', `
+      <p>Hi ${esc(name)},</p>
+      <p>Use this code to reset your <strong>${esc(companyName)}</strong> password on Task Tracker:</p>
+      <p style="font-size:32px;letter-spacing:8px;font-weight:700;font-family:Consolas,monospace;background:#eef2ff;color:#3730a3;padding:14px;text-align:center;border-radius:10px">${esc(code)}</p>
+      <p style="font-size:13px;color:#475569">The code expires in 10 minutes. If you didn't ask to reset your password, ignore this email and your password won't change.</p>`),
+  };
+}
+
 function testEmail({ companyName }) {
   return {
     subject: `SMTP test for ${companyName}`,
@@ -126,5 +138,6 @@ module.exports = {
   companySmtpConfig,
   otpEmail,
   inviteEmail,
+  resetEmail,
   testEmail,
 };
