@@ -1,3 +1,5 @@
+# NOT ACTIVE: GitHub only runs workflows in .github/workflows/. The active CI is .github/workflows/ci.yml.
+# This file is kept for reference; see docs/rca/RCA-2026-09-24-expo-android-build.pdf.
 name: CD Deployment Pipeline
 
 on:
