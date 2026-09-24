@@ -1,20 +1,36 @@
-# Product Mobile App (`apps/mobile`)
+# Task Tracker Mobile (`apps/mobile`)
 
-React Native + Expo mobile application, also incorporating the native Android Studio offline build.
+Expo (React Native) app that opens your hosted Task Tracker web app, so accounts, data and the UI are shared with the website.
 
-## Development
+## Setup
+
+1. Set your site address in `config.ts`:
+   ```ts
+   export const APP_URL = 'https://your-app.vercel.app';
+   ```
+2. Install dependencies from the repository root:
+   ```bash
+   npm install
+   ```
+
+## Run
 
 ```bash
-# Start Expo development server
-npm run start --workspace=apps/mobile
-
-# Run directly on Android
-npm run android --workspace=apps/mobile
-
-# Run directly on iOS
-npm run ios --workspace=apps/mobile
+npm run start --workspace=apps/mobile     # Expo dev server (scan the QR code with Expo Go)
+npm run android --workspace=apps/mobile   # build & run on an Android device / emulator
+npm run ios --workspace=apps/mobile       # build & run on iOS (macOS only)
 ```
 
-## Native Android Project
+## Native folders
 
-The complete native Android project with Gradle wrapper and offline assets is located in `android/` and synchronized in `apps/mobile/android/`.
+`android/` and `ios/` inside this folder are **generated** by `npx expo prebuild` and are not committed
+(see `.gitignore`). Re-generate them any time with:
+
+```bash
+cd apps/mobile
+npx expo prebuild --clean
+```
+
+App icons and the splash screen come from `assets/` (referenced in `app.json`).
+
+The separate hand-written Android WebView project (no Expo) lives in the repository's top-level `android/` folder.
