@@ -21,9 +21,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # The QA agent uses Node's built-in WebSocket, available from Node 22.
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Check index.html copies are in sync
         run: |
@@ -55,7 +56,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Syntax check
         run: for f in api/*.js api/_lib/*.js; do node --check "$f"; done

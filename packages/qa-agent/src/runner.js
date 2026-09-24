@@ -113,6 +113,10 @@ export class CDPClient {
 
   async connect() {
     return new Promise((resolve, reject) => {
+      if (typeof WebSocket === 'undefined') {
+        reject(new Error(`The QA agent needs Node.js 22 or newer (built-in WebSocket); this is ${process.version}.`));
+        return;
+      }
       this.ws = new WebSocket(this.wsUrl);
       this.ws.onopen = () => resolve();
       this.ws.onerror = reject;
