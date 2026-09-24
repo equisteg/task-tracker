@@ -1,0 +1,99 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  web:
+    name: Web app (QA suite)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Check index.html copies are in sync
+        run: |
+          for f in apps/web/index.html apps/web/public/index.html android/app/src/main/assets/index.html; do
+            cmp -s index.html "$f" || { echo "::error file=$f::is out of sync with index.html (copy index.html over it)"; exit 1; }
+          done
+
+      # The QA agent reuses a Chrome already listening on port 9222; CI runners need --no-sandbox.
+      - name: Start headless Chrome
+        run: |
+          google-chrome --headless=new --remote-debugging-port=9222 --no-sandbox --disable-gpu \
+            --disable-dev-shm-usage --user-data-dir=/tmp/qa-chrome about:blank > /tmp/chrome.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -sf http://127.0.0.1:9222/json/version > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/chrome.log
+          exit 1
+
+      - name: Run QA suite (exits non-zero if any check fails)
+        run: node packages/qa-agent/src/index.js
+
+  api:
+    name: API (compile & load)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Syntax check
+        run: for f in api/*.js api/_lib/*.js; do node --check "$f"; done
+
+      # Vercel ships the API with no npm install, so every handler must load with only the bundled vendor.js.
+      - name: Load every handler
+        run: node -e "for (const f of require('fs').readdirSync('api').filter(n => n.endsWith('.js'))) require('./api/' + f); console.log('All API handlers load')"
+
+  mobile:
+    name: Mobile app (Expo)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Installed on its own, outside the monorepo workspaces, exactly like a fresh Expo project.
+      - name: Install
+        run: |
+          cp -r apps/mobile "$RUNNER_TEMP/mobile"
+          cd "$RUNNER_TEMP/mobile"
+          npm install --no-audit --no-fund
+
+      - name: Check app config, assets and dependencies
+        working-directory: ${{ runner.temp }}/mobile
+        run: npm test
+
+      - name: Type-check
+        working-directory: ${{ runner.temp }}/mobile
+        run: npm run lint
+
+      - name: Expo prebuild (Android)
+        working-directory: ${{ runner.temp }}/mobile
+        run: npm run build
+
+      - name: Bundle JavaScript (Android)
+        working-directory: ${{ runner.temp }}/mobile
+        run: npm run bundle

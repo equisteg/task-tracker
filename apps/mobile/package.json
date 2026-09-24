@@ -2,19 +2,17 @@
   "name": "@product/mobile",
   "version": "1.0.0",
   "private": true,
-  "main": "App.tsx",
+  "main": "index.js",
   "scripts": {
-    "start": "expo start || true",
-    "android": "expo run:android || true",
-    "ios": "expo run:ios || true",
-    "web": "expo start --web || true",
-    "build": "echo 'Mobile assets ready'",
-    "lint": "tsc --noEmit || true",
-    "test": "node -e 'console.log(\"Mobile tests passed\")'"
+    "start": "expo start",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "build": "expo prebuild --platform android --no-install --clean",
+    "lint": "tsc --noEmit",
+    "test": "node scripts/check-app-config.js",
+    "bundle": "expo export --platform android --output-dir dist"
   },
   "dependencies": {
-    "@product/shared-types": "*",
-    "@product/api-client": "*",
     "expo": "~51.0.0",
     "react": "18.2.0",
     "react-native": "0.74.1",

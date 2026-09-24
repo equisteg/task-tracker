@@ -21,6 +21,17 @@ npm run android --workspace=apps/mobile   # build & run on an Android device / e
 npm run ios --workspace=apps/mobile       # build & run on iOS (macOS only)
 ```
 
+## Checks
+
+```bash
+npm test --workspace=apps/mobile      # app.json images exist and are valid, APP_URL is https, imports are declared
+npm run lint --workspace=apps/mobile  # TypeScript type-check
+npm run build --workspace=apps/mobile # expo prebuild (Android)
+npm run bundle --workspace=apps/mobile # bundle the JavaScript (Android)
+```
+
+The same four checks run in CI on every pull request (`.github/workflows/ci.yml`, job "Mobile app").
+
 ## Native folders
 
 `android/` and `ios/` inside this folder are **generated** by `npx expo prebuild` and are not committed
