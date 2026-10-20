@@ -98,3 +98,16 @@ jobs:
       - name: Bundle JavaScript (Android)
         working-directory: ${{ runner.temp }}/mobile
         run: npm run bundle
+
+  secrets-guard:
+    name: No secret files, live keys or private kit files
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node tests/tools/check-forbidden-files.mjs
