@@ -43,16 +43,3 @@ Thumbs.db
 apps/mobile/android/
 apps/mobile/ios/
 apps/mobile/.expo/
-
-# Founders' private kit (installed by `npm run kit` from equisteg-com/claude-kit; never committed here)
-.claude-kit/
-.claude/
-CLAUDE.md
-CLAUDE.local.md
-prompts/
-docs/kit/
-docs/standards/agent-reviews.md
-docs/standards/product-categories.md
-docs/standards/repo-security.md
-docs/standards/risks-and-issues.md
-docs/standards/self-healing.md

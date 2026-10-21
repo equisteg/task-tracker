@@ -16,9 +16,10 @@
     "qa": "node packages/qa-agent/src/index.js",
     "qa:agent": "node packages/qa-agent/src/index.js --heal",
     "qa:daemon": "node packages/qa-agent/src/index.js --daemon",
-    "kit": "node tests/tools/kit.mjs",
     "check:secrets": "node tests/tools/check-forbidden-files.mjs",
-    "prepare": "node tests/tools/install-githooks.mjs"
+    "prepare": "node tests/tools/install-githooks.mjs",
+    "lint:agents": "node tests/tools/lint-agents.mjs",
+    "test:guards": "node --test tests/tools/*.test.mjs"
   },
   "keywords": [
     "monorepo",
@@ -33,10 +34,5 @@
     "autonomous-healing"
   ],
   "author": "Platform Operations",
-  "license": "UNLICENSED",
-  "claudeKit": {
-    "repo": "equisteg-com/claude-kit",
-    "ref": "main",
-    "product": "task-tracker"
-  }
+  "license": "UNLICENSED"
 }
